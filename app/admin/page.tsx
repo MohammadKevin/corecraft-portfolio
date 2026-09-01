@@ -8,7 +8,6 @@ import {
   Trash2,
   Edit2,
   ExternalLink,
-  Github,
   CheckCircle2,
   AlertTriangle,
   LogOut,
