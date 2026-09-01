@@ -1,157 +1,174 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Mail, Phone, MapPin, ExternalLink, Heart } from "lucide-react";
+import {
+  Mail,
+  MapPin,
+  ArrowUpRight,
+  Shield,
+  FileText,
+  Terminal,
+  Layers,
+} from "lucide-react";
+import {
+  GithubIcon,
+  LinkedinIcon,
+  InstagramIcon,
+} from "@/components/icons/SocialIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { translations } from "@/data/translations";
-
-const footerNavKeys = [
-  { key: "home",     href: "#hero"         },
-  { key: "about",    href: "#whoami"       },
-  { key: "skills",   href: "#stack"        },
-  { key: "projects", href: "#projects"     },
-  { key: "github",   href: "#github"       },
-  { key: "timeline", href: "#timeline"     },
-  { key: "contact",  href: "#contact"      },
-] as const;
-
-const socials = [
-  {
-    label: "LinkedIn",
-    href: "https://linkedin.com/in/mohammad-kevin-arif-rudianto-945733347",
-    icon: (
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-      </svg>
-    ),
-  },
-  {
-    label: "GitHub",
-    href: "https://github.com/MohammadKevin",
-    icon: (
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-      </svg>
-    ),
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/mhmdkevin_1/",
-    icon: (
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-      </svg>
-    ),
-  },
-];
 
 export default function Footer() {
   const pathname = usePathname();
   const { lang } = useLanguage();
-  const f = translations.footer;
-  const n = translations.nav;
 
   if (pathname && pathname.startsWith("/admin")) return null;
 
   return (
-    <footer className="bg-[#060911] border-t border-white/6 text-slate-400">
-      <div className="max-w-6xl mx-auto px-6 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
-
-          {/* Brand */}
-          <div className="md:col-span-5 flex flex-col gap-4">
+    <footer className="bg-zinc-50 text-zinc-600 border-t border-zinc-200">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10">
+          
+          {/* Brand & Bio Column (Span 5) */}
+          <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="photo-ring w-11 h-11 relative">
-                <Image src="/images/icon.png" alt="Kevin" fill sizes="44px" className="object-cover" />
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-200 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
+                <Image
+                  src="/images/icon.png"
+                  alt="Mohammad Kevin"
+                  width={40}
+                  height={40}
+                  className="object-cover"
+                />
               </div>
               <div>
-                <p className="font-bold text-white">Mohammad Kevin</p>
-                <p className="text-xs text-[var(--accent-light)] font-mono">{f.role[lang]}</p>
+                <p className="font-bold text-zinc-950 text-base">Mohammad Kevin</p>
+                <p className="text-xs text-sky-600 font-mono font-medium">
+                  Fullstack & Backend Software Engineer
+                </p>
               </div>
             </div>
 
-            <p className="text-sm text-slate-500 leading-relaxed max-w-xs">{f.desc[lang]}</p>
+            <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed max-w-sm">
+              {lang === "id"
+                ? "Membangun sistem web berskala tinggi, API performa tinggi, dan aplikasi kasir POS dengan stack Next.js, NestJS, Prisma, dan PostgreSQL."
+                : "Architecting high-throughput APIs, scalable web applications, and resilient POS transactional systems with Next.js, NestJS, Prisma, and PostgreSQL."}
+            </p>
 
-            <div className="flex items-center gap-1.5 text-xs text-slate-600">
-              <MapPin className="w-3.5 h-3.5 text-[var(--accent-light)]" />
-              {f.location[lang]}
-              <span className="mx-2">·</span>
-              <span className="status-dot" style={{ width: "6px", height: "6px" }} />
-              {f.available[lang]}
-            </div>
-
-            <div className="flex items-center gap-2 mt-1">
-              {socials.map(s => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="w-8 h-8 rounded-lg bg-white/4 border border-white/8 text-slate-500
-                    hover:text-white hover:border-[var(--accent-border)] flex items-center justify-center transition-all"
-                >
-                  {s.icon}
-                </a>
-              ))}
+            {/* Live Status Badge */}
+            <div className="flex items-center gap-2 pt-1">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-xs font-mono text-zinc-700 font-semibold">
+                {lang === "id" ? "Sistem Online & Siap Kolaborasi" : "Systems Operational · Ready for Hire"}
+              </span>
             </div>
           </div>
 
-          {/* Nav */}
-          <div className="md:col-span-3 flex flex-col gap-3">
-            <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{f.navLabel[lang]}</p>
-            <ul className="flex flex-col gap-2">
-              {footerNavKeys.map(link => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-slate-500 hover:text-[var(--accent-light)] transition-colors"
-                  >
-                    {(n as Record<string, Record<string, string>>)[link.key][lang]}
-                  </a>
-                </li>
-              ))}
+          {/* Quick Links Column (Span 4) */}
+          <div className="md:col-span-4 space-y-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
+              {lang === "id" ? "Navigasi Cepat" : "Navigation"}
+            </p>
+            <ul className="space-y-2 text-xs font-medium">
+              <li>
+                <Link href="/#hero" className="hover:text-sky-600 transition-colors">
+                  {lang === "id" ? "Beranda" : "Overview"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/#about" className="hover:text-sky-600 transition-colors">
+                  {lang === "id" ? "Tentang Saya" : "Personal Profile"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/#features" className="hover:text-sky-600 transition-colors">
+                  {lang === "id" ? "Arsitektur Sistem" : "System Capabilities"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/#services" className="hover:text-sky-600 transition-colors">
+                  {lang === "id" ? "Layanan Rekayasa" : "Services & Deliverables"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/#projects" className="hover:text-sky-600 transition-colors">
+                  {lang === "id" ? "Portofolio Proyek" : "Production Projects"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/cv" className="text-sky-600 hover:text-sky-700 font-bold inline-flex items-center gap-1 transition-colors">
+                  <span>Curriculum Vitae (PDF)</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="md:col-span-4 flex flex-col gap-3">
-            <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{f.contactLabel[lang]}</p>
-            <div className="flex flex-col gap-2.5">
-              <a href="mailto:kvn4.200581@gmail.com"
-                className="flex items-center gap-2.5 text-sm text-slate-500 hover:text-[var(--accent-light)] transition-colors">
-                <Mail className="w-4 h-4 text-[var(--accent-light)] shrink-0" />
-                kvn4.200581@gmail.com
+          {/* Direct Connect Column (Span 3) */}
+          <div className="md:col-span-3 space-y-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                {lang === "id" ? "Kontak Langsung" : "Direct Connect"}
+              </p>
+              <p className="text-xs text-zinc-500 mt-1">Malang, East Java, Indonesia (UTC+7)</p>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-2">
+              <a
+                href="https://github.com/MohammadKevin"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Profile"
+                className="w-9 h-9 rounded-xl bg-white border border-zinc-300 text-zinc-700 flex items-center justify-center hover:border-sky-400 hover:text-sky-600 hover:bg-sky-50 shadow-2xs transition-all cursor-pointer"
+              >
+                <GithubIcon className="w-4 h-4" />
               </a>
-              <a href="https://wa.me/6282131588846" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm text-slate-500 hover:text-emerald-400 transition-colors">
-                <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                +62 821-3158-8846
+              <a
+                href="https://linkedin.com/in/mohammadkevin"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn Profile"
+                className="w-9 h-9 rounded-xl bg-white border border-zinc-300 text-zinc-700 flex items-center justify-center hover:border-sky-400 hover:text-sky-600 hover:bg-sky-50 shadow-2xs transition-all cursor-pointer"
+              >
+                <LinkedinIcon className="w-4 h-4" />
               </a>
-              <a href="https://linkedin.com/in/mohammad-kevin-arif-rudianto-945733347"
-                target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm text-slate-500 hover:text-sky-400 transition-colors">
-                <ExternalLink className="w-4 h-4 text-sky-400 shrink-0" />
-                LinkedIn Profile
+              <a
+                href="https://instagram.com/mhmmd.kvnn_"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Profile"
+                className="w-9 h-9 rounded-xl bg-white border border-zinc-300 text-zinc-700 flex items-center justify-center hover:border-sky-400 hover:text-sky-600 hover:bg-sky-50 shadow-2xs transition-all cursor-pointer"
+              >
+                <InstagramIcon className="w-4 h-4" />
+              </a>
+              <a
+                href="mailto:kvn4.200581@gmail.com"
+                aria-label="Send Email"
+                className="w-9 h-9 rounded-xl bg-white border border-zinc-300 text-zinc-700 flex items-center justify-center hover:border-sky-400 hover:text-sky-600 hover:bg-sky-50 shadow-2xs transition-all cursor-pointer"
+              >
+                <Mail className="w-4 h-4" />
               </a>
             </div>
-            <a href="#contact" className="btn-accent text-sm px-4 py-2 rounded-lg w-fit mt-2">
-              {f.hireBtn[lang]}
-            </a>
+
+            <div className="pt-2 text-[11px] font-mono text-zinc-400">
+              <span>&gt;_ Next.js 16 · Tailwind CSS 4</span>
+            </div>
           </div>
 
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-white/5 py-4 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-700">
-          <span>{f.builtWith[lang]}</span>
-          <div className="flex items-center gap-1">
-            © {new Date().getFullYear()} Mohammad Kevin · Made with
-            <Heart className="w-3 h-3 text-rose-500 mx-1" />
-            {f.madeIn[lang]}
+        {/* Bottom Copyright Strip */}
+        <div className="mt-12 pt-6 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+          <p>© {new Date().getFullYear()} Mohammad Kevin. All rights reserved.</p>
+          <div className="flex items-center gap-4 text-[11px]">
+            <span className="text-zinc-400">Editorial SaaS Interface</span>
+            <span className="text-zinc-300">·</span>
+            <span className="text-zinc-600 font-mono font-medium">corecraft.my.id</span>
           </div>
         </div>
       </div>

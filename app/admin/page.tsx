@@ -1,36 +1,38 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
-  Plus,
-  Edit2,
-  Trash2,
-  Folder,
-  Eye,
-  Activity,
-  LogOut,
   ArrowLeft,
+  Plus,
+  Trash2,
+  Edit2,
+  ExternalLink,
+  Github,
   CheckCircle2,
   AlertTriangle,
-  X,
+  LogOut,
+  Folder,
+  Layers,
+  Activity,
+  Award,
+  ShieldCheck,
   Search,
-  Sparkles,
+  RefreshCw,
+  X,
+  Laptop,
+  Smartphone,
+  Monitor,
   Terminal,
   Grid,
-  ChevronRight,
-  Database,
-  Smartphone,
-  Laptop,
-  Monitor,
-  Code2,
-  ExternalLink,
-  RefreshCw,
-  GitBranch,
-  Award,
-  ShieldCheck
+  Lock,
+  ArrowRight,
+  User,
+  Key,
 } from "lucide-react";
+import { GithubIcon } from "@/components/icons/SocialIcons";
 
+// Types definition
 interface Project {
   id: string;
   title: string;
@@ -48,45 +50,42 @@ interface CertificateItem {
   title: string;
   issuer: string;
   date: string;
-  category: string;
-  skills: string[];
+  category?: string;
+  skills?: string[];
   credentialUrl?: string;
 }
 
 interface Visitor {
   id: string;
-  timestamp: string;
   ip: string;
-  device: string;
-  os: string;
-  browser: string;
   userAgent: string;
+  device: string;
+  browser: string;
+  os: string;
+  timestamp: string;
 }
 
 interface GithubRepo {
   id: number;
   name: string;
   fullName: string;
-  repoUrl: string;
   description: string;
-  homepage: string;
   language: string;
   topics: string[];
   stars: number;
   forks: number;
+  repoUrl: string;
+  homepage: string;
   updatedAt: string;
 }
 
 const colorGradients = [
-  { label: "Blue to Cyan", value: "from-blue-600 to-cyan-500", bg: "bg-gradient-to-r from-blue-600 to-cyan-500" },
-  { label: "Indigo to Blue", value: "from-indigo-600 to-blue-500", bg: "bg-gradient-to-r from-indigo-600 to-blue-500" },
-  { label: "Cyan to Blue", value: "from-cyan-600 to-blue-600", bg: "bg-gradient-to-r from-cyan-600 to-blue-600" },
-  { label: "Blue to Indigo", value: "from-blue-700 to-indigo-600", bg: "bg-gradient-to-r from-blue-700 to-indigo-600" },
-  { label: "Blue to Green", value: "from-blue-500 to-emerald-400", bg: "bg-gradient-to-r from-blue-500 to-emerald-400" },
-  { label: "Purple to Pink", value: "from-purple-600 to-pink-500", bg: "bg-gradient-to-r from-purple-600 to-pink-500" },
-  { label: "Rose to Red", value: "from-rose-600 to-red-500", bg: "bg-gradient-to-r from-rose-600 to-red-500" },
-  { label: "Orange to Red", value: "from-orange-500 to-red-600", bg: "bg-gradient-to-r from-orange-500 to-red-600" },
-  { label: "Slate to Navy", value: "from-slate-800 to-blue-900", bg: "bg-gradient-to-r from-slate-800 to-blue-900" },
+  { label: "Sky Blue", value: "from-sky-500 to-cyan-500", bg: "bg-sky-500" },
+  { label: "Indigo Cobalt", value: "from-indigo-600 to-sky-500", bg: "bg-indigo-600" },
+  { label: "Emerald Mint", value: "from-emerald-600 to-teal-500", bg: "bg-emerald-600" },
+  { label: "Violet Purple", value: "from-purple-600 to-indigo-500", bg: "bg-purple-600" },
+  { label: "Amber Orange", value: "from-amber-500 to-orange-600", bg: "bg-amber-500" },
+  { label: "Rose Pink", value: "from-rose-500 to-red-600", bg: "bg-rose-500" },
 ];
 
 export default function AdminDashboard() {
@@ -99,11 +98,11 @@ export default function AdminDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [certificates, setCertificates] = useState<CertificateItem[]>([]);
   const [visitors, setVisitors] = useState<Visitor[]>([]);
-  
+
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [loadingCertificates, setLoadingCertificates] = useState(false);
   const [loadingAnalytics, setLoadingAnalytics] = useState(false);
-  
+
   // Certificate Form States
   const [isEditingCert, setIsEditingCert] = useState(false);
   const [certId, setCertId] = useState("");
@@ -113,14 +112,14 @@ export default function AdminDashboard() {
   const [certCategory, setCertCategory] = useState("Backend");
   const [certSkills, setCertSkills] = useState("");
   const [certCredentialUrl, setCertCredentialUrl] = useState("");
-  
+
   // Project Form States
   const [isEditing, setIsEditing] = useState(false);
   const [formId, setFormId] = useState("");
   const [formTitle, setFormTitle] = useState("");
   const [formCategory, setFormCategory] = useState("");
   const [formType, setFormType] = useState("Fullstack");
-  const [formColor, setFormColor] = useState("from-blue-600 to-cyan-500");
+  const [formColor, setFormColor] = useState("from-sky-500 to-cyan-500");
   const [formDesc, setFormDesc] = useState("");
   const [formTech, setFormTech] = useState("");
   const [formDemoUrl, setFormDemoUrl] = useState("");
@@ -209,7 +208,7 @@ export default function AdminDashboard() {
       date: certDate,
       category: certCategory,
       skills: certSkills,
-      credentialUrl: certCredentialUrl
+      credentialUrl: certCredentialUrl,
     };
 
     const method = isEditingCert ? "PUT" : "POST";
@@ -217,7 +216,7 @@ export default function AdminDashboard() {
       const res = await fetch("/api/certificates", {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.success) {
@@ -227,7 +226,7 @@ export default function AdminDashboard() {
       } else {
         showToast(data.error || "Gagal menyimpan sertifikat", "error");
       }
-    } catch (err) {
+    } catch {
       showToast("Error koneksi saat menyimpan sertifikat", "error");
     }
   };
@@ -243,7 +242,7 @@ export default function AdminDashboard() {
       } else {
         showToast(data.error || "Gagal menghapus sertifikat", "error");
       }
-    } catch (err) {
+    } catch {
       showToast("Error koneksi saat menghapus sertifikat", "error");
     }
   };
@@ -257,6 +256,7 @@ export default function AdminDashboard() {
     setCertCategory(cert.category || "Backend");
     setCertSkills(Array.isArray(cert.skills) ? cert.skills.join(", ") : "");
     setCertCredentialUrl(cert.credentialUrl || "");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const resetCertForm = () => {
@@ -336,7 +336,6 @@ export default function AdminDashboard() {
     setFormRepoUrl(repo.repoUrl);
     setRepoInputSearch(repo.name);
 
-    // Auto-fill title if empty or default
     if (!formTitle || formTitle === "Kasir App" || !isEditing) {
       const formattedTitle = repo.name
         .split(/[-_]/)
@@ -353,7 +352,6 @@ export default function AdminDashboard() {
       setFormDemoUrl(repo.homepage);
     }
 
-    // Auto-suggest tech stack from repo language & topics
     const techItems: string[] = [];
     if (repo.language) techItems.push(repo.language);
     if (Array.isArray(repo.topics)) {
@@ -397,7 +395,7 @@ export default function AdminDashboard() {
     setFormTitle("");
     setFormCategory("");
     setFormType("Fullstack");
-    setFormColor("from-blue-600 to-cyan-500");
+    setFormColor("from-sky-500 to-cyan-500");
     setFormDesc("");
     setFormTech("");
     setFormDemoUrl("");
@@ -442,8 +440,7 @@ export default function AdminDashboard() {
       } else {
         showToast(data.error || "Gagal menyimpan proyek", "error");
       }
-    } catch (err) {
-      console.error("Save error:", err);
+    } catch {
       showToast("Gagal menyimpan. Cek jaringan Anda.", "error");
     }
   };
@@ -476,13 +473,11 @@ export default function AdminDashboard() {
       } else {
         showToast(data.error || "Gagal menghapus proyek", "error");
       }
-    } catch (err) {
-      console.error("Delete error:", err);
+    } catch {
       showToast("Gagal menghapus. Cek jaringan Anda.", "error");
     }
   };
 
-  // Filters projects
   const filteredProjects = projects.filter((p) => {
     const matchesSearch =
       p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -492,7 +487,6 @@ export default function AdminDashboard() {
     return matchesSearch;
   });
 
-  // Filters visitors
   const filteredVisitors = visitors.filter((v) => {
     const matchesSearch =
       v.ip.includes(searchVisitorQuery) ||
@@ -503,10 +497,9 @@ export default function AdminDashboard() {
     return matchesSearch && matchesDevice;
   });
 
-  // Inline Repo Search Filter
   const searchFilteredRepos = githubRepos.filter((r) =>
     r.name.toLowerCase().includes(repoInputSearch.toLowerCase()) ||
-    r.description.toLowerCase().includes(repoInputSearch.toLowerCase()) ||
+    (r.description && r.description.toLowerCase().includes(repoInputSearch.toLowerCase())) ||
     (r.language && r.language.toLowerCase().includes(repoInputSearch.toLowerCase()))
   );
 
@@ -520,71 +513,78 @@ export default function AdminDashboard() {
         hour: "2-digit",
         minute: "2-digit",
       });
-    } catch (e) {
+    } catch {
       return isoString;
     }
   };
 
   const getDeviceIcon = (device: string) => {
-    if (device === "Desktop") return <Laptop className="w-4 h-4 text-sky-400" />;
-    if (device === "Mobile") return <Smartphone className="w-4 h-4 text-emerald-400" />;
-    return <Monitor className="w-4 h-4 text-amber-400" />;
+    if (device === "Desktop") return <Laptop className="w-4 h-4 text-sky-600" />;
+    if (device === "Mobile") return <Smartphone className="w-4 h-4 text-emerald-600" />;
+    return <Monitor className="w-4 h-4 text-amber-600" />;
   };
 
+  // ══════════════ LOGIN GATE VIEW ══════════════
   if (!isAuthenticated) {
     return (
-      <main className="min-h-screen bg-[#030712] text-foreground flex items-center justify-center p-6 relative overflow-hidden font-sans">
-        <div className="absolute top-[15%] left-[-10%] w-[30rem] h-[30rem] bg-primary/10 glow-blob animate-glow-1" />
-        <div className="absolute bottom-[15%] right-[-10%] w-[30rem] h-[30rem] bg-secondary/10 glow-blob animate-glow-2" />
-
-        <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-md rounded-3xl p-8 border border-white/5 shadow-2xl relative z-10">
+      <main className="min-h-screen bg-zinc-50 text-zinc-900 flex items-center justify-center p-6 font-sans">
+        <div className="w-full max-w-md bg-white rounded-[14px] p-8 border border-zinc-200 shadow-sm">
           <div className="text-center mb-8">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-secondary mb-4 transition-colors group"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-zinc-900 mb-6 transition-colors"
             >
-              <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-0.5 transition-transform" />
-              Kembali ke Portfolio
+              <ArrowLeft className="w-4 h-4" />
+              <span>Kembali ke Portofolio</span>
             </Link>
-            <h1 className="text-3xl font-black text-white tracking-tight">Admin Console</h1>
-            <p className="text-xs text-gray-400 mt-1.5">Masukkan kredensial Kevin untuk mengelola portofolio.</p>
-          </div>
-
-          <form onSubmit={handleLoginSubmit} className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Username</label>
-              <input
-                type="text"
-                required
-                placeholder="Masukkan username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="px-4 py-3 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm text-white bg-slate-950/60 focus:bg-slate-950 transition-all w-full"
-              />
+            
+            <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 flex items-center justify-center mx-auto mb-4 shadow-2xs">
+              <Lock className="w-6 h-6 text-sky-600" />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Password</label>
-              <input
-                type="password"
-                required
-                placeholder="Masukkan password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="px-4 py-3 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm text-white bg-slate-950/60 focus:bg-slate-950 transition-all w-full"
-              />
+            <h1 className="text-2xl font-extrabold text-zinc-950 tracking-tight">Admin Console</h1>
+            <p className="text-xs text-zinc-500 mt-1.5">Masukkan kredensial Kevin untuk mengelola portofolio.</p>
+          </div>
+
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider block">Username</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  placeholder="Masukkan username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50 text-sm text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:outline-sky-500 transition-all shadow-2xs"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider block">Password</label>
+              <div className="relative">
+                <input
+                  type="password"
+                  required
+                  placeholder="Masukkan password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-zinc-50 text-sm text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:outline-sky-500 transition-all shadow-2xs"
+                />
+              </div>
             </div>
 
             {loginError && (
-              <p className="text-xs font-bold text-rose-500 bg-rose-500/10 border border-rose-500/20 px-4 py-2.5 rounded-xl flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                {loginError}
+              <p className="text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 p-3 rounded-xl flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600" />
+                <span>{loginError}</span>
               </p>
             )}
 
             <button
               type="submit"
-              className="w-full py-4 bg-gradient-to-r from-primary to-secondary text-gray-950 font-bold rounded-xl shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer text-center text-sm"
+              className="w-full py-3 bg-sky-500 hover:bg-sky-600 active:scale-98 text-white font-bold rounded-xl shadow-xs transition-all cursor-pointer text-sm"
             >
               Masuk ke Dashboard
             </button>
@@ -594,110 +594,117 @@ export default function AdminDashboard() {
     );
   }
 
+  // ══════════════ AUTHENTICATED DASHBOARD ══════════════
   return (
-    <main className="min-h-screen bg-[#030712] text-foreground pt-12 pb-16 relative overflow-hidden font-sans">
-      <div className="absolute top-[5%] left-[-15%] w-[35rem] h-[35rem] bg-primary/10 glow-blob animate-glow-1" />
-      <div className="absolute bottom-[10%] right-[-15%] w-[40rem] h-[40rem] bg-secondary/10 glow-blob animate-glow-2" />
-
+    <main className="min-h-screen bg-zinc-50 text-zinc-900 pt-8 pb-16 font-sans">
+      
       {/* Floating Toast notification */}
       <div
-        className={`fixed bottom-6 right-6 z-50 px-6 py-4 rounded-2xl text-white text-sm font-semibold shadow-2xl transition-all duration-300 flex items-center gap-3 ${
+        className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl text-sm font-semibold shadow-lg transition-all duration-300 flex items-center gap-3 border ${
           toastVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-90 pointer-events-none"
-        } ${toast.type === "success" ? "bg-primary border border-primary/30" : "bg-rose-600 border border-rose-500/30"}`}
+        } ${toast.type === "success" ? "bg-white text-zinc-900 border-zinc-300 shadow-emerald-500/5" : "bg-rose-50 text-rose-900 border-rose-200"}`}
       >
-        {toast.type === "success" ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertTriangle className="w-5 h-5 shrink-0" />}
+        {toast.type === "success" ? <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> : <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />}
         <span>{toast.msg}</span>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Dashboard */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 border-b border-white/5 pb-6">
-          <div>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-slate-900 border border-white/10 hover:border-primary text-gray-400 hover:text-white transition-all cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </Link>
-              <div>
-                <h1 className="text-3xl font-extrabold text-white leading-tight">Developer Dashboard</h1>
-                <p className="text-xs text-gray-400 mt-0.5">Pusat kendali portofolio dan pemantauan analitik Mohammad Kevin.</p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-white p-5 sm:p-6 rounded-[14px] border border-zinc-200 shadow-2xs">
+          <div className="flex items-center gap-3.5">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-zinc-100 border border-zinc-200 hover:bg-zinc-200 text-zinc-700 transition-all cursor-pointer shadow-2xs"
+              title="Kembali ke Beranda"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-extrabold text-zinc-950 tracking-tight leading-tight">Developer Dashboard</h1>
+                <span className="px-2 py-0.5 rounded-md bg-sky-50 border border-sky-200 text-sky-700 text-[10px] font-mono font-bold">
+                  v2.0
+                </span>
               </div>
+              <p className="text-xs text-zinc-500 mt-0.5">Pusat kendali portofolio dan manajemen data Mohammad Kevin.</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 self-start sm:self-auto">
             <button
               onClick={() => {
                 if (activeTab === "projects") fetchProjects();
                 else if (activeTab === "certificates") fetchCertificates();
                 else fetchAnalytics();
               }}
-              className="flex items-center gap-2 px-4 py-2.5 bg-slate-900 border border-white/10 hover:border-primary hover:text-primary rounded-xl text-xs font-bold text-white transition-all cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2 bg-white border border-zinc-200 hover:bg-zinc-50 rounded-xl text-xs font-bold text-zinc-800 shadow-2xs transition-all cursor-pointer"
             >
-              Segarkan Data
+              <RefreshCw className="w-3.5 h-3.5 text-zinc-500" />
+              <span>Segarkan</span>
             </button>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2.5 bg-rose-950/20 border border-rose-500/25 text-rose-400 hover:bg-rose-500 hover:text-gray-950 rounded-xl text-xs font-bold transition-all cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2 bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 rounded-xl text-xs font-bold transition-all cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
-              Keluar
+              <span>Keluar</span>
             </button>
           </div>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex flex-wrap gap-2 p-1.5 bg-slate-950/60 border border-white/5 rounded-2xl w-fit mb-10">
+        <div className="flex flex-wrap gap-1.5 p-1 bg-white border border-zinc-200 rounded-xl w-fit mb-8 shadow-2xs">
           <button
             onClick={() => setActiveTab("projects")}
-            className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === "projects" ? "bg-primary text-gray-950 shadow-lg" : "text-gray-400 hover:text-white"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeTab === "projects" ? "bg-sky-50 text-sky-800 border border-sky-200 shadow-2xs" : "text-zinc-600 hover:text-zinc-950"
             }`}
           >
-            <Folder className="w-4 h-4" />
-            Upload & Edit Proyek
+            <Folder className="w-4 h-4 text-sky-600" />
+            <span>Upload & Edit Proyek</span>
           </button>
           <button
             onClick={() => setActiveTab("certificates")}
-            className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === "certificates" ? "bg-primary text-gray-950 shadow-lg" : "text-gray-400 hover:text-white"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeTab === "certificates" ? "bg-sky-50 text-sky-800 border border-sky-200 shadow-2xs" : "text-zinc-600 hover:text-zinc-950"
             }`}
           >
-            <Award className="w-4 h-4" />
-            Kelola Sertifikat
+            <Award className="w-4 h-4 text-sky-600" />
+            <span>Kelola Sertifikat</span>
           </button>
           <button
-            onClick={() => setActiveTab("analytics")}
-            className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === "analytics" ? "bg-primary text-gray-950 shadow-lg" : "text-gray-400 hover:text-white"
+            onClick={() => {
+              setActiveTab("analytics");
+              fetchAnalytics();
+            }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeTab === "analytics" ? "bg-sky-50 text-sky-800 border border-sky-200 shadow-2xs" : "text-zinc-600 hover:text-zinc-950"
             }`}
           >
-            <Activity className="w-4 h-4" />
-            Analitik Pengunjung
+            <Activity className="w-4 h-4 text-sky-600" />
+            <span>Analitik Pengunjung</span>
           </button>
         </div>
 
         {/* CONTENT TABS */}
         {activeTab === "projects" ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
             
             {/* FORM UPLOAD (Left - 5 Cols) */}
-            <div className="lg:col-span-5 bg-slate-900/40 border border-white/5 rounded-3xl p-6 shadow-xl flex flex-col gap-6 relative">
-              <div className="border-b border-white/5 pb-4 flex items-center justify-between">
+            <div className="lg:col-span-5 bg-white border border-zinc-200 rounded-[14px] p-6 shadow-2xs flex flex-col gap-6 relative">
+              <div className="border-b border-zinc-200 pb-4 flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary" />
-                    {isEditing ? "Edit Proyek" : "Upload Proyek Baru"}
+                  <h2 className="text-lg font-bold text-zinc-950 flex items-center gap-2">
+                    <Folder className="w-5 h-5 text-sky-600" />
+                    <span>{isEditing ? "Edit Proyek" : "Upload Proyek Baru"}</span>
                   </h2>
-                  <p className="text-[11px] text-gray-400 mt-1">Data ini langsung disinkronkan ke halaman utama.</p>
+                  <p className="text-xs text-zinc-500 mt-0.5">Data ini langsung disinkronkan ke halaman utama.</p>
                 </div>
                 {isEditing && (
                   <button
                     onClick={handleFormReset}
-                    className="p-1 rounded-lg bg-white/5 hover:bg-rose-950/40 text-gray-400 hover:text-rose-400 transition-colors"
+                    className="p-1 rounded-lg bg-zinc-100 hover:bg-rose-50 text-zinc-500 hover:text-rose-600 transition-colors"
                     title="Batalkan Edit"
                   >
                     <X className="w-4 h-4" />
@@ -708,34 +715,32 @@ export default function AdminDashboard() {
               <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
                 
                 {/* INLINE GITHUB REPO SEARCH SELECTOR */}
-                <div ref={dropdownRef} className="flex flex-col gap-1.5 p-4 rounded-2xl bg-slate-950/80 border border-primary/30 relative">
+                <div ref={dropdownRef} className="flex flex-col gap-2 p-4 rounded-xl bg-zinc-50 border border-zinc-200 relative">
                   <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-                      <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                        <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                      </svg>
-                      Cari & Pilih Repo GitHub (@{githubUsername})
+                    <label className="text-[11px] font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-1.5">
+                      <GithubIcon className="w-3.5 h-3.5" />
+                      <span>Cari Repo GitHub (@{githubUsername})</span>
                     </label>
                     <button
                       type="button"
                       onClick={() => fetchGithubRepos(githubUsername)}
                       disabled={loadingGithubRepos}
-                      className="text-[10px] text-gray-400 hover:text-primary flex items-center gap-1 font-semibold transition-colors cursor-pointer"
+                      className="text-[10px] text-zinc-500 hover:text-sky-600 flex items-center gap-1 font-semibold transition-colors cursor-pointer"
                     >
-                      <RefreshCw className={`w-3 h-3 ${loadingGithubRepos ? "animate-spin text-primary" : ""}`} />
+                      <RefreshCw className={`w-3 h-3 ${loadingGithubRepos ? "animate-spin text-sky-600" : ""}`} />
                       <span>Muat Ulang Repo</span>
                     </button>
                   </div>
 
                   {/* Input Search & Dropdown Trigger */}
                   <div className="relative mt-1">
-                    <div className="flex items-center bg-slate-900 border border-white/10 rounded-xl focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all">
-                      <div className="pl-3.5 pr-1 text-primary">
+                    <div className="flex items-center bg-white border border-zinc-300 rounded-xl focus-within:ring-2 focus-within:ring-sky-500 focus-within:border-transparent transition-all shadow-2xs">
+                      <div className="pl-3 pr-1 text-zinc-400">
                         <Search className="w-3.5 h-3.5" />
                       </div>
                       <input
                         type="text"
-                        placeholder={loadingGithubRepos ? "Memuat repository GitHub..." : "Ketik untuk mencari repo (contoh: Kasir, portfolio)..."}
+                        placeholder={loadingGithubRepos ? "Memuat repository GitHub..." : "Ketik untuk mencari repo..."}
                         value={repoInputSearch || (formRepoUrl ? formRepoUrl.replace("https://github.com/MohammadKevin/", "").replace("https://github.com/", "") : "")}
                         onChange={(e) => {
                           setRepoInputSearch(e.target.value);
@@ -743,7 +748,7 @@ export default function AdminDashboard() {
                           setIsRepoDropdownOpen(true);
                         }}
                         onFocus={() => setIsRepoDropdownOpen(true)}
-                        className="w-full py-2.5 px-2 text-xs text-white bg-transparent focus:outline-none placeholder-gray-500 font-mono"
+                        className="w-full py-2 px-2 text-xs text-zinc-900 bg-transparent focus:outline-none placeholder-zinc-400 font-mono"
                       />
                       {formRepoUrl && (
                         <button
@@ -752,7 +757,7 @@ export default function AdminDashboard() {
                             setFormRepoUrl("");
                             setRepoInputSearch("");
                           }}
-                          className="pr-3 text-gray-500 hover:text-rose-400 text-xs font-bold cursor-pointer"
+                          className="pr-3 text-zinc-400 hover:text-rose-500 text-xs font-bold cursor-pointer"
                           title="Hapus tautan repo"
                         >
                           <X className="w-4 h-4" />
@@ -762,48 +767,45 @@ export default function AdminDashboard() {
 
                     {/* Dropdown Menu Result */}
                     {isRepoDropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1.5 z-40 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl max-h-56 overflow-y-auto p-1.5 font-sans">
+                      <div className="absolute top-full left-0 right-0 mt-1.5 z-40 bg-white border border-zinc-200 rounded-xl shadow-xl max-h-56 overflow-y-auto p-1 font-sans">
                         {loadingGithubRepos ? (
-                          <div className="py-4 text-center text-gray-400 text-xs flex items-center justify-center gap-2">
-                            <svg className="animate-spin h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                            </svg>
-                            Memuat daftar repo @{githubUsername}...
+                          <div className="py-4 text-center text-zinc-500 text-xs flex items-center justify-center gap-2">
+                            <RefreshCw className="animate-spin h-3.5 w-3.5 text-sky-600" />
+                            <span>Memuat daftar repo @{githubUsername}...</span>
                           </div>
                         ) : searchFilteredRepos.length > 0 ? (
                           searchFilteredRepos.map((repo) => (
                             <div
                               key={repo.id}
                               onClick={() => handleSelectGithubRepo(repo)}
-                              className="p-2.5 rounded-xl hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between group border border-transparent hover:border-primary/20"
+                              className="p-2.5 rounded-lg hover:bg-zinc-50 transition-all cursor-pointer flex items-center justify-between group border border-transparent hover:border-zinc-200"
                             >
                               <div className="flex flex-col gap-0.5 truncate pr-2">
                                 <div className="flex items-center gap-2">
-                                  <Folder className="w-3.5 h-3.5 text-primary shrink-0" />
-                                  <span className="text-xs font-bold text-white group-hover:text-primary transition-colors truncate">
+                                  <Folder className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                                  <span className="text-xs font-bold text-zinc-950 group-hover:text-sky-600 transition-colors truncate">
                                     {repo.name}
                                   </span>
                                   {repo.language && (
-                                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-primary/10 border border-primary/20 text-primary shrink-0 font-mono">
+                                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-sky-50 border border-sky-200 text-sky-700 shrink-0 font-mono">
                                       {repo.language}
                                     </span>
                                   )}
                                 </div>
                                 {repo.description && (
-                                  <span className="text-[10px] text-gray-400 truncate pl-5">
+                                  <span className="text-[10px] text-zinc-500 truncate pl-5">
                                     {repo.description}
                                   </span>
                                 )}
                               </div>
-                              <span className="text-[10px] text-primary font-bold shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <span className="text-[10px] text-sky-600 font-bold shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                                 Pilih ✓
                               </span>
                             </div>
                           ))
                         ) : (
-                          <div className="py-4 text-center text-gray-400 text-xs">
-                            Tidak ada repository bernama "{repoInputSearch}".
+                          <div className="py-4 text-center text-zinc-400 text-xs">
+                            Tidak ada repository bernama &quot;{repoInputSearch}&quot;.
                           </div>
                         )}
                       </div>
@@ -811,50 +813,50 @@ export default function AdminDashboard() {
                   </div>
 
                   {formRepoUrl ? (
-                    <div className="flex items-center justify-between text-[10px] bg-slate-900 p-2 rounded-xl border border-emerald-500/30 text-emerald-400 mt-1 font-mono">
+                    <div className="flex items-center justify-between text-[10px] bg-emerald-50 p-2 rounded-lg border border-emerald-200 text-emerald-800 mt-1 font-mono">
                       <span className="truncate flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
                         Connected: {formRepoUrl}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-[9px] text-gray-400 mt-0.5">
-                      Ketik atau klik kolom di atas untuk mencari & menghubungkan repo GitHub.
+                    <span className="text-[10px] text-zinc-500">
+                      Ketik nama repo untuk menghubungkan langsung dengan kode GitHub.
                     </span>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Judul Proyek *</label>
+                  <label className="text-xs font-bold text-zinc-800">Judul Proyek *</label>
                   <input
                     type="text"
                     required
                     placeholder="Contoh: Kasir App"
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                    className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Sub-kategori *</label>
+                    <label className="text-xs font-bold text-zinc-800">Sub-kategori *</label>
                     <input
                       type="text"
                       required
                       placeholder="Contoh: POS System"
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                      className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Tipe Proyek *</label>
+                    <label className="text-xs font-bold text-zinc-800">Tipe Proyek *</label>
                     <select
                       value={formType}
                       onChange={(e) => setFormType(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                      className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs cursor-pointer"
                     >
                       <option value="Fullstack">Fullstack</option>
                       <option value="Backend">Backend</option>
@@ -864,54 +866,35 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Skema Gradien Warna *</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {colorGradients.map((g) => (
-                      <button
-                        key={g.value}
-                        type="button"
-                        onClick={() => setFormColor(g.value)}
-                        className={`h-10 rounded-xl relative border flex items-center justify-center text-[9px] font-bold text-white tracking-tight overflow-hidden transition-all cursor-pointer ${
-                          formColor === g.value ? "border-primary ring-2 ring-primary/45" : "border-white/5 hover:border-white/20"
-                        }`}
-                      >
-                        <div className={`absolute inset-0 opacity-80 ${g.bg}`} />
-                        <span className="relative z-10 px-1 text-center bg-black/40 rounded py-0.5">{g.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Deskripsi Proyek *</label>
+                  <label className="text-xs font-bold text-zinc-800">Deskripsi Proyek *</label>
                   <textarea
                     required
                     rows={4}
                     placeholder="Sistem kasir offline-first lengkap dengan faktur dan pemantauan stok..."
                     value={formDesc}
                     onChange={(e) => setFormDesc(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60 resize-none"
+                    className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 resize-none shadow-2xs"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  <label className="text-xs font-bold text-zinc-800">
                     Teknologi (Pisahkan koma) *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="React.js, Node.js, MySQL, Tailwind CSS"
+                    placeholder="Next.js, NestJS, PostgreSQL, Prisma"
                     value={formTech}
                     onChange={(e) => setFormTech(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                    className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                   />
-                  <span className="text-[9px] text-gray-500">Masukkan nama teknologi dipisahkan dengan tanda koma.</span>
+                  <span className="text-[10px] text-zinc-500">Masukkan nama teknologi dipisahkan dengan koma.</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                    <label className="text-xs font-bold text-zinc-800">
                       Live Demo URL (Opsional)
                     </label>
                     <input
@@ -919,83 +902,44 @@ export default function AdminDashboard() {
                       placeholder="https://demo-app.com"
                       value={formDemoUrl}
                       onChange={(e) => setFormDemoUrl(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                      className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                      GitHub Repo URL (Terisi Otomatis)
+                    <label className="text-xs font-bold text-zinc-800">
+                      GitHub Repo URL
                     </label>
                     <input
                       type="url"
                       placeholder="https://github.com/user/repo"
                       value={formRepoUrl}
                       onChange={(e) => setFormRepoUrl(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                      className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-2 w-full py-3 bg-gradient-to-r from-primary to-secondary text-gray-950 font-bold rounded-xl shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer text-xs uppercase tracking-wider"
+                  className="mt-2 w-full py-3 bg-sky-500 hover:bg-sky-600 active:scale-98 text-white font-bold rounded-xl shadow-xs transition-all cursor-pointer text-xs uppercase tracking-wider"
                 >
-                  {isEditing ? "Perbarui Proyek" : "Upload Proyek"}
+                  {isEditing ? "Perbarui Proyek" : "Simpan & Publikasikan Proyek"}
                 </button>
               </form>
-
-              {/* CARD PREVIEW */}
-              <div className="border-t border-white/5 pt-4">
-                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-3">Live Card Preview</span>
-                <div className="relative group bg-slate-900/40 border border-white/5 rounded-3xl shadow-lg p-0 flex flex-col h-64 overflow-hidden">
-                  <div className={`h-full bg-gradient-to-br ${formColor} p-6 flex flex-col justify-between overflow-hidden relative z-0`}>
-                    <div className="absolute inset-0 bg-[#030712]/45 backdrop-blur-[1px]" />
-                    
-                    <div className="relative z-10 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-white/90 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 uppercase tracking-wider">
-                        {formCategory || "Kategori"}
-                      </span>
-                      {formRepoUrl && (
-                        <span className="text-[9px] font-bold text-emerald-400 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3" />
-                          GitHub Connected
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="relative z-10 flex flex-col gap-1">
-                      <h3 className="text-xl font-extrabold text-white leading-tight">{formTitle || "Judul Proyek"}</h3>
-                      <span className="text-[10px] text-primary font-semibold flex items-center gap-1 opacity-80">
-                        {formType} Developer
-                      </span>
-                      <p className="text-[10px] text-gray-300 leading-snug line-clamp-2 mt-1">
-                        {formDesc || "Deskripsi proyek Anda akan muncul di bagian ini ketika Anda mulai mengetik."}
-                      </p>
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {formTech.split(",").map((t) => t.trim()).filter(Boolean).slice(0, 3).map((techName) => (
-                          <span key={techName} className="text-[8px] text-gray-300 bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
-                            {techName}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* LIST PROJECT (Right - 7 Cols) */}
-            <div className="lg:col-span-7 bg-slate-900/40 border border-white/5 rounded-3xl p-6 shadow-xl flex flex-col gap-6">
+            <div className="lg:col-span-7 bg-white border border-zinc-200 rounded-[14px] p-6 shadow-2xs flex flex-col gap-6">
               
               {/* Search Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-4">
                 <div>
-                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Grid className="w-5 h-5 text-secondary" />
-                    Proyek Aktif ({projects.length})
+                  <h2 className="text-lg font-bold text-zinc-950 flex items-center gap-2">
+                    <Grid className="w-5 h-5 text-sky-600" />
+                    <span>Proyek Aktif ({projects.length})</span>
                   </h2>
-                  <p className="text-[11px] text-gray-400 mt-1">Daftar semua proyek yang saat ini tampil di portofolio.</p>
+                  <p className="text-xs text-zinc-500 mt-0.5">Daftar semua proyek yang tampil di portofolio.</p>
                 </div>
                 <div className="relative w-full sm:w-64">
                   <input
@@ -1003,19 +947,16 @@ export default function AdminDashboard() {
                     placeholder="Cari proyek..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-2 pl-9 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                    className="w-full px-3.5 py-2 pl-9 rounded-xl border border-zinc-300 bg-zinc-50 focus:bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                   />
-                  <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 </div>
               </div>
 
               {/* Projects Grid */}
               {loadingProjects ? (
-                <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
-                  <svg className="animate-spin h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                  </svg>
+                <div className="flex flex-col items-center justify-center py-20 text-zinc-500 gap-3">
+                  <RefreshCw className="animate-spin h-6 w-6 text-sky-600" />
                   <span className="text-xs">Memuat daftar proyek...</span>
                 </div>
               ) : filteredProjects.length > 0 ? (
@@ -1023,37 +964,35 @@ export default function AdminDashboard() {
                   {filteredProjects.map((p) => (
                     <div
                       key={p.id}
-                      className="border border-white/5 bg-slate-950/40 rounded-2xl p-5 hover:border-primary/20 transition-all flex flex-col justify-between h-52 relative"
+                      className="border border-zinc-200 bg-zinc-50/70 hover:bg-white rounded-[14px] p-5 shadow-2xs hover:border-sky-400 transition-all flex flex-col justify-between h-56 relative"
                     >
                       <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-bold text-primary uppercase tracking-widest">{p.category}</span>
+                          <span className="text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-md font-mono uppercase tracking-wider">{p.category}</span>
                           <div className="flex items-center gap-1.5">
                             {p.repoUrl && p.repoUrl.includes("github.com") && (
-                              <span className="text-[8px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-1.5 py-0.5 rounded-md flex items-center gap-1 font-mono">
-                                <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
-                                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                                </svg>
+                              <span className="text-[9px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-md flex items-center gap-1 font-mono">
+                                <GithubIcon className="w-2.5 h-2.5" />
                                 GitHub
                               </span>
                             )}
-                            <span className="text-[9px] font-semibold text-white bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] font-semibold text-zinc-700 bg-white border border-zinc-200 px-2 py-0.5 rounded-md">
                               {p.type}
                             </span>
                           </div>
                         </div>
-                        <h3 className="text-base font-bold text-white leading-tight">{p.title}</h3>
-                        <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{p.desc}</p>
+                        <h3 className="text-base font-bold text-zinc-950 leading-tight">{p.title}</h3>
+                        <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed">{p.desc}</p>
                       </div>
 
-                      <div className="flex items-center justify-between border-t border-white/5 pt-3 mt-3">
+                      <div className="flex items-center justify-between border-t border-zinc-200/80 pt-3 mt-3">
                         <div className="flex flex-wrap gap-1 max-w-[60%]">
                           {p.tech.slice(0, 2).map((t) => (
-                            <span key={t} className="text-[8px] bg-slate-900 border border-white/5 px-1.5 py-0.5 rounded text-gray-400">
+                            <span key={t} className="text-[9px] bg-white border border-zinc-200 px-1.5 py-0.5 rounded text-zinc-700 font-mono">
                               {t}
                             </span>
                           ))}
-                          {p.tech.length > 2 && <span className="text-[7px] text-gray-500">+{p.tech.length - 2}</span>}
+                          {p.tech.length > 2 && <span className="text-[8px] text-zinc-400 font-mono">+{p.tech.length - 2}</span>}
                         </div>
 
                         <div className="flex items-center gap-1.5">
@@ -1062,7 +1001,7 @@ export default function AdminDashboard() {
                               href={p.repoUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-emerald-500 hover:text-emerald-400 text-gray-400 transition-all"
+                              className="p-1.5 rounded-lg bg-white border border-zinc-200 hover:border-sky-400 hover:text-sky-600 text-zinc-600 shadow-2xs transition-all"
                               title="Buka Repo GitHub"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -1070,14 +1009,14 @@ export default function AdminDashboard() {
                           )}
                           <button
                             onClick={() => handleEditClick(p)}
-                            className="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-primary hover:text-primary text-gray-400 transition-all cursor-pointer"
+                            className="p-1.5 rounded-lg bg-white border border-zinc-200 hover:border-sky-400 hover:text-sky-600 text-zinc-600 shadow-2xs transition-all cursor-pointer"
                             title="Edit Proyek"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteClick(p.id, p.title)}
-                            className="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-rose-500 hover:text-rose-500 text-gray-400 transition-all cursor-pointer"
+                            className="p-1.5 rounded-lg bg-white border border-zinc-200 hover:border-rose-300 hover:text-rose-600 text-zinc-600 shadow-2xs transition-all cursor-pointer"
                             title="Hapus Proyek"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -1088,10 +1027,10 @@ export default function AdminDashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-20 bg-white/[0.01] rounded-2xl border border-white/5">
-                  <Search className="w-8 h-8 text-gray-500 mx-auto" />
-                  <h3 className="text-sm font-bold text-white mt-3">Tidak Ada Proyek</h3>
-                  <p className="text-xs text-gray-400 mt-1.5 px-6">
+                <div className="text-center py-20 bg-zinc-50 rounded-[14px] border border-zinc-200 p-6">
+                  <Search className="w-8 h-8 text-zinc-400 mx-auto" />
+                  <h3 className="text-sm font-bold text-zinc-900 mt-3">Tidak Ada Proyek</h3>
+                  <p className="text-xs text-zinc-500 mt-1">
                     Mulai upload proyek baru menggunakan formulir di sebelah kiri.
                   </p>
                 </div>
@@ -1099,24 +1038,24 @@ export default function AdminDashboard() {
             </div>
           </div>
         ) : activeTab === "certificates" ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
             
             {/* FORM UPLOAD SERTIFIKAT (Left - 5 Cols) */}
-            <div className="lg:col-span-5 bg-slate-900/40 border border-white/5 rounded-3xl p-6 shadow-xl flex flex-col gap-6 relative">
-              <div className="border-b border-white/5 pb-4 flex items-center justify-between">
+            <div className="lg:col-span-5 bg-white border border-zinc-200 rounded-[14px] p-6 shadow-2xs flex flex-col gap-6 relative">
+              <div className="border-b border-zinc-200 pb-4 flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Award className="w-5 h-5 text-primary" />
+                  <h2 className="text-lg font-bold text-zinc-950 flex items-center gap-2">
+                    <Award className="w-5 h-5 text-sky-600" />
                     <span>{isEditingCert ? "Edit Sertifikat" : "Upload Sertifikat Baru"}</span>
                   </h2>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    {isEditingCert ? "Perbarui informasi kredensial sertifikat." : "Tambahkan sertifikasi & kredensial profesional baru."}
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    {isEditingCert ? "Perbarui informasi kredensial sertifikat." : "Tambahkan sertifikasi & kredensial baru."}
                   </p>
                 </div>
                 {isEditingCert && (
                   <button
                     onClick={resetCertForm}
-                    className="px-3 py-1 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white rounded-lg text-xs font-semibold border border-white/10 transition-all cursor-pointer"
+                    className="px-2.5 py-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-lg text-xs font-semibold border border-zinc-200 transition-all cursor-pointer"
                   >
                     Batal Edit
                   </button>
@@ -1125,104 +1064,104 @@ export default function AdminDashboard() {
 
               <form onSubmit={handleSaveCertificate} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-gray-300">Judul Sertifikat *</label>
+                  <label className="text-xs font-bold text-zinc-800">Judul Sertifikat *</label>
                   <input
                     type="text"
                     required
                     placeholder="misal: Backend Developer & RESTful API Engineering"
                     value={certTitle}
                     onChange={(e) => setCertTitle(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                    className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-gray-300">Penerbit / Institusi *</label>
+                  <label className="text-xs font-bold text-zinc-800">Penerbit / Institusi *</label>
                   <input
                     type="text"
                     required
                     placeholder="misal: SMK Telkom Malang / Dicoding / Udemy"
                     value={certIssuer}
                     onChange={(e) => setCertIssuer(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                    className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-gray-300">Tahun / Tanggal *</label>
+                    <label className="text-xs font-bold text-zinc-800">Tahun / Tanggal *</label>
                     <input
                       type="text"
                       required
                       placeholder="misal: 2024"
                       value={certDate}
                       onChange={(e) => setCertDate(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                      className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-gray-300">Kategori *</label>
+                    <label className="text-xs font-bold text-zinc-800">Kategori *</label>
                     <select
                       value={certCategory}
                       onChange={(e) => setCertCategory(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary text-xs text-white bg-slate-950/60 cursor-pointer"
+                      className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs cursor-pointer"
                     >
-                      <option value="Backend" className="bg-slate-900">Backend</option>
-                      <option value="Fullstack" className="bg-slate-900">Fullstack</option>
-                      <option value="Database" className="bg-slate-900">Database</option>
-                      <option value="General" className="bg-slate-900">General</option>
+                      <option value="Backend">Backend</option>
+                      <option value="Fullstack">Fullstack</option>
+                      <option value="Database">Database</option>
+                      <option value="General">General</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-gray-300">Skill / Teknologi (Pisahkan Koma)</label>
+                  <label className="text-xs font-bold text-zinc-800">Skill / Teknologi (Pisahkan Koma)</label>
                   <input
                     type="text"
                     placeholder="misal: Node.js, Express, PostgreSQL, Prisma"
                     value={certSkills}
                     onChange={(e) => setCertSkills(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                    className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-gray-300">URL Verifikasi Credential (Opsional)</label>
+                  <label className="text-xs font-bold text-zinc-800">URL Verifikasi Credential (Opsional)</label>
                   <input
                     type="url"
                     placeholder="https://..."
                     value={certCredentialUrl}
                     onChange={(e) => setCertCredentialUrl(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-xs text-white bg-slate-950/60"
+                    className="px-3.5 py-2.5 rounded-xl border border-zinc-300 bg-white focus:outline-sky-500 text-xs text-zinc-900 shadow-2xs"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-2 w-full py-3 bg-gradient-to-r from-primary to-secondary text-gray-950 font-bold rounded-xl shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer text-xs uppercase tracking-wider flex items-center justify-center gap-2"
+                  className="mt-2 w-full py-3 bg-sky-500 hover:bg-sky-600 active:scale-98 text-white font-bold rounded-xl shadow-xs transition-all cursor-pointer text-xs uppercase tracking-wider flex items-center justify-center gap-2"
                 >
                   <Award className="w-4 h-4" />
-                  <span>{isEditingCert ? "Perbarui Sertifikat" : "Upload Sertifikat"}</span>
+                  <span>{isEditingCert ? "Perbarui Sertifikat" : "Simpan Sertifikat"}</span>
                 </button>
               </form>
 
             </div>
 
             {/* DAFTAR SERTIFIKAT (Right - 7 Cols) */}
-            <div className="lg:col-span-7 bg-slate-900/40 border border-white/5 rounded-3xl p-6 shadow-xl flex flex-col gap-6">
-              <div className="border-b border-white/5 pb-4 flex items-center justify-between">
+            <div className="lg:col-span-7 bg-white border border-zinc-200 rounded-[14px] p-6 shadow-2xs flex flex-col gap-6">
+              <div className="border-b border-zinc-200 pb-4 flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                  <h2 className="text-lg font-bold text-zinc-950 flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-sky-600" />
                     <span>Daftar Sertifikat Terdaftar ({certificates.length})</span>
                   </h2>
-                  <p className="text-xs text-gray-400 mt-0.5">Seluruh kredensial sertifikasi yang tampil di halaman portofolio.</p>
+                  <p className="text-xs text-zinc-500 mt-0.5">Seluruh sertifikasi yang tampil di halaman portofolio.</p>
                 </div>
               </div>
 
               {loadingCertificates ? (
-                <div className="text-center py-16 text-gray-500">
+                <div className="text-center py-16 text-zinc-500">
                   Memuat data sertifikat...
                 </div>
               ) : certificates.length > 0 ? (
@@ -1230,56 +1169,56 @@ export default function AdminDashboard() {
                   {certificates.map((cert) => (
                     <div
                       key={cert.id}
-                      className="border border-white/5 bg-slate-950/40 rounded-2xl p-5 hover:border-primary/20 transition-all flex flex-col justify-between h-52 relative"
+                      className="border border-zinc-200 bg-zinc-50/70 hover:bg-white rounded-[14px] p-5 shadow-2xs hover:border-sky-400 transition-all flex flex-col justify-between h-56 relative"
                     >
                       <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-bold text-primary uppercase tracking-widest">{cert.category || "Backend"}</span>
-                          <span className="text-[9px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                          <span className="text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-md font-mono uppercase tracking-wider">{cert.category || "Backend"}</span>
+                          <span className="text-[10px] font-mono text-zinc-700 bg-white border border-zinc-200 px-2 py-0.5 rounded-md font-bold">
                             {cert.date}
                           </span>
                         </div>
-                        <h3 className="text-sm font-bold text-white leading-tight">{cert.title}</h3>
-                        <p className="text-xs text-gray-400 leading-relaxed">{cert.issuer}</p>
+                        <h3 className="text-sm font-bold text-zinc-950 leading-tight">{cert.title}</h3>
+                        <p className="text-xs text-zinc-600 leading-relaxed">{cert.issuer}</p>
                       </div>
 
                       <div>
                         {Array.isArray(cert.skills) && cert.skills.length > 0 && (
                           <div className="flex flex-wrap gap-1 mb-3">
                             {cert.skills.map((s) => (
-                              <span key={s} className="text-[8px] bg-slate-900 border border-white/5 px-1.5 py-0.5 rounded text-gray-300">
+                              <span key={s} className="text-[9px] bg-white border border-zinc-200 px-1.5 py-0.5 rounded text-zinc-700 font-mono">
                                 {s}
                               </span>
                             ))}
                           </div>
                         )}
 
-                        <div className="flex items-center justify-between border-t border-white/5 pt-3">
+                        <div className="flex items-center justify-between border-t border-zinc-200/80 pt-3">
                           {cert.credentialUrl ? (
                             <a
                               href={cert.credentialUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1"
+                              className="text-[11px] text-sky-600 hover:text-sky-700 font-bold flex items-center gap-1"
                             >
                               <span>Verify Link</span>
                               <ExternalLink className="w-3 h-3" />
                             </a>
                           ) : (
-                            <span className="text-[9px] text-gray-600">No URL</span>
+                            <span className="text-[10px] text-zinc-400">No URL</span>
                           )}
 
                           <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => handleEditCertClick(cert)}
-                              className="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-primary hover:text-primary text-gray-400 transition-all cursor-pointer"
+                              className="p-1.5 rounded-lg bg-white border border-zinc-200 hover:border-sky-400 hover:text-sky-600 text-zinc-600 shadow-2xs transition-all cursor-pointer"
                               title="Edit Sertifikat"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => handleDeleteCertificate(cert.id)}
-                              className="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:border-rose-500 hover:text-rose-500 text-gray-400 transition-all cursor-pointer"
+                              className="p-1.5 rounded-lg bg-white border border-zinc-200 hover:border-rose-300 hover:text-rose-600 text-zinc-600 shadow-2xs transition-all cursor-pointer"
                               title="Hapus Sertifikat"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1291,10 +1230,10 @@ export default function AdminDashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-20 bg-white/[0.01] rounded-2xl border border-white/5">
-                  <Award className="w-8 h-8 text-gray-500 mx-auto" />
-                  <h3 className="text-sm font-bold text-white mt-3">Belum Ada Sertifikat</h3>
-                  <p className="text-xs text-gray-400 mt-1.5 px-6">
+                <div className="text-center py-20 bg-zinc-50 rounded-[14px] border border-zinc-200 p-6">
+                  <Award className="w-8 h-8 text-zinc-400 mx-auto" />
+                  <h3 className="text-sm font-bold text-zinc-900 mt-3">Belum Ada Sertifikat</h3>
+                  <p className="text-xs text-zinc-500 mt-1">
                     Tambah sertifikat baru menggunakan formulir di sebelah kiri.
                   </p>
                 </div>
@@ -1304,22 +1243,22 @@ export default function AdminDashboard() {
           </div>
         ) : (
           /* ANALYTICS TAB CONTENT */
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-6 sm:gap-8">
             
             {/* STATS PANEL */}
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-              <div className="bg-slate-900/40 border border-white/5 p-6 rounded-2xl">
-                <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Total Kunjungan</span>
-                <div className="text-4xl font-black text-white mt-2">{visitors.length}</div>
-                <p className="text-[10px] text-gray-500 mt-1">Jumlah tayangan halaman utama</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-white border border-zinc-200 p-5 rounded-[14px] shadow-2xs">
+                <span className="text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded uppercase tracking-wider font-mono">Total Kunjungan</span>
+                <div className="text-3xl font-extrabold text-zinc-950 font-mono mt-3">{visitors.length}</div>
+                <p className="text-[11px] text-zinc-500 mt-1">Jumlah tayangan halaman utama</p>
               </div>
 
-              <div className="bg-slate-900/40 border border-white/5 p-6 rounded-2xl">
-                <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Desktop</span>
-                <div className="text-4xl font-black text-white mt-2">
+              <div className="bg-white border border-zinc-200 p-5 rounded-[14px] shadow-2xs">
+                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded uppercase tracking-wider font-mono">Desktop</span>
+                <div className="text-3xl font-extrabold text-zinc-950 font-mono mt-3">
                   {visitors.filter((v) => v.device === "Desktop").length}
                 </div>
-                <p className="text-[10px] text-gray-500 mt-1">
+                <p className="text-[11px] text-zinc-500 mt-1">
                   Kunjungan via PC / Laptop (
                   {visitors.length
                     ? Math.round((visitors.filter((v) => v.device === "Desktop").length / visitors.length) * 100)
@@ -1328,12 +1267,12 @@ export default function AdminDashboard() {
                 </p>
               </div>
 
-              <div className="bg-slate-900/40 border border-white/5 p-6 rounded-2xl">
-                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Mobile</span>
-                <div className="text-4xl font-black text-white mt-2">
+              <div className="bg-white border border-zinc-200 p-5 rounded-[14px] shadow-2xs">
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded uppercase tracking-wider font-mono">Mobile</span>
+                <div className="text-3xl font-extrabold text-zinc-950 font-mono mt-3">
                   {visitors.filter((v) => v.device === "Mobile").length}
                 </div>
-                <p className="text-[10px] text-gray-500 mt-1">
+                <p className="text-[11px] text-zinc-500 mt-1">
                   Kunjungan via Smartphone (
                   {visitors.length
                     ? Math.round((visitors.filter((v) => v.device === "Mobile").length / visitors.length) * 100)
@@ -1342,12 +1281,12 @@ export default function AdminDashboard() {
                 </p>
               </div>
 
-              <div className="bg-slate-900/40 border border-white/5 p-6 rounded-2xl">
-                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Tablet & Lainnya</span>
-                <div className="text-4xl font-black text-white mt-2">
+              <div className="bg-white border border-zinc-200 p-5 rounded-[14px] shadow-2xs">
+                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded uppercase tracking-wider font-mono">Tablet & Lainnya</span>
+                <div className="text-3xl font-extrabold text-zinc-950 font-mono mt-3">
                   {visitors.filter((v) => v.device !== "Desktop" && v.device !== "Mobile").length}
                 </div>
-                <p className="text-[10px] text-gray-500 mt-1">
+                <p className="text-[11px] text-zinc-500 mt-1">
                   Kunjungan via perangkat lain (
                   {visitors.length
                     ? Math.round(
@@ -1362,23 +1301,23 @@ export default function AdminDashboard() {
             </div>
 
             {/* VISITOR LOGS TABLE */}
-            <div className="bg-slate-900/40 border border-white/5 rounded-3xl p-6 shadow-xl flex flex-col gap-6">
+            <div className="bg-white border border-zinc-200 rounded-[14px] p-6 shadow-2xs flex flex-col gap-6">
               
               {/* Filter visitor */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-4">
                 <div>
-                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Terminal className="w-5 h-5 text-primary" />
-                    Log Kunjungan Terbaru
+                  <h2 className="text-lg font-bold text-zinc-950 flex items-center gap-2">
+                    <Terminal className="w-5 h-5 text-sky-600" />
+                    <span>Log Kunjungan Terbaru</span>
                   </h2>
-                  <p className="text-[11px] text-gray-400 mt-1">Detil logs 1000 kunjungan terakhir ke portofolio Anda.</p>
+                  <p className="text-xs text-zinc-500 mt-0.5">Detil log kunjungan terakhir ke portofolio Anda.</p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
                   <select
                     value={visitorFilterDevice}
                     onChange={(e) => setVisitorFilterDevice(e.target.value)}
-                    className="px-3 py-2 rounded-xl border border-white/5 text-xs text-white bg-slate-950/60 focus:outline-none"
+                    className="px-3 py-2 rounded-xl border border-zinc-300 text-xs text-zinc-900 bg-white focus:outline-sky-500 shadow-2xs cursor-pointer"
                   >
                     <option value="All">Semua Perangkat</option>
                     <option value="Desktop">Desktop</option>
@@ -1392,17 +1331,17 @@ export default function AdminDashboard() {
                       placeholder="Cari IP / OS / Browser..."
                       value={searchVisitorQuery}
                       onChange={(e) => setSearchVisitorQuery(e.target.value)}
-                      className="w-full px-4 py-2 pl-9 rounded-xl border border-white/5 focus:outline-none text-xs text-white bg-slate-950/60"
+                      className="w-full px-3.5 py-2 pl-9 rounded-xl border border-zinc-300 text-xs text-zinc-900 bg-white focus:outline-sky-500 shadow-2xs"
                     />
-                    <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   </div>
                 </div>
               </div>
 
               {/* Table */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs text-gray-400">
-                  <thead className="text-[10px] text-gray-500 uppercase bg-slate-950/80 border-b border-white/5 font-bold tracking-wider">
+              <div className="overflow-x-auto border border-zinc-200 rounded-xl">
+                <table className="w-full text-left text-xs text-zinc-600">
+                  <thead className="text-[10px] text-zinc-600 uppercase bg-zinc-50 border-b border-zinc-200 font-bold tracking-wider">
                     <tr>
                       <th className="py-3 px-4">Perangkat</th>
                       <th className="py-3 px-4">Sistem Operasi</th>
@@ -1411,29 +1350,29 @@ export default function AdminDashboard() {
                       <th className="py-3 px-4">Waktu Kunjungan</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-zinc-200">
                     {loadingAnalytics ? (
                       <tr>
-                        <td colSpan={5} className="text-center py-12 text-gray-500">
+                        <td colSpan={5} className="text-center py-12 text-zinc-500">
                           Memuat data log pengunjung...
                         </td>
                       </tr>
                     ) : filteredVisitors.length > 0 ? (
                       filteredVisitors.map((v) => (
-                        <tr key={v.id} className="hover:bg-white/[0.02] transition-colors">
-                          <td className="py-3 px-4 font-bold text-white flex items-center gap-2">
+                        <tr key={v.id} className="hover:bg-zinc-50/60 transition-colors">
+                          <td className="py-3 px-4 font-bold text-zinc-950 flex items-center gap-2">
                             {getDeviceIcon(v.device)}
                             <span>{v.device}</span>
                           </td>
-                          <td className="py-3 px-4 text-gray-300">{v.os}</td>
-                          <td className="py-3 px-4 text-gray-300">{v.browser}</td>
-                          <td className="py-3 px-4 font-mono text-[11px] text-primary">{v.ip}</td>
-                          <td className="py-3 px-4 text-gray-400">{formatDate(v.timestamp)}</td>
+                          <td className="py-3 px-4 text-zinc-700">{v.os}</td>
+                          <td className="py-3 px-4 text-zinc-700">{v.browser}</td>
+                          <td className="py-3 px-4 font-mono text-[11px] text-sky-700 font-bold">{v.ip}</td>
+                          <td className="py-3 px-4 text-zinc-500 font-mono text-[11px]">{formatDate(v.timestamp)}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={5} className="text-center py-12 text-gray-500">
+                        <td colSpan={5} className="text-center py-12 text-zinc-400">
                           Belum ada log pengunjung yang tercatat.
                         </td>
                       </tr>

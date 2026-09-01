@@ -4,251 +4,192 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, Palette } from "lucide-react";
+import { Menu, X, ArrowUpRight, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/data/translations";
 
-const themes = [
-  { id: "indigo",  label: "Indigo",  color: "#6366f1" },
-  { id: "rose",    label: "Rose",    color: "#f43f5e" },
-  { id: "amber",   label: "Amber",   color: "#f59e0b" },
-  { id: "emerald", label: "Emerald", color: "#10b981" },
-  { id: "cyan",    label: "Cyan",    color: "#06b6d4" },
-];
-
 export default function Navbar() {
   const pathname = usePathname();
-  const { lang, setLang } = useLanguage();
-
-  const [menuOpen,  setMenuOpen]  = useState(false);
-  const [themeOpen, setThemeOpen] = useState(false);
-  const [scrolled,  setScrolled]  = useState(false);
+  const { lang, toggle } = useLanguage();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
-  const [currentTheme,  setCurrentTheme]  = useState("indigo");
 
   const n = translations.nav;
 
   const navItems = [
-    { label: n.home[lang],     href: "#hero"         },
-    { label: n.about[lang],    href: "#whoami"        },
-    { label: n.skills[lang],   href: "#stack"         },
-    { label: n.projects[lang], href: "#projects"      },
-    { label: n.github[lang],   href: "#github"        },
-    { label: n.certs[lang],    href: "#certificates"  },
-    { label: n.timeline[lang], href: "#timeline"      },
-    { label: n.contact[lang],  href: "#contact"       },
+    { label: n.home[lang], href: "/#hero", id: "hero" },
+    { label: n.about[lang], href: "/#about", id: "about" },
+    { label: "Features", href: "/#features", id: "features" },
+    { label: "Services", href: "/#services", id: "services" },
+    { label: n.skills[lang], href: "/#stack", id: "stack" },
+    { label: n.projects[lang], href: "/#projects", id: "projects" },
+    { label: n.timeline[lang], href: "/#experience", id: "experience" },
+    { label: "CV", href: "/cv", id: "cv" },
   ];
 
   useEffect(() => {
-    const saved = localStorage.getItem("kv-theme") || "indigo";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCurrentTheme(saved);
-    document.documentElement.setAttribute("data-theme", saved);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
 
-    const onScroll = () => {
-      setScrolled(window.scrollY > 30);
-      const ids = ["hero","whoami","stack","projects","github","certificates","timeline","contact"];
-      for (const id of [...ids].reverse()) {
+      const sectionIds = ["hero", "about", "features", "services", "stack", "projects", "experience", "contact"];
+      const scrollY = window.scrollY;
+
+      if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 90) {
+        setActiveSection("contact");
+        return;
+      }
+
+      let currentActive = "hero";
+      for (const id of sectionIds) {
         const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 160) {
-          setActiveSection(id);
-          break;
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200) {
+            currentActive = id;
+          }
         }
       }
-    };
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
-  const applyTheme = (id: string) => {
-    setCurrentTheme(id);
-    localStorage.setItem("kv-theme", id);
-    document.documentElement.setAttribute("data-theme", id);
-    setThemeOpen(false);
-  };
+      setActiveSection(currentActive);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (pathname && pathname.startsWith("/admin")) return null;
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         scrolled
-          ? "bg-[#080f1e]/95 backdrop-blur-md border-b border-white/6 shadow-xl shadow-black/30"
-          : "bg-transparent"
+          ? "bg-white/90 backdrop-blur-md border-b border-zinc-200/80 shadow-xs"
+          : "bg-white/70 backdrop-blur-sm border-b border-zinc-100"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-
-        {/* ── Brand ─────────────────────────── */}
-        <Link href="/" id="navbar-brand" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20
-            group-hover:border-[var(--accent-border)] transition-all">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+        
+        {/* ── Brand / Minimalist Logo ─────────────────────────── */}
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-w-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-zinc-900 flex items-center justify-center text-white font-mono font-bold text-xs sm:text-sm shadow-xs group-hover:scale-105 transition-transform overflow-hidden relative border border-zinc-200 shrink-0">
             <Image
               src="/images/icon.png"
-              alt="Kevin"
-              width={32}
-              height={32}
+              alt="Mohammad Kevin"
+              width={36}
+              height={36}
               className="object-cover"
             />
           </div>
-          <span className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors hidden sm:block">
-            Mohammad Kevin
-          </span>
+          <div className="flex flex-col min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-xs sm:text-sm font-bold text-zinc-950 tracking-tight group-hover:text-sky-600 transition-colors truncate">
+                Mohammad Kevin
+              </span>
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60 shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse" />
+                Available
+              </span>
+            </div>
+            <span className="text-[10px] sm:text-[11px] text-zinc-500 font-mono hidden sm:block truncate">
+              Fullstack & Backend Engineer
+            </span>
+          </div>
         </Link>
 
-        {/* ── Desktop Nav ─────────────────── */}
-        <nav className="hidden lg:flex items-center gap-0.5">
+        {/* ── Desktop Navigation Links ─────────────────── */}
+        <nav className="hidden lg:flex items-center gap-1 p-1 bg-zinc-100/60 rounded-xl border border-zinc-200/50">
           {navItems.map((item) => {
-            const id = item.href.replace("#", "");
-            const active = activeSection === id;
+            const isActive = activeSection === item.id;
             return (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 ${
-                  active
-                    ? "text-[var(--accent-light)] bg-[var(--accent-muted)]"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 ${
+                  isActive
+                    ? "text-sky-700 bg-white shadow-2xs font-bold border border-zinc-200/80"
+                    : "text-zinc-600 hover:text-zinc-950 hover:bg-white/60"
                 }`}
               >
                 {item.label}
-              </a>
+              </Link>
             );
           })}
         </nav>
 
-        {/* ── Right Controls ──────────────── */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* ── Action Buttons (Desktop Language + Primary CTA) ─────────────────── */}
+        <div className="hidden sm:flex items-center gap-2.5 shrink-0">
+          {/* Language Toggle Pill */}
+          <button
+            onClick={toggle}
+            aria-label="Toggle language"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-zinc-700 bg-zinc-50 border border-zinc-200 hover:bg-zinc-100 hover:text-zinc-950 transition-colors cursor-pointer"
+          >
+            <Globe className="w-3.5 h-3.5 text-zinc-500" />
+            <span className="uppercase font-mono">{lang}</span>
+          </button>
 
-          {/* ── Language Toggle ──── */}
-          <div className="flex items-center bg-white/5 rounded-lg border border-white/10 p-0.5">
-            <button
-              onClick={() => setLang("id")}
-              className={`px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-md text-[10px] sm:text-xs font-bold transition-all ${
-                lang === "id" 
-                  ? "bg-[var(--accent-muted)] text-[var(--accent-light)] border border-[var(--accent-border)]" 
-                  : "text-slate-400 hover:text-white border border-transparent"
-              }`}
-            >
-              ID
-            </button>
-            <button
-              onClick={() => setLang("en")}
-              className={`px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-md text-[10px] sm:text-xs font-bold transition-all ${
-                lang === "en" 
-                  ? "bg-[var(--accent-muted)] text-[var(--accent-light)] border border-[var(--accent-border)]" 
-                  : "text-slate-400 hover:text-white border border-transparent"
-              }`}
-            >
-              EN
-            </button>
-          </div>
-
-          {/* ── Theme Switcher ───── */}
-          <div className="relative">
-            <button
-              id="theme-toggle-btn"
-              onClick={() => setThemeOpen(!themeOpen)}
-              title="Ganti tema warna"
-              className="p-1.5 sm:p-2 rounded-lg text-slate-400 hover:text-[var(--accent-light)] bg-white/5 hover:bg-[var(--accent-muted)] border border-white/10 hover:border-[var(--accent-border)] transition-all"
-              aria-label="Theme switcher"
-            >
-              <Palette className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-
-            {themeOpen && (
-              <div
-                id="theme-panel"
-                className="absolute right-0 top-full mt-2 card-flat p-3 flex flex-col gap-2 min-w-[160px] shadow-2xl shadow-black/50 border border-white/8"
-              >
-                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider px-1">
-                  {n.themeLabel[lang]}
-                </p>
-                <div className="flex flex-col gap-0.5">
-                  {themes.map((t) => (
-                    <button
-                      key={t.id}
-                      id={`theme-${t.id}`}
-                      onClick={() => applyTheme(t.id)}
-                      className={`flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm
-                        transition-all cursor-pointer text-left ${
-                        currentTheme === t.id
-                          ? "bg-white/8 text-white"
-                          : "text-slate-400 hover:bg-white/5 hover:text-white"
-                      }`}
-                    >
-                      <span
-                        className="w-3.5 h-3.5 rounded-full shrink-0 border border-white/20"
-                        style={{ background: t.color }}
-                      />
-                      {t.label}
-                      {currentTheme === t.id && (
-                        <span className="ml-auto text-[10px] text-[var(--accent-light)]">✓</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* ── Hire Me CTA ────── */}
+          {/* Primary Cyan CTA Button */}
           <a
             href="#contact"
-            id="navbar-cta"
-            className="hidden sm:inline-flex btn-accent text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 hover:bg-sky-600 active:scale-98 text-white shadow-sm transition-all whitespace-nowrap cursor-pointer"
           >
-            {n.hireMe[lang]}
+            <span>{n.hireMe?.[lang] || "Get in Touch"}</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-white" />
           </a>
+        </div>
 
-          {/* ── Mobile Menu Toggle ── */}
+        {/* ── Mobile Controls (Language Pill + Hamburger) ─────────────────── */}
+        <div className="flex items-center gap-1.5 lg:hidden shrink-0">
           <button
-            id="mobile-menu-btn"
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden p-1.5 sm:p-2 rounded-lg text-slate-400 hover:text-[var(--accent-light)] bg-white/5 hover:bg-[var(--accent-muted)] border border-white/10 hover:border-[var(--accent-border)] transition-all"
-            aria-label="Toggle menu"
+            onClick={toggle}
+            className="px-2 py-1 rounded-lg text-xs font-mono font-bold text-zinc-700 bg-zinc-100 border border-zinc-200 cursor-pointer"
           >
-            {menuOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Menu className="w-4 h-4 sm:w-5 sm:h-5" />}
+            {lang.toUpperCase()}
+          </button>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+            className="p-2 rounded-lg text-zinc-700 hover:bg-zinc-100 transition-colors border border-zinc-200 cursor-pointer"
+          >
+            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* ── Mobile Menu ─────────────────── */}
+      {/* ── Mobile Menu Dropdown ─────────────────── */}
       {menuOpen && (
-        <div className="lg:hidden mx-3 mb-3 card-flat p-3 flex flex-col gap-1 border border-white/8">
+        <div className="lg:hidden bg-white/98 backdrop-blur-xl border-b border-zinc-200 px-4 pt-3 pb-6 space-y-1 shadow-xl animate-in slide-in-from-top-2 duration-150">
           {navItems.map((item) => {
-            const id = item.href.replace("#", "");
-            const active = activeSection === id;
+            const isActive = activeSection === item.id;
             return (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                  active
-                    ? "text-[var(--accent-light)] bg-[var(--accent-muted)]"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                className={`block px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-sky-50 text-sky-700 font-bold border border-sky-200"
+                    : "text-zinc-800 hover:bg-zinc-50 hover:text-sky-600"
                 }`}
               >
                 {item.label}
-              </a>
+              </Link>
             );
           })}
-          <div className="mt-1 pt-2 border-t border-white/6 sm:hidden">
+          <div className="pt-3 border-t border-zinc-100 flex flex-col gap-2">
             <a
               href="#contact"
               onClick={() => setMenuOpen(false)}
-              className="btn-accent w-full justify-center text-sm py-2.5 rounded-lg"
+              className="inline-flex items-center justify-center gap-2 w-full text-center text-sm py-2.5 rounded-xl font-bold bg-sky-500 hover:bg-sky-600 text-white shadow-sm transition-all"
             >
-              {n.hireMe[lang]}
+              <span>{n.hireMe?.[lang] || "Get in Touch"}</span>
+              <ArrowUpRight className="w-4 h-4 text-white" />
             </a>
           </div>
         </div>
-      )}
-
-      {/* Close theme panel on outside click */}
-      {themeOpen && (
-        <div className="fixed inset-0 z-[-1]" onClick={() => setThemeOpen(false)} />
       )}
     </header>
   );

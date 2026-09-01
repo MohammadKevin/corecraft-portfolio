@@ -18,15 +18,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://corecraft.my.id'),
-  title: "Mohammad Kevin | Backend & Fullstack Developer",
+  metadataBase: new URL("https://corecraft.my.id"),
+  title: "Mohammad Kevin | Backend & Fullstack Software Engineer",
   description:
-    "Portfolio of Mohammad Kevin, Fullstack & Backend Developer based in Malang, Indonesia. Specializing in Next.js, NestJS, Express, Prisma, PostgreSQL, and MySQL.",
+    "High-performance backend systems, scalable REST APIs, and modern fullstack applications. Specialized in Next.js, NestJS, Express, Prisma, PostgreSQL, and MySQL.",
   keywords: [
     "Mohammad Kevin",
     "Backend Developer",
     "Fullstack Developer",
-    "Developer Malang",
+    "Software Engineer Malang",
     "SMK Telkom Malang",
     "Next.js Developer",
     "NestJS Developer",
@@ -34,8 +34,9 @@ export const metadata: Metadata = {
     "Prisma ORM",
     "PostgreSQL",
     "MySQL",
-    "Terminal Portfolio",
-    "corecraft",
+    "SaaS Architecture",
+    "API Gateway",
+    "POS Systems",
   ].join(", "),
   authors: [{ name: "Mohammad Kevin" }],
   creator: "Mohammad Kevin",
@@ -43,22 +44,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     url: "https://corecraft.my.id",
-    title: "Mohammad Kevin | Backend & Fullstack Developer",
-    description: "Portfolio of Mohammad Kevin, Fullstack & Backend Developer based in Malang, Indonesia.",
+    title: "Mohammad Kevin | Backend & Fullstack Software Engineer",
+    description: "High-performance backend systems, scalable REST APIs, and modern fullstack applications.",
     siteName: "Mohammad Kevin Portfolio",
     images: [
       {
-        url: "/images/logo.png", // We can use the existing logo for OG image, or a specific OG image if available
+        url: "/images/logo.png",
         width: 800,
         height: 600,
-        alt: "Mohammad Kevin Portfolio",
+        alt: "Mohammad Kevin",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mohammad Kevin | Backend & Fullstack Developer",
-    description: "Portfolio of Mohammad Kevin, Fullstack & Backend Developer based in Malang, Indonesia.",
+    title: "Mohammad Kevin | Backend & Fullstack Software Engineer",
+    description: "High-performance backend systems, scalable REST APIs, and modern fullstack applications.",
     images: ["/images/logo.png"],
   },
   robots: {
@@ -67,9 +68,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   alternates: {
@@ -91,28 +92,16 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`scroll-smooth ${jetbrainsMono.variable} ${inter.variable}`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const t = localStorage.getItem('kv-theme') || 'indigo';
-                  document.documentElement.setAttribute('data-theme', t);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
       <body
         suppressHydrationWarning
-        className="antialiased bg-[#080f1e] text-slate-300 min-h-screen font-sans"
+        className="antialiased bg-white text-zinc-900 min-h-screen font-sans selection:bg-sky-100 selection:text-sky-900"
       >
         <LanguageProvider>
           <Navbar />
-          {children}
-          <Footer />
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
         </LanguageProvider>
       </body>
     </html>
