@@ -87,9 +87,7 @@ export default function Navbar() {
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="text-xs sm:text-sm font-bold text-zinc-950 tracking-tight group-hover:text-sky-600 transition-colors truncate">
                 Mohammad Kevin
-              </span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60 shrink-0">
-            </div>
+              </span></div>
             <span className="text-[10px] sm:text-[11px] text-zinc-500 font-mono hidden sm:block truncate">
               Fullstack & Backend Engineer
             </span>
