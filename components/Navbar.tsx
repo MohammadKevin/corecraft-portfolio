@@ -89,9 +89,6 @@ export default function Navbar() {
                 Mohammad Kevin
               </span>
               <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60 shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse" />
-                Available
-              </span>
             </div>
             <span className="text-[10px] sm:text-[11px] text-zinc-500 font-mono hidden sm:block truncate">
               Fullstack & Backend Engineer
