@@ -18,6 +18,18 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { GithubIcon } from "@/components/icons/SocialIcons";
+import {
+  VscodeIcon,
+  LaravelIcon,
+  NodeIcon,
+  NestjsIcon,
+  NextjsIcon,
+  ReactIcon,
+  TypescriptIcon,
+  PostgresIcon,
+  PrismaIcon,
+  DockerIcon,
+} from "@/components/icons/TechIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/data/translations";
 
@@ -51,6 +63,146 @@ export default function Hero() {
       {/* Subtle Background Grid */}
       <div className="absolute inset-0 saas-grid-bg opacity-70 pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-sky-100/40 via-sky-50/10 to-transparent blur-3xl -z-10 pointer-events-none" />
+
+      {/* ═══════════════════════════════════════════════════════════════
+          FLOATING TECH & APP ICONS (VS Code, Laravel, Node, etc.)
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none overflow-hidden sm:overflow-visible">
+        
+        {/* Left Side: VS Code (Top-Left) */}
+        <div 
+          className="absolute top-14 left-2 sm:top-20 sm:left-6 lg:left-6 xl:-left-4 z-20 pointer-events-auto transition-transform animate-float-slow"
+          style={{ animationDelay: "0s" }}
+        >
+          <div className="floating-tech-badge group hover:border-sky-500 hover:shadow-sky-500/15">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-110 transition-transform">
+              <VscodeIcon className="w-full h-full" />
+            </div>
+            <div className="hidden sm:flex flex-col text-left pr-1">
+              <span className="text-xs font-bold text-zinc-900 leading-tight group-hover:text-sky-600 transition-colors">VS Code</span>
+              <span className="text-[10px] text-zinc-400 font-mono">Primary IDE</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Left Side: Laravel (Mid-Left) */}
+        <div 
+          className="absolute top-52 -left-1 sm:top-56 sm:left-4 lg:left-2 xl:-left-8 z-20 pointer-events-auto transition-transform animate-float-medium"
+          style={{ animationDelay: "1.2s" }}
+        >
+          <div className="floating-tech-badge group hover:border-red-400 hover:shadow-red-500/15">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-110 transition-transform">
+              <LaravelIcon className="w-full h-full" />
+            </div>
+            <div className="hidden sm:flex flex-col text-left pr-1">
+              <span className="text-xs font-bold text-zinc-900 leading-tight group-hover:text-red-600 transition-colors">Laravel</span>
+              <span className="text-[10px] text-zinc-400 font-mono">Backend Stack</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Left Side: NestJS (Bottom-Left) */}
+        <div 
+          className="absolute top-[26rem] left-4 sm:top-[26rem] sm:left-8 lg:left-8 xl:-left-2 z-20 pointer-events-auto transition-transform animate-float-drift hidden md:block"
+          style={{ animationDelay: "2.5s" }}
+        >
+          <div className="floating-tech-badge group hover:border-rose-400 hover:shadow-rose-500/15">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-110 transition-transform">
+              <NestjsIcon className="w-full h-full" />
+            </div>
+            <div className="hidden sm:flex flex-col text-left pr-1">
+              <span className="text-xs font-bold text-zinc-900 leading-tight group-hover:text-rose-600 transition-colors">NestJS</span>
+              <span className="text-[10px] text-zinc-400 font-mono">Architecture</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side: Node.js (Top-Right) */}
+        <div 
+          className="absolute top-12 right-2 sm:top-16 sm:right-6 lg:right-6 xl:-right-4 z-20 pointer-events-auto transition-transform animate-float-medium"
+          style={{ animationDelay: "0.8s" }}
+        >
+          <div className="floating-tech-badge group hover:border-emerald-500 hover:shadow-emerald-500/15">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-110 transition-transform">
+              <NodeIcon className="w-full h-full" />
+            </div>
+            <div className="hidden sm:flex flex-col text-left pr-1">
+              <span className="text-xs font-bold text-zinc-900 leading-tight group-hover:text-emerald-600 transition-colors">Node.js</span>
+              <span className="text-[10px] text-zinc-400 font-mono">API Runtime</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side: Next.js (Mid-Right) */}
+        <div 
+          className="absolute top-48 -right-1 sm:top-52 sm:right-4 lg:right-2 xl:-right-8 z-20 pointer-events-auto transition-transform animate-float-slow"
+          style={{ animationDelay: "1.8s" }}
+        >
+          <div className="floating-tech-badge group hover:border-zinc-700 hover:shadow-zinc-900/15">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-110 transition-transform">
+              <NextjsIcon className="w-full h-full" />
+            </div>
+            <div className="hidden sm:flex flex-col text-left pr-1">
+              <span className="text-xs font-bold text-zinc-900 leading-tight group-hover:text-zinc-950 transition-colors">Next.js</span>
+              <span className="text-[10px] text-zinc-400 font-mono">Fullstack SSR</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side: PostgreSQL (Bottom-Right) */}
+        <div 
+          className="absolute top-[25rem] right-4 sm:top-[25rem] sm:right-8 lg:right-8 xl:-right-2 z-20 pointer-events-auto transition-transform animate-float-reverse hidden md:block"
+          style={{ animationDelay: "3.2s" }}
+        >
+          <div className="floating-tech-badge group hover:border-blue-500 hover:shadow-blue-500/15">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-110 transition-transform">
+              <PostgresIcon className="w-full h-full" />
+            </div>
+            <div className="hidden sm:flex flex-col text-left pr-1">
+              <span className="text-xs font-bold text-zinc-900 leading-tight group-hover:text-blue-600 transition-colors">PostgreSQL</span>
+              <span className="text-[10px] text-zinc-400 font-mono">Database</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Subtle Ambient Depth Floating Micro Chips */}
+        <div 
+          className="absolute top-36 left-1/4 -translate-x-20 opacity-30 lg:opacity-60 pointer-events-none animate-float-fast hidden lg:block"
+          style={{ animationDelay: "2.1s" }}
+        >
+          <div className="p-2 rounded-xl bg-white/70 backdrop-blur-xs border border-zinc-200/60 shadow-2xs">
+            <TypescriptIcon className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div 
+          className="absolute top-32 right-1/4 translate-x-20 opacity-30 lg:opacity-60 pointer-events-none animate-float-drift hidden lg:block"
+          style={{ animationDelay: "0.5s" }}
+        >
+          <div className="p-2 rounded-xl bg-white/70 backdrop-blur-xs border border-zinc-200/60 shadow-2xs">
+            <ReactIcon className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div 
+          className="absolute bottom-24 left-1/3 -translate-x-16 opacity-30 lg:opacity-50 pointer-events-none animate-float-reverse hidden xl:block"
+          style={{ animationDelay: "1.5s" }}
+        >
+          <div className="p-2 rounded-xl bg-white/70 backdrop-blur-xs border border-zinc-200/60 shadow-2xs">
+            <PrismaIcon className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div 
+          className="absolute bottom-28 right-1/3 translate-x-20 opacity-30 lg:opacity-50 pointer-events-none animate-float-slow hidden xl:block"
+          style={{ animationDelay: "3.7s" }}
+        >
+          <div className="p-2 rounded-xl bg-white/70 backdrop-blur-xs border border-zinc-200/60 shadow-2xs">
+            <DockerIcon className="w-5 h-5" />
+          </div>
+        </div>
+
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
         
