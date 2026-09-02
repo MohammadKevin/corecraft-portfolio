@@ -58,7 +58,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative pt-24 pb-16 sm:pt-32 sm:pb-24 md:pt-36 md:pb-28 overflow-hidden bg-gradient-to-b from-zinc-50/80 via-white to-white"
+      className="relative pt-[120px] pb-16 sm:pt-[154px] sm:pb-24 md:pt-[170px] md:pb-28 overflow-hidden bg-gradient-to-b from-zinc-50/80 via-white to-white"
     >
       {/* Subtle Background Grid */}
       <div className="absolute inset-0 saas-grid-bg opacity-70 pointer-events-none" />
@@ -71,7 +71,7 @@ export default function Hero() {
         
         {/* Left Side: VS Code (Top-Left) */}
         <div 
-          className="absolute top-14 left-2 sm:top-20 sm:left-6 lg:left-6 xl:-left-4 z-20 pointer-events-auto transition-transform animate-float-slow"
+          className="absolute top-20 left-2 sm:top-28 sm:left-6 lg:left-6 xl:-left-4 z-20 pointer-events-auto transition-transform animate-float-slow"
           style={{ animationDelay: "0s" }}
         >
           <div className="floating-tech-badge group hover:border-sky-500 hover:shadow-sky-500/15">
@@ -87,7 +87,7 @@ export default function Hero() {
 
         {/* Left Side: Laravel (Mid-Left) */}
         <div 
-          className="absolute top-52 -left-1 sm:top-56 sm:left-4 lg:left-2 xl:-left-8 z-20 pointer-events-auto transition-transform animate-float-medium"
+          className="absolute top-60 -left-1 sm:top-64 sm:left-4 lg:left-2 xl:-left-8 z-20 pointer-events-auto transition-transform animate-float-medium"
           style={{ animationDelay: "1.2s" }}
         >
           <div className="floating-tech-badge group hover:border-red-400 hover:shadow-red-500/15">
@@ -103,7 +103,7 @@ export default function Hero() {
 
         {/* Left Side: NestJS (Bottom-Left) */}
         <div 
-          className="absolute top-[26rem] left-4 sm:top-[26rem] sm:left-8 lg:left-8 xl:-left-2 z-20 pointer-events-auto transition-transform animate-float-drift hidden md:block"
+          className="absolute top-[28rem] left-4 sm:top-[28rem] sm:left-8 lg:left-8 xl:-left-2 z-20 pointer-events-auto transition-transform animate-float-drift hidden md:block"
           style={{ animationDelay: "2.5s" }}
         >
           <div className="floating-tech-badge group hover:border-rose-400 hover:shadow-rose-500/15">
@@ -119,7 +119,7 @@ export default function Hero() {
 
         {/* Right Side: Node.js (Top-Right) */}
         <div 
-          className="absolute top-12 right-2 sm:top-16 sm:right-6 lg:right-6 xl:-right-4 z-20 pointer-events-auto transition-transform animate-float-medium"
+          className="absolute top-18 right-2 sm:top-24 sm:right-6 lg:right-6 xl:-right-4 z-20 pointer-events-auto transition-transform animate-float-medium"
           style={{ animationDelay: "0.8s" }}
         >
           <div className="floating-tech-badge group hover:border-emerald-500 hover:shadow-emerald-500/15">
@@ -135,7 +135,7 @@ export default function Hero() {
 
         {/* Right Side: Next.js (Mid-Right) */}
         <div 
-          className="absolute top-48 -right-1 sm:top-52 sm:right-4 lg:right-2 xl:-right-8 z-20 pointer-events-auto transition-transform animate-float-slow"
+          className="absolute top-56 -right-1 sm:top-60 sm:right-4 lg:right-2 xl:-right-8 z-20 pointer-events-auto transition-transform animate-float-slow"
           style={{ animationDelay: "1.8s" }}
         >
           <div className="floating-tech-badge group hover:border-zinc-700 hover:shadow-zinc-900/15">
@@ -151,7 +151,7 @@ export default function Hero() {
 
         {/* Right Side: PostgreSQL (Bottom-Right) */}
         <div 
-          className="absolute top-[25rem] right-4 sm:top-[25rem] sm:right-8 lg:right-8 xl:-right-2 z-20 pointer-events-auto transition-transform animate-float-reverse hidden md:block"
+          className="absolute top-[27rem] right-4 sm:top-[27rem] sm:right-8 lg:right-8 xl:-right-2 z-20 pointer-events-auto transition-transform animate-float-reverse hidden md:block"
           style={{ animationDelay: "3.2s" }}
         >
           <div className="floating-tech-badge group hover:border-blue-500 hover:shadow-blue-500/15">
@@ -167,7 +167,7 @@ export default function Hero() {
 
         {/* Subtle Ambient Depth Floating Micro Chips */}
         <div 
-          className="absolute top-36 left-1/4 -translate-x-20 opacity-30 lg:opacity-60 pointer-events-none animate-float-fast hidden lg:block"
+          className="absolute top-44 left-1/4 -translate-x-20 opacity-30 lg:opacity-60 pointer-events-none animate-float-fast hidden lg:block"
           style={{ animationDelay: "2.1s" }}
         >
           <div className="p-2 rounded-xl bg-white/70 backdrop-blur-xs border border-zinc-200/60 shadow-2xs">
@@ -176,7 +176,7 @@ export default function Hero() {
         </div>
 
         <div 
-          className="absolute top-32 right-1/4 translate-x-20 opacity-30 lg:opacity-60 pointer-events-none animate-float-drift hidden lg:block"
+          className="absolute top-40 right-1/4 translate-x-20 opacity-30 lg:opacity-60 pointer-events-none animate-float-drift hidden lg:block"
           style={{ animationDelay: "0.5s" }}
         >
           <div className="p-2 rounded-xl bg-white/70 backdrop-blur-xs border border-zinc-200/60 shadow-2xs">
