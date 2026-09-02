@@ -208,7 +208,7 @@ export default function Hero() {
         
         {/* Top Editorial Pill with Photo Avatar */}
         <div className="flex justify-center mb-6">
-          <div className="saas-badge bg-white/90 backdrop-blur-md shadow-xs border-zinc-200/90 text-zinc-800 py-1.5 px-3 flex items-center gap-2">
+          <div className="bg-white/90 backdrop-blur-md shadow-xs border border-zinc-200/90 text-zinc-800 py-1.5 px-3.5 rounded-[20px] flex items-center gap-2">
             <div className="w-5 h-5 rounded-full overflow-hidden relative shrink-0 border border-sky-400">
               <Image
                 src="/images/logo.png"
