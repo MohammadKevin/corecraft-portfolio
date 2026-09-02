@@ -20,7 +20,6 @@ export default function Navbar() {
   const navItems = [
     { label: n.home[lang], href: "/#hero", id: "hero" },
     { label: n.about[lang], href: "/#about", id: "about" },
-    { label: "Features", href: "/#features", id: "features" },
     { label: "Services", href: "/#services", id: "services" },
     { label: n.skills[lang], href: "/#stack", id: "stack" },
     { label: n.projects[lang], href: "/#projects", id: "projects" },
@@ -32,7 +31,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      const sectionIds = ["hero", "about", "features", "services", "stack", "projects", "experience", "contact"];
+      const sectionIds = ["hero", "about", "services", "stack", "projects", "experience", "contact"];
       const scrollY = window.scrollY;
 
       if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 90) {

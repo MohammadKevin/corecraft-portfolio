@@ -208,7 +208,7 @@ export default function Hero() {
         
         {/* Top Editorial Pill with Photo Avatar */}
         <div className="flex justify-center mb-6">
-          <div className="bg-white/90 backdrop-blur-md shadow-xs border border-zinc-200/90 text-zinc-800 py-1.5 px-3.5 rounded-[20px] flex items-center gap-2">
+          <div className="bg-white/90 backdrop-blur-md shadow-xs border border-zinc-200/90 text-zinc-800 py-1.5 px-3.5 rounded-[10px] flex items-center gap-2">
             <div className="w-5 h-5 rounded-full overflow-hidden relative shrink-0 border border-sky-400">
               <Image
                 src="/images/logo.png"
@@ -218,10 +218,6 @@ export default function Hero() {
                 className="object-cover object-top"
               />
             </div>
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
-            </span>
             <span className="font-semibold text-zinc-950 text-xs">Mohammad Kevin</span>
             <span className="text-zinc-300">|</span>
             <span className="text-zinc-600 text-xs truncate max-w-[160px] sm:max-w-none">

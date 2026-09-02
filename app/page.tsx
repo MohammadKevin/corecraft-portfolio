@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Hero from "@/components/sections/Hero";
 import Stats from "@/components/sections/Stats";
 import AboutSection from "@/components/sections/AboutSection";
-import BentoFeatures from "@/components/sections/BentoFeatures";
 import ServicesGrid from "@/components/sections/ServicesGrid";
 import TechStack from "@/components/sections/TechStack";
 import ProjectsSection from "@/components/sections/ProjectsSection";
@@ -47,10 +46,7 @@ export default function Home() {
       {/* 3. Dedicated About & Portrait Photo Section */}
       <AboutSection />
 
-      {/* 4. Asymmetrical Bento Grid with Interactive Features */}
-      <BentoFeatures />
-
-      {/* 5. Engineering Services & Deliverables Grid */}
+      {/* 4. Engineering Services & Deliverables Grid */}
       <ServicesGrid />
 
       {/* 6. Production Provenance & Categorized Tech Stack */}
