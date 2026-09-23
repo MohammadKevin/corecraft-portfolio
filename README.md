@@ -12,12 +12,12 @@
 
 ---
 
-## 📌 Overview
+## Overview
 A modern developer portfolio featuring dynamic project showcases, tech stack skill graphs, an interactive contact form powered by EmailJS, and an admin CMS view.
 
 ---
 
-## ✨ Key Features
+## Key Features
 - Interactive project filtering by tech stack and category
 - Direct email contact form integration with EmailJS
 - Admin CMS section for updating portfolio entries
@@ -25,7 +25,7 @@ A modern developer portfolio featuring dynamic project showcases, tech stack ski
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Framework**: Next.js
 - **Language**: TypeScript
 - **Services**: EmailJS, Supabase
@@ -33,7 +33,7 @@ A modern developer portfolio featuring dynamic project showcases, tech stack ski
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 ```text
 portfolio/
 ├── app/
@@ -44,7 +44,7 @@ portfolio/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 Make sure you have the required runtimes and tools installed on your machine:
@@ -61,7 +61,7 @@ npm run dev
 
 ---
 
-## 👤 Author
+## Author
 **Mohammad Kevin Arif Rudianto**
 - **GitHub:** [@MohammadKevin](https://github.com/MohammadKevin)
 - **Portfolio:** [portfolio-mohammadkevin.vercel.app](https://portfolio-mohammadkevin.vercel.app)
@@ -70,9 +70,9 @@ npm run dev
 
 ---
 
-## 📄 License
+## License
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 <div align="center">
-⭐️ If you found this repository useful, please consider giving it a star!
+If you found this repository useful, please consider giving it a star!
 </div>
