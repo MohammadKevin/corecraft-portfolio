@@ -18,10 +18,10 @@ A modern developer portfolio featuring dynamic project showcases, tech stack ski
 ---
 
 ## ✨ Key Features
-- ⚡ **Interactive project filtering by tech stack and category**: Interactive project filtering by tech stack and category
-- ⚡ **Direct email contact form integration with EmailJS**: Direct email contact form integration with EmailJS
-- ⚡ **Admin CMS section for updating portfolio entries**: Admin CMS section for updating portfolio entries
-- ⚡ **Responsive modern layout with dark aesthetic**: Responsive modern layout with dark aesthetic
+- Interactive project filtering by tech stack and category
+- Direct email contact form integration with EmailJS
+- Admin CMS section for updating portfolio entries
+- Responsive modern layout with dark aesthetic
 
 ---
 
