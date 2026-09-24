@@ -129,7 +129,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setLang("id")}
-                aria-label="Bahasa Indonesia"
+                aria-label="ID - Bahasa Indonesia"
                 className={`px-2 py-0.5 rounded-full transition-all cursor-pointer ${
                   lang === "id" ? "bg-white text-[#1C1B1D] font-semibold shadow-xs" : "text-[#71717A] hover:text-[#1C1B1D]"
                 }`}
@@ -139,7 +139,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setLang("en")}
-                aria-label="English"
+                aria-label="EN - English"
                 className={`px-2 py-0.5 rounded-full transition-all cursor-pointer ${
                   lang === "en" ? "bg-white text-[#1C1B1D] font-semibold shadow-xs" : "text-[#71717A] hover:text-[#1C1B1D]"
                 }`}
