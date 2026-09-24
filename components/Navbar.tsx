@@ -88,7 +88,7 @@ export default function Navbar() {
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/80 to-transparent" />
 
           <div className="relative flex items-center gap-2.5 shrink-0">
-            <Link href="/" className="flex items-center gap-2.5 group">
+            <Link href="/" className="flex items-center gap-2 group">
               <Image
                 src="/images/corecraft-logo-dark.svg"
                 alt="CoreCraft Logo"
@@ -96,14 +96,9 @@ export default function Navbar() {
                 height={34}
                 className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 object-contain rounded-[9px] shadow-2xs transition-transform group-hover:scale-105"
               />
-              <div className="flex flex-col text-left leading-tight">
-                <span className="text-[13px] sm:text-[14px] font-bold text-[#1C1B1D] tracking-tight leading-none">
-                  Kevin
-                </span>
-                <span className="text-[9px] sm:text-[10px] font-mono text-[#71717A] tracking-tight">
-                  corecraft.my.id
-                </span>
-              </div>
+              <span className="text-[14px] sm:text-[15px] font-bold text-[#1C1B1D] tracking-tight leading-none">
+                Kevin
+              </span>
             </Link>
           </div>
 
