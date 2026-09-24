@@ -13,8 +13,10 @@ export default function Navbar() {
   const { lang, setLang } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
 
+  const isExpanded = isHovered || menuOpen;
   const n = translations.nav;
 
   const navItems = [
@@ -62,19 +64,24 @@ export default function Navbar() {
 
   if (pathname && pathname.startsWith("/admin")) return null;
 
-  // Base liquid glass pill container — tuned for light/cream backgrounds
-  const glassBase =
-    "relative overflow-hidden bg-white/45 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/70 " +
-    "shadow-[inset_0_1.5px_1px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03),0_10px_30px_-5px_rgba(28,27,29,0.08)]";
-
   return (
-    <header className="fixed top-4 sm:top-5 left-0 right-0 z-50 flex justify-center px-3 sm:px-4 pointer-events-none">
-      <div className="pointer-events-auto w-full max-w-5xl">
+    <header className="fixed top-3.5 sm:top-5 inset-x-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none transition-all duration-300">
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isExpanded
+            ? "w-full max-w-5xl scale-100"
+            : "w-full max-w-2xl lg:max-w-3xl scale-[0.92] sm:scale-95"
+        }`}
+      >
         <div
-          className={`dynamic-island-nav flex items-center justify-between gap-2 md:gap-3 px-3.5 sm:px-5 h-15 sm:h-16 rounded-full ${glassBase} ${
-            scrolled
-              ? "scale-[0.94] md:scale-[0.95] hover:scale-[0.99] md:hover:scale-100 bg-white/60 shadow-[0_16px_40px_-8px_rgba(28,27,29,0.12)] border-white/80"
-              : "scale-[0.95] md:scale-[0.96] hover:scale-[1.00] md:hover:scale-[1.01] hover:bg-white/65 hover:border-white/90 hover:shadow-[0_20px_45px_-10px_rgba(28,27,29,0.14)]"
+          className={`relative flex items-center justify-between rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isExpanded
+              ? "h-14 sm:h-16 px-4 sm:px-6 bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_24px_50px_rgba(28,27,29,0.12),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.06]"
+              : scrolled
+              ? "h-12 sm:h-13 px-3.5 sm:px-5 bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_12px_28px_rgba(28,27,29,0.08),inset_0_1px_1px_rgba(255,255,255,0.9)] ring-1 ring-black/[0.04]"
+              : "h-12 sm:h-13 px-3.5 sm:px-5 bg-white/65 backdrop-blur-xl border border-white/70 shadow-[0_8px_20px_rgba(28,27,29,0.05),inset_0_1px_1px_rgba(255,255,255,0.85)] ring-1 ring-black/[0.03]"
           }`}
         >
           {/* top glass sheen */}
@@ -87,20 +94,20 @@ export default function Navbar() {
                 alt="CoreCraft Logo"
                 width={34}
                 height={34}
-                className="w-8.5 h-8.5 object-contain rounded-[9px] shadow-2xs transition-transform group-hover:scale-105"
+                className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 object-contain rounded-[9px] shadow-2xs transition-transform group-hover:scale-105"
               />
               <div className="flex flex-col text-left leading-tight">
-                <span className="text-[14px] font-bold text-[#1C1B1D] tracking-tight leading-none">
+                <span className="text-[13px] sm:text-[14px] font-bold text-[#1C1B1D] tracking-tight leading-none">
                   Kevin
                 </span>
-                <span className="text-[10px] font-mono text-[#71717A] tracking-tight">
+                <span className="text-[9px] sm:text-[10px] font-mono text-[#71717A] tracking-tight">
                   corecraft.my.id
                 </span>
               </div>
             </Link>
           </div>
 
-          <div className="hidden lg:block h-5 w-[1px] bg-black/10 relative" />
+          <div className="hidden lg:block h-4.5 w-[1px] bg-black/10 relative" />
 
           <nav className="relative hidden md:flex items-center gap-1 shrink-0" aria-label="Main Navigation">
             {navItems.map((item) => {
@@ -109,7 +116,7 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-1.5 rounded-full text-[13px] transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] ${
+                  className={`px-3 py-1.5 rounded-full text-xs sm:text-[13px] transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] ${
                     isActive
                       ? "bg-[#1C1B1D] text-white font-medium shadow-sm"
                       : "text-[#52525B] hover:text-[#1C1B1D] hover:bg-black/5"
@@ -124,7 +131,7 @@ export default function Navbar() {
           <div className="relative flex items-center gap-2 shrink-0">
             {/* language toggle in glass capsule */}
             <div
-              className="flex items-center bg-black/[0.04] backdrop-blur-md rounded-full p-0.5 border border-black/10 text-[11px] font-mono transition-transform duration-200 hover:scale-[1.02]"
+              className="flex items-center bg-black/[0.04] backdrop-blur-md rounded-full p-0.5 border border-black/10 text-[10px] sm:text-[11px] font-mono transition-transform duration-200 hover:scale-[1.02]"
               role="group"
               aria-label="Language Selector"
             >
@@ -150,10 +157,10 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* CTA pill button, solid dark like reference */}
+            {/* CTA pill button */}
             <Link
               href="/#contact"
-              className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1C1B1D] text-white px-4 py-1.5 text-xs font-semibold hover:bg-black transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-md"
+              className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1C1B1D] text-white px-3.5 sm:px-4 py-1.5 text-xs font-semibold hover:bg-black transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-md"
             >
               {n.hireMe[lang]}
             </Link>
@@ -171,7 +178,7 @@ export default function Navbar() {
 
         {menuOpen && (
           <div
-            className={`md:hidden mt-2 rounded-[22px] p-3 space-y-1 ${glassBase}`}
+            className="md:hidden mt-2 rounded-[22px] p-3 space-y-1 relative overflow-hidden bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_20px_40px_rgba(28,27,29,0.12)]"
             role="navigation"
             aria-label="Mobile Navigation"
           >
@@ -184,7 +191,7 @@ export default function Navbar() {
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
                   className={`relative block px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-colors ${
-                    isActive ? "bg-[#1C1B1D] text-white" : "text-[#1C1B1D] hover:bg-black/5"
+                    isActive ? "bg-[#1C1B1D] text-white font-semibold" : "text-[#1C1B1D] hover:bg-black/5"
                   }`}
                 >
                   {item.label}
