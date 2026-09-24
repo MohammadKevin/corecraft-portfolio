@@ -65,23 +65,23 @@ export default function Navbar() {
   if (pathname && pathname.startsWith("/admin")) return null;
 
   return (
-    <header className="fixed top-3.5 sm:top-5 inset-x-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none transition-all duration-300">
+    <header className="fixed top-2 sm:top-5 inset-x-0 z-50 flex justify-center px-2 sm:px-6 pointer-events-none transition-all duration-300">
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={`pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isExpanded
             ? "w-full max-w-5xl scale-100"
-            : "w-full max-w-2xl lg:max-w-3xl scale-[0.92] sm:scale-95"
+            : "w-[96%] max-w-2xl lg:max-w-3xl scale-100 sm:scale-95"
         }`}
       >
         <div
           className={`relative flex items-center justify-between rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isExpanded
-              ? "h-14 sm:h-16 px-4 sm:px-6 bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_24px_50px_rgba(28,27,29,0.12),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.06]"
+              ? "h-13 sm:h-16 px-3.5 sm:px-6 bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_24px_50px_rgba(28,27,29,0.12),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.06]"
               : scrolled
-              ? "h-12 sm:h-13 px-3.5 sm:px-5 bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_12px_28px_rgba(28,27,29,0.08),inset_0_1px_1px_rgba(255,255,255,0.9)] ring-1 ring-black/[0.04]"
-              : "h-12 sm:h-13 px-3.5 sm:px-5 bg-white/65 backdrop-blur-xl border border-white/70 shadow-[0_8px_20px_rgba(28,27,29,0.05),inset_0_1px_1px_rgba(255,255,255,0.85)] ring-1 ring-black/[0.03]"
+              ? "h-11 sm:h-13 px-3 sm:px-5 bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_12px_28px_rgba(28,27,29,0.08),inset_0_1px_1px_rgba(255,255,255,0.9)] ring-1 ring-black/[0.04]"
+              : "h-11 sm:h-13 px-3 sm:px-5 bg-white/65 backdrop-blur-xl border border-white/70 shadow-[0_8px_20px_rgba(28,27,29,0.05),inset_0_1px_1px_rgba(255,255,255,0.85)] ring-1 ring-black/[0.03]"
           }`}
         >
           {/* top glass sheen */}

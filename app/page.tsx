@@ -168,10 +168,10 @@ export default function Home() {
             {lang === "id" ? "Membangun Arsitektur API Scalable & Sistem Fullstack Modern." : "Architecting Scalable APIs & Modern Fullstack Systems."}
           </h1>
 
-          <p className="text-lg leading-relaxed text-[#71717A] max-w-2xl mx-auto mb-10">
+          <p className="text-base sm:text-lg leading-relaxed text-[#71717A] max-w-2xl mx-auto mb-10">
             {lang === "id" 
-              ? "Lulusan & Rekayasawan Perangkat Lunak dari SMK Telkom Malang dengan fokus mendalam pada performa backend berlatensi rendah, sistem POS & inventaris terdistribusi, integrasi ORM efisien, serta API RESTful tangguh siap produksi."
-              : "Software Engineer from SMK Telkom Malang focusing on low-latency backend performance, distributed POS & inventory systems, efficient ORM integration, and production-ready RESTful APIs."}
+              ? "Siswa Rekayasa Perangkat Lunak dari SMK Telkom Malang dengan 2+ tahun pengalaman praktis merancang arsitektur POS, type-safe ORM, dan REST API yang andal untuk kebutuhan bisnis nyata."
+              : "Software Engineering Student at SMK Telkom Malang with 2+ years of practical experience designing POS architecture, type-safe ORMs, and reliable REST APIs for real business needs."}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
@@ -234,12 +234,12 @@ export default function Home() {
 
             <div className="lg:col-span-7 flex flex-col gap-5">
               <p className="text-[15px] leading-relaxed text-[#71717A]">
-                {lang === "id" ? "Saya Mohammad Kevin, seorang Fullstack dan Backend Software Engineer lulusan SMK Telkom Malang. Ketertarikan saya berakar pada pembangunan fondasi backend yang kokoh: merancang arsitektur basis data relasional, mengoptimalkan query, serta membangun pipeline API yang efisien dan aman." : "I'm Mohammad Kevin, a Fullstack and Backend Software Engineer from SMK Telkom Malang. My interest is rooted in building solid backend foundations: designing relational database architectures, optimizing queries, and building efficient and secure API pipelines."}
+                {lang === "id" ? "Saya Mohammad Kevin, seorang Siswa Rekayasa Perangkat Lunak di SMK Telkom Malang sekaligus Fullstack dan Backend Developer. Ketertarikan saya berakar pada pembangunan fondasi backend yang kokoh: merancang arsitektur basis data relasional, mengoptimalkan query, serta membangun pipeline API yang efisien dan aman." : "I'm Mohammad Kevin, a Software Engineering student at SMK Telkom Malang and a Fullstack & Backend Developer. My interest is rooted in building solid backend foundations: designing relational database architectures, optimizing queries, and building efficient and secure API pipelines."}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
                 {[
                   { label: lang === "id" ? "LOKASI" : "LOCATION", val: "Malang, Jatim", sub: "WIB / UTC+7" }, 
-                  { label: lang === "id" ? "STATUS" : "STATUS", val: lang === "id" ? "Tersedia Penuh" : "Available", sub: lang === "id" ? "Full-time / Magang" : "Full-time / Internship" }, 
+                  { label: lang === "id" ? "STATUS" : "STATUS", val: lang === "id" ? "Siswa Aktif" : "Active Student", sub: lang === "id" ? "Siap Magang / Freelance" : "Internship / Freelance" }, 
                   { label: lang === "id" ? "FOKUS" : "FOCUS", val: "Backend & Cloud", sub: "API & DB Engines" }
                 ].map(item => (
                   <div key={item.label} className="liquid-glass p-4.5 rounded-2xl shadow-xs border border-white/80 hover:shadow-md transition-all">
