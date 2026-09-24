@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/data/translations";
 
@@ -163,44 +162,72 @@ export default function Navbar() {
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
               aria-expanded={menuOpen}
-              className="md:hidden p-1.5 rounded-full text-[#1C1B1D] hover:bg-black/5 transition-colors cursor-pointer"
+              className="md:hidden p-2 rounded-full text-[#1C1B1D] hover:bg-black/5 transition-all active:scale-90 cursor-pointer"
             >
-              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <div className="relative w-5 h-5 flex items-center justify-center">
+                <span
+                  className={`absolute h-0.5 w-4.5 bg-[#1C1B1D] rounded-full transition-all duration-300 ${
+                    menuOpen ? "rotate-45 translate-y-0" : "-translate-y-1.5"
+                  }`}
+                />
+                <span
+                  className={`absolute h-0.5 w-4.5 bg-[#1C1B1D] rounded-full transition-all duration-200 ${
+                    menuOpen ? "opacity-0 scale-x-0" : "opacity-100"
+                  }`}
+                />
+                <span
+                  className={`absolute h-0.5 w-4.5 bg-[#1C1B1D] rounded-full transition-all duration-300 ${
+                    menuOpen ? "-rotate-45 translate-y-0" : "translate-y-1.5"
+                  }`}
+                />
+              </div>
             </button>
           </div>
         </div>
 
-        {menuOpen && (
-          <div
-            className="md:hidden mt-2 rounded-[22px] p-3 space-y-1 relative overflow-hidden bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_20px_40px_rgba(28,27,29,0.12)]"
-            role="navigation"
-            aria-label="Mobile Navigation"
-          >
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[22px] bg-gradient-to-b from-white/70 to-transparent" />
-            {navItems.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`relative block px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-colors ${
-                    isActive ? "bg-[#1C1B1D] text-white font-semibold" : "text-[#1C1B1D] hover:bg-black/5"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-            <Link
-              href="/#contact"
-              onClick={() => setMenuOpen(false)}
-              className="relative mt-2 flex items-center justify-center w-full text-sm py-2.5 rounded-full font-semibold bg-[#1C1B1D] text-white"
+        {/* Smooth Accordion Sheet Dropdown for Mobile */}
+        <div
+          className={`md:hidden grid transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            menuOpen
+              ? "grid-rows-[1fr] opacity-100 mt-2.5 pointer-events-auto"
+              : "grid-rows-[0fr] opacity-0 mt-0 pointer-events-none"
+          }`}
+        >
+          <div className="overflow-hidden">
+            <div
+              className="rounded-[28px] p-3 sm:p-4 space-y-1 relative overflow-hidden liquid-glass-nav shadow-[0_24px_50px_-10px_rgba(28,27,29,0.15)] border border-white/90"
+              role="navigation"
+              aria-label="Mobile Navigation"
             >
-              {n.hireMe[lang]}
-            </Link>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[28px] bg-gradient-to-b from-white/80 to-transparent" />
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`relative flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
+                      isActive
+                        ? "bg-[#1C1B1D] text-white shadow-sm"
+                        : "text-[#52525B] hover:text-[#1C1B1D] hover:bg-black/5"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                  </Link>
+                );
+              })}
+              <Link
+                href="/#contact"
+                onClick={() => setMenuOpen(false)}
+                className="relative mt-2.5 flex items-center justify-center w-full text-sm py-3.5 rounded-full font-bold bg-[#1C1B1D] text-white shadow-md active:scale-[0.98] transition-all"
+              >
+                {n.hireMe[lang]}
+              </Link>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
