@@ -35,14 +35,22 @@ export default function Home() {
   const t = translations.hero;
 
   useEffect(() => {
-    fetch("/api/visit", { method: "POST" }).catch(() => {});
+    // Only record visit once per session
+    try {
+      if (!sessionStorage.getItem("kv-visited")) {
+        sessionStorage.setItem("kv-visited", "true");
+        fetch("/api/visit", { method: "POST" }).catch(() => {});
+      }
+    } catch {
+      fetch("/api/visit", { method: "POST" }).catch(() => {});
+    }
   }, []);
 
   useEffect(() => {
     fetch("/api/projects")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.projects)) {
+        if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
           setProjects(data.projects);
         }
       })
@@ -57,21 +65,24 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return;
     setFormStatus("loading");
     setErrorMsg("");
 
     try {
       await sendEmail(SERVICE_ID, TEMPLATE_ID, {
-        from_name: form.name,
-        from_email: form.email,
-        message: `[${projectType}]\n\n${form.message}`,
+        from_name: form.name.trim(),
+        from_email: form.email.trim(),
+        message: `[${projectType}]\n\n${form.message.trim()}`,
       }, PUBLIC_KEY);
       setFormStatus("success");
       setForm({ name: "", email: "", message: "" });
+      setTimeout(() => {
+        setFormStatus("idle");
+      }, 6000);
     } catch {
       setFormStatus("error");
-      setErrorMsg(lang === "id" ? "Gagal mengirim pesan. Silakan coba via email langsung." : "Failed to send message. Please reach out directly via email.");
+      setErrorMsg(lang === "id" ? "Gagal mengirim pesan. Silakan coba hubungi langsung via email." : "Failed to send message. Please reach out directly via email.");
     }
   };
 

@@ -64,19 +64,21 @@ export default function Navbar() {
 
   // Base liquid glass pill container — tuned for light/cream backgrounds
   const glassBase =
-    "relative overflow-hidden bg-white/40 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/60 " +
-    "shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),inset_0_-1px_1px_rgba(0,0,0,0.03),0_8px_32px_rgba(0,0,0,0.08)]";
+    "relative overflow-hidden bg-white/45 backdrop-blur-2xl backdrop-saturate-[180%] border border-white/70 " +
+    "shadow-[inset_0_1.5px_1px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03),0_10px_30px_-5px_rgba(28,27,29,0.08)]";
 
   return (
-    <header className="fixed top-5 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+    <header className="fixed top-4 sm:top-5 left-0 right-0 z-50 flex justify-center px-3 sm:px-4 pointer-events-none">
       <div className="pointer-events-auto w-full max-w-5xl">
         <div
-          className={`flex items-center justify-between gap-2 md:gap-3 px-4 h-16 rounded-full transition-all duration-300 ${glassBase} ${
-            scrolled ? "scale-[0.99] bg-white/50" : ""
+          className={`dynamic-island-nav flex items-center justify-between gap-2 md:gap-3 px-3.5 sm:px-5 h-15 sm:h-16 rounded-full ${glassBase} ${
+            scrolled
+              ? "scale-[0.94] md:scale-[0.95] hover:scale-[0.99] md:hover:scale-100 bg-white/60 shadow-[0_16px_40px_-8px_rgba(28,27,29,0.12)] border-white/80"
+              : "scale-[0.95] md:scale-[0.96] hover:scale-[1.00] md:hover:scale-[1.01] hover:bg-white/65 hover:border-white/90 hover:shadow-[0_20px_45px_-10px_rgba(28,27,29,0.14)]"
           }`}
         >
           {/* top glass sheen */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/70 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/80 to-transparent" />
 
           <div className="relative flex items-center gap-2.5 shrink-0">
             <Link href="/" className="flex items-center gap-2.5 group">
@@ -107,7 +109,7 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-1.5 rounded-full text-[13px] transition-all ${
+                  className={`px-3 py-1.5 rounded-full text-[13px] transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] ${
                     isActive
                       ? "bg-[#1C1B1D] text-white font-medium shadow-sm"
                       : "text-[#52525B] hover:text-[#1C1B1D] hover:bg-black/5"
@@ -122,7 +124,7 @@ export default function Navbar() {
           <div className="relative flex items-center gap-2 shrink-0">
             {/* language toggle in glass capsule */}
             <div
-              className="flex items-center bg-black/[0.04] backdrop-blur-md rounded-full p-0.5 border border-black/10 text-[11px] font-mono"
+              className="flex items-center bg-black/[0.04] backdrop-blur-md rounded-full p-0.5 border border-black/10 text-[11px] font-mono transition-transform duration-200 hover:scale-[1.02]"
               role="group"
               aria-label="Language Selector"
             >
@@ -130,8 +132,8 @@ export default function Navbar() {
                 type="button"
                 onClick={() => setLang("id")}
                 aria-label="Bahasa Indonesia"
-                className={`px-2 py-0.5 rounded-full transition-colors cursor-pointer ${
-                  lang === "id" ? "bg-white text-[#1C1B1D] font-semibold shadow-xs" : "text-[#71717A]"
+                className={`px-2 py-0.5 rounded-full transition-all cursor-pointer ${
+                  lang === "id" ? "bg-white text-[#1C1B1D] font-semibold shadow-xs" : "text-[#71717A] hover:text-[#1C1B1D]"
                 }`}
               >
                 ID
@@ -140,8 +142,8 @@ export default function Navbar() {
                 type="button"
                 onClick={() => setLang("en")}
                 aria-label="English"
-                className={`px-2 py-0.5 rounded-full transition-colors cursor-pointer ${
-                  lang === "en" ? "bg-white text-[#1C1B1D] font-semibold shadow-xs" : "text-[#71717A]"
+                className={`px-2 py-0.5 rounded-full transition-all cursor-pointer ${
+                  lang === "en" ? "bg-white text-[#1C1B1D] font-semibold shadow-xs" : "text-[#71717A] hover:text-[#1C1B1D]"
                 }`}
               >
                 EN
@@ -151,7 +153,7 @@ export default function Navbar() {
             {/* CTA pill button, solid dark like reference */}
             <Link
               href="/#contact"
-              className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1C1B1D] text-white px-4 py-1.5 text-xs font-semibold hover:bg-black transition-colors shadow-md"
+              className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1C1B1D] text-white px-4 py-1.5 text-xs font-semibold hover:bg-black transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-md"
             >
               {n.hireMe[lang]}
             </Link>
