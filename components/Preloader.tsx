@@ -4,28 +4,16 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function Preloader() {
-  const [loading, setLoading] = useState(() => {
-    if (typeof window !== "undefined") {
-      try {
-        return !sessionStorage.getItem("corecraft-preloader-seen");
-      } catch {
-        return true;
-      }
-    }
-    return true;
-  });
-
+  const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState<"compact" | "expanding" | "morphing" | "done">("compact");
 
   useEffect(() => {
-    if (!loading) return;
-
-    // Phase 1: Emergence & count up (0 - 2000ms)
-    setTimeout(() => setPhase("expanding"), 300);
+    // Start emergence immediately on mount
+    const emergenceTimer = setTimeout(() => setPhase("expanding"), 100);
 
     const startTime = Date.now();
-    const duration = 2100;
+    const duration = 2100; // 2.1s counter + 0.6s morph = ~2.7s total
 
     const timer = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -34,25 +22,25 @@ export default function Preloader() {
 
       if (current >= 100) {
         clearInterval(timer);
-        
-        // Phase 2: Morph & Elevate to Navbar (2200ms)
+
+        // Morph & glide up directly to Navbar position
         setTimeout(() => {
           setPhase("morphing");
-          try {
-            sessionStorage.setItem("corecraft-preloader-seen", "true");
-          } catch {}
 
-          // Phase 3: Done & Unmount
+          // Unmount and reveal page
           setTimeout(() => {
             setPhase("done");
             setLoading(false);
-          }, 700);
-        }, 150);
+          }, 650);
+        }, 120);
       }
     }, 20);
 
-    return () => clearInterval(timer);
-  }, [loading]);
+    return () => {
+      clearTimeout(emergenceTimer);
+      clearInterval(timer);
+    };
+  }, []);
 
   if (!loading || phase === "done") return null;
 
@@ -65,11 +53,11 @@ export default function Preloader() {
           : "bg-[#FAF8F1] backdrop-blur-2xl"
       }`}
     >
-      {/* Dynamic Island Floating Capsule */}
+      {/* Floating Center Dynamic Island Pill */}
       <div
         className={`relative flex items-center justify-between rounded-full bg-[#1C1B1D] text-white border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.3)] transition-all ease-[cubic-bezier(0.16,1,0.3,1)] ${
           phase === "compact"
-            ? "w-[160px] h-11 px-3.5 scale-90 translate-y-0 opacity-0 duration-300"
+            ? "w-[160px] h-11 px-3.5 scale-90 translate-y-0 opacity-0 duration-200"
             : phase === "expanding"
             ? "w-[270px] sm:w-[310px] h-12 sm:h-13 px-4 sm:px-5 scale-100 translate-y-0 opacity-100 duration-500"
             : "w-[94%] max-w-3xl lg:max-w-4xl h-12 sm:h-13 px-4 sm:px-5 scale-100 -translate-y-[calc(50vh-2rem)] opacity-0 bg-white/80 duration-700"
