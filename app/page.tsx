@@ -202,19 +202,22 @@ export default function Home() {
             {lang === "id" ? "Komitmen pada Performa, Ketepatan Logik & Kode Bersih" : "Committed to Performance, Precise Logic & Clean Code"}
           </h2>
 
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 relative">
-              <div className="liquid-glass w-full aspect-square rounded-3xl overflow-hidden shadow-xl p-3 border border-white/80 relative">
-                <Image 
-                  src="/images/logo.png" 
-                  alt="Mohammad Kevin" 
-                  fill 
-                  sizes="(max-width: 768px) 100vw, 480px" 
-                  className="rounded-2xl object-cover" 
-                  priority 
-                />
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            <div className="lg:col-span-5 relative max-w-sm sm:max-w-md lg:max-w-none mx-auto w-full">
+              <div className="liquid-glass w-full aspect-[4/5] rounded-3xl shadow-xl p-3 sm:p-3.5 border border-white/80 relative group">
+                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-zinc-100/40">
+                  <Image 
+                    src="/images/logo.png" 
+                    alt="Mohammad Kevin" 
+                    fill 
+                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 440px, 480px" 
+                    className="object-cover object-top hover:scale-[1.02] transition-transform duration-500" 
+                    priority 
+                  />
+                </div>
               </div>
-              <div className="liquid-glass absolute -bottom-4 right-2 px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-2 text-sm font-semibold text-[#1C1B1D] border border-white/80">
+              <div className="liquid-glass absolute -bottom-3 sm:-bottom-4 right-2 sm:right-4 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-lg flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#1C1B1D] border border-white/80 backdrop-blur-md">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 {lang === "id" ? "Siap untuk Proyek & Magang" : "Open for Projects & Internship"}
               </div>
             </div>
