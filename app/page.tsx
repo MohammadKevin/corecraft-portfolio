@@ -6,7 +6,8 @@ import Link from "next/link";
 import { 
   Download, FileText, Server, Database, Monitor, 
   ShoppingCart, FolderClosed, RefreshCw, Send, 
-  AlertCircle, Loader2, MapPin, Clock, Check, X, ExternalLink, Award
+  AlertCircle, Loader2, MapPin, Clock, Check, X, ExternalLink, Award,
+  ChevronDown, ChevronUp
 } from "lucide-react";
 import { projectsData, Project } from "@/data/projects";
 import { skillCategories } from "@/data/skills";
@@ -26,6 +27,11 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<string>("backend");
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [isCvModalOpen, setIsCvModalOpen] = useState(false);
+  
+  // Mobile Collapsible States (Prevents endless vertical scrolling)
+  const [showAllServices, setShowAllServices] = useState(false);
+  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [showAllCerts, setShowAllCerts] = useState(false);
   
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -250,24 +256,48 @@ export default function Home() {
       </section>
 
       {/* 3. SERVICES SECTION */}
-      <section id="services" aria-label="Services" className="w-full py-24 bg-transparent scroll-mt-28">
-        <div className="max-w-6xl mx-auto px-6">
+      <section id="services" aria-label="Services" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
             {lang === "id" ? "LAYANAN REKAYASA" : "ENGINEERING SERVICES"}
           </span>
-          <h2 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[38px] leading-tight font-bold text-[#1C1B1D] max-w-2xl mb-12 tracking-tight">
-            {lang === "id" ? "Solusi Rekayasa Perangkat Lunak Komprehensif" : "Comprehensive Software Engineering Solutions"}
+          <h2 className="font-[family-name:var(--font-display)] text-[26px] sm:text-[38px] leading-tight font-bold text-[#1C1B1D] max-w-2xl mb-8 sm:mb-12 tracking-tight">
+            {lang === "id" ? "Solusi Rekayasa Perangkat Lunak Terarah & Terukur" : "Focused & Measurable Software Engineering Solutions"}
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {servicesData.map((svc) => (
-              <div key={svc.title.en} className="liquid-glass rounded-3xl p-7 sm:p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-white/80 flex flex-col group">
-                <div className="w-13 h-13 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center mb-6 group-hover:scale-105 transition-transform border border-sky-400/20 shadow-xs">
-                  <svc.icon className="w-6 h-6" />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5 sm:gap-6">
+            {(showAllServices ? servicesData : servicesData).map((svc, idx) => (
+              <div 
+                key={svc.title.en} 
+                className={`liquid-glass rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-white/80 flex flex-col justify-between group ${
+                  idx >= 3 && !showAllServices ? "hidden md:flex" : "flex"
+                }`}
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform border border-sky-400/20 shadow-xs">
+                    <svc.icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg font-bold text-[#1C1B1D] mb-2.5">{svc.title[lang]}</h3>
+                  <p className="text-[14px] leading-relaxed text-[#71717A]">{svc.desc[lang]}</p>
                 </div>
-                <h3 className="text-lg font-bold text-[#1C1B1D] mb-3">{svc.title[lang]}</h3>
-                <p className="text-[15px] leading-relaxed text-[#71717A]">{svc.desc[lang]}</p>
               </div>
             ))}
+          </div>
+
+          {/* Mobile Show More / Show Less Toggle Button */}
+          <div className="flex justify-center pt-6 md:hidden">
+            <button
+              type="button"
+              onClick={() => setShowAllServices(!showAllServices)}
+              className="liquid-glass inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold text-[#1C1B1D] hover:bg-white/90 transition-all active:scale-95 shadow-xs border border-white/80"
+            >
+              <span>
+                {showAllServices
+                  ? (lang === "id" ? "Tampilkan Lebih Sedikit" : "Show Less")
+                  : (lang === "id" ? `Lihat Semua Layanan (${servicesData.length})` : `View All Services (${servicesData.length})`)}
+              </span>
+              {showAllServices ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
           </div>
         </div>
       </section>
@@ -326,22 +356,25 @@ export default function Home() {
       </section>
 
       {/* 5. PROJECTS SECTION */}
-      <section id="projects" aria-label="Projects" className="w-full py-24 bg-transparent scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col gap-10">
+      <section id="projects" aria-label="Projects" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-8 sm:gap-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
                 {lang === "id" ? "PORTOFOLIO TERPILIH" : "FEATURED PORTFOLIO"}
               </span>
-              <h2 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[38px] font-bold text-[#1C1B1D] tracking-tight">
-                {lang === "id" ? "Studi Kasus & Implementasi Nyata" : "Case Studies & Real Implementations"}
+              <h2 className="font-[family-name:var(--font-display)] text-[26px] sm:text-[38px] font-bold text-[#1C1B1D] tracking-tight">
+                {lang === "id" ? "Studi Kasus & Implementasi Nyata" : "Case Studies & Production Implementations"}
               </h2>
             </div>
-            <div className="liquid-glass flex flex-wrap gap-1.5 p-1.5 rounded-full shadow-xs border border-white/80" role="tablist">
+            <div className="liquid-glass flex flex-wrap gap-1.5 p-1.5 rounded-full shadow-xs border border-white/80 self-start md:self-auto" role="tablist">
               {projectFilterOptions.map(cat => (
                 <button 
                   key={cat.key} 
-                  onClick={() => setActiveCategory(cat.key)} 
+                  onClick={() => {
+                    setActiveCategory(cat.key);
+                    setShowAllProjects(false);
+                  }} 
                   role="tab"
                   aria-selected={activeCategory === cat.key}
                   className={`px-3.5 py-1.5 rounded-full font-mono text-[12px] transition-all cursor-pointer ${activeCategory === cat.key ? "bg-[#1C1B1D] text-white font-medium shadow-xs" : "text-[#71717A] hover:text-[#1C1B1D]"}`}
@@ -351,20 +384,26 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="grid lg:grid-cols-3 gap-8">
-            {filteredProjects.map(p => {
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filteredProjects.map((p, idx) => {
               const dText = typeof p.desc === 'string' ? p.desc : (p.desc?.[lang] || (p.desc as { id?: string })?.id || "");
               const iText = typeof p.impact === 'string' ? p.impact : (p.impact?.[lang] || (p.impact as { id?: string })?.id || "");
               return (
-                <div key={p.id} className="liquid-glass rounded-3xl p-7 shadow-sm border border-white/80 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div 
+                  key={p.id} 
+                  className={`liquid-glass rounded-3xl p-6 sm:p-7 shadow-sm border border-white/80 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
+                    idx >= 3 && !showAllProjects ? "hidden md:flex" : "flex"
+                  }`}
+                >
                   <div>
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex justify-between items-center mb-3.5">
                       <span className="text-[11px] bg-sky-500/10 text-sky-700 px-3 py-0.5 rounded-full font-bold border border-sky-400/20">
                         {p.type}
                       </span>
                       <span className="text-[11px] text-zinc-400 font-mono">2025</span>
                     </div>
-                    <h3 className="text-xl font-bold text-[#1C1B1D] mb-2">{p.title}</h3>
+                    <h3 className="text-xl font-bold text-[#1C1B1D] mb-2 leading-snug">{p.title}</h3>
                     <p className="text-[14px] text-[#71717A] mb-4 leading-relaxed">{dText}</p>
                     {iText && (
                       <div className="bg-emerald-500/10 text-emerald-950 rounded-2xl p-3 text-[11px] mb-4 font-mono leading-relaxed border border-emerald-400/20">
@@ -397,30 +436,50 @@ export default function Home() {
               );
             })}
           </div>
+
+          {/* Mobile Show More / Show Less Toggle for Projects */}
+          {filteredProjects.length > 3 && (
+            <div className="flex justify-center pt-2 md:hidden">
+              <button
+                type="button"
+                onClick={() => setShowAllProjects(!showAllProjects)}
+                className="liquid-glass inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold text-[#1C1B1D] hover:bg-white/90 transition-all active:scale-95 shadow-xs border border-white/80"
+              >
+                <span>
+                  {showAllProjects
+                    ? (lang === "id" ? "Tampilkan Lebih Sedikit" : "Show Less")
+                    : (lang === "id" ? `Lihat Semua Proyek (${filteredProjects.length})` : `View All Projects (${filteredProjects.length})`)}
+                </span>
+                {showAllProjects ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       {/* 6. CERTIFICATES & CREDENTIALS SECTION */}
-      <section id="certificates" aria-label="Certificates" className="w-full py-24 bg-transparent scroll-mt-28">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col gap-10">
+      <section id="certificates" aria-label="Certificates" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-8 sm:gap-10">
           <div>
             <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
               {lang === "id" ? "SERTIFIKASI & KREDENSIAL" : "CERTIFICATIONS & CREDENTIALS"}
             </span>
-            <h2 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[38px] font-bold text-[#1C1B1D] tracking-tight">
+            <h2 className="font-[family-name:var(--font-display)] text-[26px] sm:text-[38px] font-bold text-[#1C1B1D] tracking-tight">
               {lang === "id" ? "Kompetensi Terverifikasi & Resmi" : "Verified Industry Credentials"}
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {certificatesData.map((cert) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5 sm:gap-6">
+            {certificatesData.map((cert, idx) => {
               const titleText = typeof cert.title === "string" ? cert.title : cert.title[lang];
               const issuerText = typeof cert.issuer === "string" ? cert.issuer : cert.issuer[lang];
 
               return (
                 <div
                   key={cert.id}
-                  className="liquid-glass rounded-3xl p-6 sm:p-7 shadow-sm border border-white/80 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                  className={`liquid-glass rounded-3xl p-6 sm:p-7 shadow-sm border border-white/80 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group ${
+                    idx >= 3 && !showAllCerts ? "hidden md:flex" : "flex"
+                  }`}
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-4">
@@ -433,7 +492,7 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <h3 className="text-[17px] font-bold text-[#1C1B1D] mb-2 leading-snug group-hover:text-sky-700 transition-colors">
+                    <h3 className="text-[16px] sm:text-[17px] font-bold text-[#1C1B1D] mb-2 leading-snug group-hover:text-sky-700 transition-colors">
                       {titleText}
                     </h3>
 
@@ -462,26 +521,44 @@ export default function Home() {
               );
             })}
           </div>
+
+          {/* Mobile Show More / Show Less Toggle for Certificates */}
+          {certificatesData.length > 3 && (
+            <div className="flex justify-center pt-2 md:hidden">
+              <button
+                type="button"
+                onClick={() => setShowAllCerts(!showAllCerts)}
+                className="liquid-glass inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold text-[#1C1B1D] hover:bg-white/90 transition-all active:scale-95 shadow-xs border border-white/80"
+              >
+                <span>
+                  {showAllCerts
+                    ? (lang === "id" ? "Tampilkan Lebih Sedikit" : "Show Less")
+                    : (lang === "id" ? `Lihat Semua Sertifikat (${certificatesData.length})` : `View All Certificates (${certificatesData.length})`)}
+                </span>
+                {showAllCerts ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       {/* 7. TIMELINE SECTION */}
-      <section id="timeline" aria-label="Timeline" className="w-full py-24 bg-transparent scroll-mt-28">
-        <div className="max-w-6xl mx-auto px-6">
+      <section id="timeline" aria-label="Timeline" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
             {lang === "id" ? "PERJALANAN" : "JOURNEY"}
           </span>
-          <h2 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[38px] font-bold text-[#1C1B1D] mb-12 tracking-tight">
+          <h2 className="font-[family-name:var(--font-display)] text-[26px] sm:text-[38px] font-bold text-[#1C1B1D] mb-8 sm:mb-12 tracking-tight">
             {lang === "id" ? "Pendidikan & Rekam Jejak Profesional" : "Education & Professional Track Record"}
           </h2>
-          <div className="relative pl-6 sm:pl-8 space-y-10">
-            <div className="absolute left-2 sm:left-3 top-2 bottom-2 w-0.5 bg-zinc-300/60" />
+          <div className="relative pl-5 sm:pl-8 space-y-7 sm:space-y-10">
+            <div className="absolute left-1.5 sm:left-3 top-2 bottom-2 w-0.5 bg-zinc-300/60" />
             {timelineLogs.map((log, idx) => (
-              <div key={log.id} className="relative flex items-start gap-6">
-                <div className={`w-3 h-3 rounded-full mt-2 -ml-[23px] sm:-ml-[25px] ring-4 ring-white shadow-xs ${idx === 0 ? "bg-sky-600" : "bg-zinc-300"}`} />
-                <div className="liquid-glass rounded-3xl p-7 shadow-sm flex-1 border border-white/80 hover:shadow-md transition-all">
+              <div key={log.id} className="relative flex items-start gap-4 sm:gap-6">
+                <div className={`w-3 h-3 rounded-full mt-2 -ml-[23px] sm:-ml-[25px] ring-4 ring-white shadow-xs shrink-0 ${idx === 0 ? "bg-sky-600" : "bg-zinc-300"}`} />
+                <div className="liquid-glass rounded-3xl p-5 sm:p-7 shadow-sm flex-1 border border-white/80 hover:shadow-md transition-all">
                   <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
-                    <h3 className="text-lg font-bold text-[#1C1B1D]">
+                    <h3 className="text-base sm:text-lg font-bold text-[#1C1B1D]">
                       {typeof log.role === 'string' ? log.role : (log.role?.[lang] || log.role?.id || "")}
                     </h3>
                     <span className="text-[11px] font-mono bg-white/70 text-zinc-700 px-3 py-1 rounded-full font-semibold border border-white/80">
@@ -499,19 +576,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. CONTACT SECTION */}
-      <section id="contact" aria-label="Contact" className="w-full py-24 bg-transparent scroll-mt-28">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col gap-12">
+      {/* 8. CONTACT SECTION */}
+      <section id="contact" aria-label="Contact" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col gap-8 sm:gap-12">
           <div>
             <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
               {lang === "id" ? "HUBUNGI SAYA" : "GET IN TOUCH"}
             </span>
-            <h2 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[40px] font-bold text-[#1C1B1D] tracking-tight">
-              {lang === "id" ? "Mari Diskusikan Proyek atau Peluang Kerjasama" : "Let's Discuss Projects or Opportunities"}
+            <h2 className="font-[family-name:var(--font-display)] text-[26px] sm:text-[40px] font-bold text-[#1C1B1D] tracking-tight">
+              {lang === "id" ? "Diskusikan Kebutuhan Sistem & Kolaborasi" : "Discuss System Architecture & Engagements"}
             </h2>
           </div>
-          <div className="grid lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-5 liquid-glass p-8 sm:p-9 rounded-3xl shadow-lg border border-white/80 flex flex-col justify-between gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
+            <div className="lg:col-span-5 liquid-glass p-6 sm:p-9 rounded-3xl shadow-lg border border-white/80 flex flex-col justify-between gap-6 sm:gap-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                   <span className="text-[11px] uppercase text-[#71717A] font-mono tracking-wider font-semibold">
@@ -529,7 +606,7 @@ export default function Home() {
                     </button>
                   </div>
                 </div>
-                <div className="space-y-4 pt-2">
+                <div className="space-y-4 pt-1">
                   <div className="flex items-center gap-3">
                     <MapPin className="text-sky-600 w-5 h-5 shrink-0" />
                     <div>
@@ -540,7 +617,7 @@ export default function Home() {
                   <div className="flex items-center gap-3">
                     <Clock className="text-sky-600 w-5 h-5 shrink-0" />
                     <div>
-                      <p className="text-[10px] text-[#71717A] font-mono uppercase font-semibold">{lang === "id" ? "Jam Kerja" : "Working Hours"}</p>
+                      <p className="text-[10px] text-[#71717A] font-mono uppercase font-semibold">{lang === "id" ? "Jam Kerja Responsif" : "Response Hours"}</p>
                       <p className="text-sm font-bold text-[#1C1B1D]">
                         {lang === "id" ? "Senin – Sabtu (08:00 – 21:00 WIB)" : "Monday – Saturday (08:00 – 21:00 GMT+7)"}
                       </p>
@@ -548,14 +625,15 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="p-4 bg-sky-500/10 rounded-2xl flex items-center gap-3 border border-sky-400/20">
+              <div className="p-3.5 sm:p-4 bg-sky-500/10 rounded-2xl flex items-center gap-3 border border-sky-400/20">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                 <p className="text-xs text-[#1C1B1D] font-mono font-semibold">
-                  {lang === "id" ? "Tersedia untuk Kontrak & Magang" : "Available for Contracts & Internships"}
+                  {lang === "id" ? "Tersedia untuk Magang & Kontrak Proyek" : "Available for Internship & Project Contracts"}
                 </p>
               </div>
             </div>
             
-            <div className="lg:col-span-7 liquid-glass p-8 sm:p-9 rounded-3xl shadow-lg border border-white/80">
+            <div className="lg:col-span-7 liquid-glass p-6 sm:p-9 rounded-3xl shadow-lg border border-white/80">
               {formStatus === "success" && (
                 <div className="mb-6 p-4 bg-emerald-500/10 text-emerald-950 rounded-2xl text-xs font-mono text-center border border-emerald-400/20">
                   {lang === "id" ? "Pesan terkirim! Terima kasih sudah menghubungi — saya akan segera membalas." : "Message sent! Thank you for reaching out — I will get back to you soon."}
@@ -567,8 +645,8 @@ export default function Home() {
                   <span>{errorMsg}</span>
                 </div>
               )}
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                <div className="grid grid-cols-3 gap-2 mb-2" role="group" aria-label="Project Type">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-1" role="group" aria-label="Project Type">
                   {projectTypeOptions.map((item) => {
                     const label = item[lang];
                     const isSelected = projectType === item.id;
@@ -577,7 +655,7 @@ export default function Home() {
                         key={item.id}
                         type="button"
                         onClick={() => setProjectType(item.id)}
-                        className={`py-2 px-3 rounded-2xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                        className={`py-2 px-3 rounded-2xl text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
                           isSelected
                             ? "bg-[#1C1B1D] text-white shadow-xs"
                             : "bg-white/60 text-[#71717A] hover:bg-white/90 border border-white/80"
@@ -588,7 +666,7 @@ export default function Home() {
                     );
                   })}
                 </div>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[11px] font-bold text-[#1C1B1D] font-mono uppercase">
                       {lang === 'id' ? "Nama Lengkap" : "Full Name"}
@@ -597,7 +675,7 @@ export default function Home() {
                       type="text" 
                       value={form.name} 
                       onChange={e => setForm({...form, name: e.target.value})} 
-                      placeholder={lang === 'id' ? "Aditya Nugroho" : "John Doe"} 
+                      placeholder={lang === 'id' ? "Nama Anda / Perusahaan" : "Your Name / Organization"} 
                       className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm transition-all text-[#1C1B1D]" 
                       required 
                     />
@@ -610,7 +688,7 @@ export default function Home() {
                       type="email" 
                       value={form.email} 
                       onChange={e => setForm({...form, email: e.target.value})} 
-                      placeholder="nama@email.com" 
+                      placeholder="nama@perusahaan.com" 
                       className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm transition-all text-[#1C1B1D]" 
                       required 
                     />
@@ -618,12 +696,12 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-[#1C1B1D] font-mono uppercase">
-                    {lang === 'id' ? "Pesan" : "Message"}
+                    {lang === 'id' ? "Deskripsi Kebutuhan / Pesan" : "Project Scope / Message"}
                   </label>
                   <textarea 
                     value={form.message} 
                     onChange={e => setForm({...form, message: e.target.value})} 
-                    placeholder={lang === 'id' ? "Ceritakan detail proyek..." : "Tell me about your project requirements..."} 
+                    placeholder={lang === 'id' ? "Jelaskan kebutuhan sistem, arsitektur, estimasi timeline, atau detail proyek..." : "Describe the system scope, architecture, estimated timeline, or project specs..."} 
                     rows={4} 
                     className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm resize-none transition-all text-[#1C1B1D]" 
                     required 
@@ -632,7 +710,7 @@ export default function Home() {
                 <button 
                   type="submit" 
                   disabled={formStatus === 'loading'} 
-                  className="w-full py-4 bg-[#1C1B1D] hover:bg-black text-white rounded-full font-bold text-sm transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                  className="w-full py-3.5 sm:py-4 bg-[#1C1B1D] hover:bg-black text-white rounded-full font-bold text-sm transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-md"
                 >
                   {formStatus === 'loading' ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
