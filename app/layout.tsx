@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     canonical: "https://corecraft.my.id",
   },
   verification: {
-    google: "Ql3s20yhLdCaRpqDF5mz_7W3KDBTAOFCTs2sx9QrXvc",
+    google: "P3ie_hBmhRaKPj0kDNKLJSxyvzclf-QUbNXF33Yxkf0",
   },
 };
 
