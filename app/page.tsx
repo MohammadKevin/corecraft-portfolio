@@ -419,7 +419,7 @@ export default function Home() {
                       {typeof log.role === 'string' ? log.role : (log.role?.[lang] || log.role?.id || "")}
                     </h3>
                     <span className="text-[11px] font-mono bg-white/70 text-zinc-700 px-3 py-1 rounded-full font-semibold border border-white/80">
-                      {log.year}
+                      {typeof log.year === 'string' ? log.year : (log.year?.[lang] || log.year?.id || "")}
                     </span>
                   </div>
                   <p className="text-xs text-sky-700 font-mono font-semibold mb-2">{log.org}</p>

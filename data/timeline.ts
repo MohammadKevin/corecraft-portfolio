@@ -2,7 +2,7 @@ import type { LocalizedString } from "./projects";
 
 export interface TimelineLog {
   id: string;
-  year: string;
+  year: LocalizedString | string;
   role: LocalizedString;
   org: string;
   type: "academic" | "project" | "achievement" | "magang";
@@ -15,7 +15,7 @@ export interface TimelineLog {
 export const timelineLogs: TimelineLog[] = [
   {
     id: "log-3",
-    year: "2026 - Sekarang",
+    year: { id: "2026 – Sekarang", en: "2026 – Present" },
     role: { id: "Quality Assurance", en: "Quality Assurance" },
     org: "SIDIGS",
     type: "magang",
@@ -31,7 +31,7 @@ export const timelineLogs: TimelineLog[] = [
   },
   {
     id: "log-2",
-    year: "2025 - Sekarang",
+    year: { id: "2025 – Sekarang", en: "2025 – Present" },
     role: { id: "Freelance & Backend Developer", en: "Freelance & Backend Developer" },
     org: "Independent",
     type: "project",
@@ -47,7 +47,7 @@ export const timelineLogs: TimelineLog[] = [
   },
   {
     id: "log-1",
-    year: "2024 - sekarang",
+    year: { id: "2024 – Sekarang", en: "2024 – Present" },
     role: { id: "Siswa Rekayasa Perangkat Lunak", en: "Software Engineering Student" },
     org: "SMK Telkom Malang",
     type: "academic",

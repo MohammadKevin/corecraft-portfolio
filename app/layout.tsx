@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuroraBackground from "@/components/AuroraBackground";
+import Preloader from "@/components/Preloader";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -145,6 +146,7 @@ export default function RootLayout({
           }}
         />
         <LanguageProvider>
+          <Preloader />
           <AuroraBackground />
           <Navbar />
           <div className="flex flex-col min-h-screen relative z-0">

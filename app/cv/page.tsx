@@ -133,7 +133,7 @@ export default function CVPage() {
                           {roleTitle}
                         </h3>
                         <span className="text-[11px] font-mono text-zinc-500 font-semibold">
-                          {exp.year}
+                          {typeof exp.year === 'string' ? exp.year : (exp.year?.[lang] || exp.year?.id || "")}
                         </span>
                       </div>
                       <p className="text-xs font-semibold text-sky-600">
@@ -173,7 +173,9 @@ export default function CVPage() {
                   <div key={acad.id} className="space-y-1">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-bold text-zinc-950">{acad.org}</h3>
-                      <span className="text-[11px] font-mono text-zinc-500 font-semibold">{acad.year}</span>
+                      <span className="text-[11px] font-mono text-zinc-500 font-semibold">
+                        {typeof acad.year === 'string' ? acad.year : (acad.year?.[lang] || acad.year?.id || "")}
+                      </span>
                     </div>
                     <p className="text-xs text-sky-600 font-medium">{roleTitle}</p>
                     <p className="text-xs text-zinc-600">{summary}</p>
