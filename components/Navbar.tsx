@@ -74,12 +74,12 @@ export default function Navbar() {
         }`}
       >
         <div
-          className={`relative flex items-center justify-between gap-2 sm:gap-4 lg:gap-6 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`relative flex items-center justify-between gap-2 sm:gap-4 lg:gap-6 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] liquid-glass-nav ${
             isExpanded
-              ? "h-14 sm:h-16 px-4 sm:px-7 bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_24px_50px_rgba(28,27,29,0.12),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.06]"
+              ? "h-14 sm:h-16 px-4 sm:px-7 bg-white/85 shadow-[0_24px_50px_rgba(28,27,29,0.14),inset_0_1.5px_2px_rgba(255,255,255,1)] border-white/95 ring-1 ring-black/[0.06]"
               : scrolled
-              ? "h-12 sm:h-13 px-3.5 sm:px-6 bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_12px_28px_rgba(28,27,29,0.08),inset_0_1px_1px_rgba(255,255,255,0.9)] ring-1 ring-black/[0.04]"
-              : "h-12 sm:h-13 px-3.5 sm:px-6 bg-white/65 backdrop-blur-xl border border-white/70 shadow-[0_8px_20px_rgba(28,27,29,0.05),inset_0_1px_1px_rgba(255,255,255,0.85)] ring-1 ring-black/[0.03]"
+              ? "h-12 sm:h-13 px-3.5 sm:px-6 bg-white/75 shadow-[0_14px_30px_rgba(28,27,29,0.10),inset_0_1.5px_1.5px_rgba(255,255,255,0.95)] border-white/85 ring-1 ring-black/[0.04]"
+              : "h-12 sm:h-13 px-3.5 sm:px-6 bg-white/60 shadow-[0_10px_24px_rgba(28,27,29,0.06),inset_0_1.5px_1.5px_rgba(255,255,255,0.90)] border-white/80 ring-1 ring-black/[0.03]"
           }`}
         >
           {/* top glass sheen */}
