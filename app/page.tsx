@@ -216,8 +216,7 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <div className="liquid-glass absolute -bottom-3 sm:-bottom-4 right-2 sm:right-4 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-lg flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#1C1B1D] border border-white/80 backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="liquid-glass absolute -bottom-3 sm:-bottom-4 right-2 sm:right-4 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-lg flex items-center text-xs sm:text-sm font-semibold text-[#1C1B1D] border border-white/80 backdrop-blur-md">
                 {lang === "id" ? "Siap untuk Proyek & Magang" : "Open for Projects & Internship"}
               </div>
             </div>

@@ -130,8 +130,7 @@ export default function DepthPhoto3D() {
       </div>
 
       <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg flex items-center justify-between text-xs font-semibold text-[#1C1B1D] border border-white/80 pointer-events-none">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <div className="flex items-center">
           <span className="font-bold">Mohammad Kevin</span>
         </div>
         <span className="text-[10px] font-mono font-semibold text-sky-700 bg-sky-50 border border-sky-100 px-2.5 py-0.5 rounded-full">
