@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { 
@@ -21,7 +21,7 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "3qW5e407vXhAId
 
 export default function Home() {
   const { lang } = useLanguage();
-  const [projects, setProjects] = useState<Project[]>(projectsData);
+  const [projects] = useState<Project[]>(projectsData);
   const [activeTab, setActiveTab] = useState<string>("backend");
   const [activeCategory, setActiveCategory] = useState<string>("All");
   
@@ -33,29 +33,6 @@ export default function Home() {
   const emailAddress = "kvn4.200581@gmail.com";
 
   const t = translations.hero;
-
-  useEffect(() => {
-    // Only record visit once per session
-    try {
-      if (!sessionStorage.getItem("kv-visited")) {
-        sessionStorage.setItem("kv-visited", "true");
-        fetch("/api/visit", { method: "POST" }).catch(() => {});
-      }
-    } catch {
-      fetch("/api/visit", { method: "POST" }).catch(() => {});
-    }
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
-          setProjects(data.projects);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);

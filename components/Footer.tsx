@@ -1,16 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/icons/SocialIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Footer() {
-  const pathname = usePathname();
   const { lang } = useLanguage();
-
-  if (pathname && pathname.startsWith("/admin")) return null;
 
   return (
     <footer className="w-full bg-white/70 backdrop-blur-md border-t border-zinc-200/60">

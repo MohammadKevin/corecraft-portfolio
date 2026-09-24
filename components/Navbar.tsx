@@ -62,10 +62,8 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
-  if (pathname && pathname.startsWith("/admin")) return null;
-
   return (
-    <header className="fixed top-2 sm:top-5 inset-x-0 z-50 flex justify-center px-2 sm:px-6 pointer-events-none transition-all duration-300">
+    <header className="fixed top-2.5 sm:top-5 inset-x-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none transition-all duration-300">
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -78,10 +76,10 @@ export default function Navbar() {
         <div
           className={`relative flex items-center justify-between gap-3 lg:gap-6 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isExpanded
-              ? "h-14 sm:h-16 px-4 sm:px-6 bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_24px_50px_rgba(28,27,29,0.12),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.06]"
+              ? "h-14 sm:h-16 pl-4 sm:pl-6 pr-3.5 sm:pr-5 bg-white/90 backdrop-blur-2xl border border-white/90 shadow-[0_24px_50px_rgba(28,27,29,0.12),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.06]"
               : scrolled
-              ? "h-12 sm:h-13 px-4 sm:px-5 bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_12px_28px_rgba(28,27,29,0.08),inset_0_1px_1px_rgba(255,255,255,0.9)] ring-1 ring-black/[0.04]"
-              : "h-12 sm:h-13 px-4 sm:px-5 bg-white/65 backdrop-blur-xl border border-white/70 shadow-[0_8px_20px_rgba(28,27,29,0.05),inset_0_1px_1px_rgba(255,255,255,0.85)] ring-1 ring-black/[0.03]"
+              ? "h-12 sm:h-13 pl-4 sm:pl-5 pr-3 sm:pr-4.5 bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_12px_28px_rgba(28,27,29,0.08),inset_0_1px_1px_rgba(255,255,255,0.9)] ring-1 ring-black/[0.04]"
+              : "h-12 sm:h-13 pl-4 sm:pl-5 pr-3 sm:pr-4.5 bg-white/65 backdrop-blur-xl border border-white/70 shadow-[0_8px_20px_rgba(28,27,29,0.05),inset_0_1px_1px_rgba(255,255,255,0.85)] ring-1 ring-black/[0.03]"
           }`}
         >
           {/* top glass sheen */}
@@ -123,7 +121,7 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="relative flex items-center gap-2 sm:gap-2.5 shrink-0 pl-1">
+          <div className="relative flex items-center gap-2 sm:gap-2.5 shrink-0">
             {/* language toggle in glass capsule */}
             <div
               className="flex items-center bg-black/[0.04] backdrop-blur-md rounded-full p-0.5 border border-black/10 text-[10px] sm:text-[11px] font-mono transition-transform duration-200 hover:scale-[1.02]"
@@ -152,10 +150,10 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* CTA pill button */}
+            {/* CTA pill button with comfortable breathing margin */}
             <Link
               href="/#contact"
-              className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1C1B1D] text-white px-3.5 sm:px-4 py-1.5 text-xs font-semibold hover:bg-black transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-md"
+              className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1C1B1D] text-white px-4 sm:px-4.5 py-1.5 sm:py-2 text-xs font-semibold hover:bg-black transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-md ml-1"
             >
               {n.hireMe[lang]}
             </Link>
