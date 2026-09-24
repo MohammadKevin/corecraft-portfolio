@@ -1,8 +1,8 @@
 <div align="center">
 
-# Interactive Developer Portfolio
+# CoreCraft Portfolio
 
-<p>Personal Portfolio & Interactive Project Showcase</p>
+<p>Mohammad Kevin — Backend & Fullstack Software Engineer Portfolio</p>
 
 ![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
@@ -13,48 +13,32 @@
 ---
 
 ## Overview
-A modern developer portfolio featuring dynamic project showcases, tech stack skill graphs, an interactive contact form powered by EmailJS, and an admin CMS view.
+High-performance developer portfolio featuring scalable backend architecture case studies, real-time telemetry analytics, interactive contact forms, and custom liquid glass UI.
 
 ---
 
 ## Key Features
-- Interactive project filtering by tech stack and category
-- Direct email contact form integration with EmailJS
-- Admin CMS section for updating portfolio entries
-- Responsive modern layout with dark aesthetic
+- Interactive project filtering and performance telemetry
+- Direct EmailJS integration and visitor analytics tracking
+- Admin CMS for project and credential management
+- Liquid glass aesthetic with ambient mesh aurora background
 
 ---
 
 ## Tech Stack
-- **Framework**: Next.js
+- **Framework**: Next.js (App Router)
 - **Language**: TypeScript
-- **Services**: EmailJS, Supabase
 - **Styling**: Tailwind CSS, Lucide Icons
-
----
-
-## Project Structure
-```text
-portfolio/
-├── app/
-│   ├── admin/          # Admin CMS management
-│   └── page.tsx        # Main portfolio showcase
-└── components/
-```
+- **Backend / Services**: Next.js API Routes, Supabase, EmailJS
 
 ---
 
 ## Getting Started
 
-### Prerequisites
-Make sure you have the required runtimes and tools installed on your machine:
-- Node.js (v18+ recommended) / Appropriate runtime
-- Git
-
 ### Installation & Local Setup
 ```bash
-git clone https://github.com/MohammadKevin/portfolio.git
-cd portfolio
+git clone https://github.com/MohammadKevin/corecraft-portfolio.git
+cd corecraft-portfolio
 npm install
 npm run dev
 ```
@@ -62,17 +46,13 @@ npm run dev
 ---
 
 ## Author
-**Mohammad Kevin Arif Rudianto**
+**Mohammad Kevin**
+- **Domain:** [corecraft.my.id](https://corecraft.my.id)
 - **GitHub:** [@MohammadKevin](https://github.com/MohammadKevin)
-- **Portfolio:** [portfolio-mohammadkevin.vercel.app](https://portfolio-mohammadkevin.vercel.app)
-- **LinkedIn:** [Mohammad Kevin](https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347)
+- **LinkedIn:** [Mohammad Kevin](https://www.linkedin.com/in/mohammadkevin)
 - **Email:** [kvn4.200581@gmail.com](mailto:kvn4.200581@gmail.com)
 
 ---
 
 ## License
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
-<div align="center">
-If you found this repository useful, please consider giving it a star!
-</div>

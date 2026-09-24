@@ -130,8 +130,8 @@ export const projectsData: Project[] = [
       en: "Provides a unique visual experience in a system terminal style with 100% Lighthouse performance score."
     },
     tech: ["Next.js 16", "Tailwind CSS", "TypeScript"],
-    demoUrl: "https://mohammadkevin.dev",
-    repoUrl: "https://github.com/MohammadKevin/my-portfolio",
+    demoUrl: "https://corecraft.my.id",
+    repoUrl: "https://github.com/MohammadKevin/corecraft-portfolio",
     featured: true
   },
   {
