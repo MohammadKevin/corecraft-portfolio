@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { translations } from "@/data/translations";
 import { whoamiData } from "@/data/whoami";
 import { timelineLogs } from "@/data/timeline";
 import { skillCategories } from "@/data/skills";
@@ -14,13 +13,11 @@ import {
   Printer,
   ArrowLeft,
   Download,
-  CheckCircle2,
 } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/icons/SocialIcons";
+import { GithubIcon } from "@/components/icons/SocialIcons";
 
 export default function CVPage() {
   const { lang } = useLanguage();
-  const tr = translations;
 
   const experiences = timelineLogs.filter(
     (t) => t.type === "project" || t.type === "achievement" || t.type === "magang"
@@ -28,9 +25,7 @@ export default function CVPage() {
   const academics = timelineLogs.filter((t) => t.type === "academic");
 
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-900 font-sans print:bg-white print:text-black pt-24 pb-12 print:py-0">
-      
-      {/* Action Controls Header (Hidden on Print) */}
+    <main className="min-h-screen bg-zinc-100 text-zinc-900 font-sans print:bg-white print:text-black pt-24 pb-12 print:py-0">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 print:hidden">
         <Link
           href="/"
@@ -60,10 +55,7 @@ export default function CVPage() {
         </div>
       </div>
 
-      {/* CV Document Sheet */}
       <div className="max-w-4xl mx-auto bg-white border border-zinc-300 shadow-sm print:shadow-none print:border-none rounded-[14px] print:rounded-none overflow-hidden">
-        
-        {/* Header Section */}
         <div className="px-8 sm:px-10 py-10 border-b border-zinc-200 bg-zinc-50/50 print:bg-white">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -112,13 +104,8 @@ export default function CVPage() {
           </div>
         </div>
 
-        {/* Body Content */}
         <div className="px-8 sm:px-10 py-10 grid grid-cols-1 md:grid-cols-12 gap-10">
-          
-          {/* Main Column (Span 8) */}
           <div className="md:col-span-8 space-y-8">
-            
-            {/* Executive Summary */}
             <section>
               <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-2 mb-3 font-mono">
                 {lang === "id" ? "Ringkasan Profesional" : "Professional Summary"}
@@ -128,7 +115,6 @@ export default function CVPage() {
               </p>
             </section>
 
-            {/* Experience & Practical Work */}
             <section>
               <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-2 mb-4 font-mono">
                 {lang === "id" ? "Pengalaman & Proyek Nyata" : "Experience & Production Work"}
@@ -173,7 +159,6 @@ export default function CVPage() {
               </div>
             </section>
 
-            {/* Education */}
             <section>
               <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-2 mb-4 font-mono">
                 {lang === "id" ? "Pendidikan Formal" : "Education"}
@@ -197,10 +182,7 @@ export default function CVPage() {
 
           </div>
 
-          {/* Sidebar Column (Span 4) */}
           <div className="md:col-span-4 space-y-8">
-            
-            {/* Tech Competencies */}
             <section>
               <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-2 mb-3 font-mono">
                 {lang === "id" ? "Keahlian Teknis" : "Technical Skills"}
@@ -226,7 +208,6 @@ export default function CVPage() {
               </div>
             </section>
 
-            {/* Languages */}
             <section>
               <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-2 mb-3 font-mono">
                 Languages
@@ -248,6 +229,6 @@ export default function CVPage() {
         </div>
 
       </div>
-    </div>
+    </main>
   );
 }

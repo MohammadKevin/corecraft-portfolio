@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
@@ -167,7 +167,6 @@ export async function POST(request: NextRequest) {
         created_at: new Date().toISOString()
       };
 
-      // Try with credentialUrl and credential_url
       let payload: Record<string, any> = {
         ...baseCert,
         credentialUrl: credentialUrl || "",

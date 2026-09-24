@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
         try {
           const fileContent = fs.readFileSync(filePath, "utf-8");
           visitors = JSON.parse(fileContent);
-        } catch (err) {
+        } catch {
           visitors = [];
         }
       }
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
         userAgent: request.headers.get("user-agent") || "Unknown User-Agent"
       };
       return NextResponse.json({ success: true, visit: newEntry, warning: `Database write failed, fallback. Error: ${error.message || error}` });
-    } catch (e) {
+    } catch {
       return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
     }
   }
@@ -188,7 +188,7 @@ export async function GET() {
         try {
           const fileContent = fs.readFileSync(filePath, "utf-8");
           visitors = JSON.parse(fileContent);
-        } catch (err) {
+        } catch {
           visitors = [];
         }
       }
@@ -209,7 +209,7 @@ export async function GET() {
         source: "local-fallback", 
         warning: `Supabase GET failed (${error.message || error}), falling back to local files.` 
       });
-    } catch (e) {
+    } catch {
       return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
     }
   }

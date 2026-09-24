@@ -1,12 +1,10 @@
-// ─── Translation strings for Indonesian & English ───────────────────────────
-
 export type Lang = "id" | "en";
 
 export const translations = {
-  // ── Navbar ──────────────────────────────────────────────────────────────
   nav: {
     home:      { id: "Beranda",  en: "Home"     },
     about:     { id: "Tentang",  en: "About"    },
+    services:  { id: "Layanan",  en: "Services" },
     skills:    { id: "Keahlian", en: "Skills"   },
     projects:  { id: "Proyek",   en: "Projects" },
     github:    { id: "GitHub",   en: "GitHub"   },
@@ -17,7 +15,6 @@ export const translations = {
     themeLabel:{ id: "Warna Tema",  en: "Color Theme"},
   },
 
-  // ── Hero ────────────────────────────────────────────────────────────────
   hero: {
     badge:       { id: "Backend & Fullstack Developer", en: "Backend & Fullstack Developer" },
     greeting:    { id: "Halo, saya",   en: "Hi, I'm" },
@@ -45,7 +42,6 @@ export const translations = {
     exp:       { id: "2+ Tahun Pengalaman",      en: "2+ Years Experience" },
   },
 
-  // ── About ───────────────────────────────────────────────────────────────
   about: {
     label:   { id: "Tentang Saya",   en: "About Me" },
     heading: { id: "Siapa",          en: "Who is" },
@@ -83,7 +79,6 @@ export const translations = {
     stackLabel:     { id: "Stack yang saya kuasai", en: "My Tech Stack" },
   },
 
-  // ── Skills ──────────────────────────────────────────────────────────────
   skills: {
     label:        { id: "Tech Stack",   en: "Tech Stack" },
     heading:      { id: "Skill &",      en: "Skills &" },
@@ -95,7 +90,6 @@ export const translations = {
     achievementsHeader: { id: "Pencapaian Nyata", en: "Real Achievements" },
   },
 
-  // ── Projects ────────────────────────────────────────────────────────────
   projects: {
     label:        { id: "Portfolio",  en: "Portfolio" },
     heading:      { id: "Proyek yang", en: "Things I've" },
@@ -110,7 +104,6 @@ export const translations = {
     empty:        { id: "Tidak ada proyek yang cocok.", en: "No matching projects found." },
   },
 
-  // ── GitHub ──────────────────────────────────────────────────────────────
   github: {
     label:         { id: "Open Source",        en: "Open Source" },
     heading:       { id: "GitHub",             en: "GitHub" },
@@ -126,7 +119,6 @@ export const translations = {
     view:          { id: "Lihat", en: "View" },
   },
 
-  // ── Certificates ────────────────────────────────────────────────────────
   certs: {
     label:   { id: "Credentials",            en: "Credentials" },
     heading: { id: "Sertifikasi &",          en: "Certifications &" },
@@ -134,7 +126,6 @@ export const translations = {
     verify:  { id: "Verifikasi",             en: "Verify" },
   },
 
-  // ── Timeline ────────────────────────────────────────────────────────────
   timeline: {
     label:         { id: "Journey",             en: "Journey" },
     heading:       { id: "Perjalanan",          en: "My" },
@@ -145,7 +136,6 @@ export const translations = {
     },
   },
 
-  // ── Contact ─────────────────────────────────────────────────────────────
   contact: {
     label:         { id: "Get In Touch",    en: "Get In Touch" },
     heading:       { id: "Yuk,",           en: "Let's" },
@@ -187,7 +177,6 @@ export const translations = {
     viaEmail:     { id: "Via Email",    en: "Via Email"    },
   },
 
-  // ── CV Modal ────────────────────────────────────────────────────────────
   cv: {
     title:     { id: "Curriculum Vitae",       en: "Curriculum Vitae" },
     role:      { id: "Backend & Fullstack Developer", en: "Backend & Fullstack Developer" },
@@ -212,7 +201,6 @@ export const translations = {
     contactBtn:  { id: "Hubungi Saya",  en: "Contact Me"   },
   },
 
-  // ── Footer ──────────────────────────────────────────────────────────────
   footer: {
     role:      { id: "Backend & Fullstack Dev", en: "Backend & Fullstack Dev" },
     desc: {
@@ -229,10 +217,8 @@ export const translations = {
   },
 } as const;
 
-/** Helper type: get value from a translation key */
 export type TranslationKey = keyof typeof translations;
 
-/** Get translated string by key path, e.g. t(lang, "hero", "badge") */
 export function t(
   lang: Lang,
   section: keyof typeof translations,

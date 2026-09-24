@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Inter } from "next/font/google";
+import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AuroraBackground from "@/components/AuroraBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -14,6 +15,12 @@ const jetbrainsMono = JetBrains_Mono({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
@@ -90,15 +97,57 @@ export default function RootLayout({
     <html
       lang="id"
       suppressHydrationWarning
-      className={`scroll-smooth ${jetbrainsMono.variable} ${inter.variable}`}
+      className={`scroll-smooth ${jetbrainsMono.variable} ${inter.variable} ${jakarta.variable}`}
     >
       <body
         suppressHydrationWarning
-        className="antialiased bg-white text-zinc-900 min-h-screen font-sans selection:bg-sky-100 selection:text-sky-900"
+        className="antialiased bg-[#FAF8F1] text-[#1C1B1D] min-h-screen font-sans selection:bg-[#76C0EC] selection:text-white"
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Mohammad Kevin",
+              url: "https://corecraft.my.id",
+              image: "/images/logo.png",
+              jobTitle: "Backend & Fullstack Software Engineer",
+              description:
+                "High-performance backend systems, scalable REST APIs, and modern fullstack applications. Specialized in Next.js, NestJS, Prisma ORM, PostgreSQL, and MySQL.",
+              alumniOf: {
+                "@type": "EducationalOrganization",
+                name: "SMK Telkom Malang",
+              },
+              knowsAbout: [
+                "Next.js",
+                "NestJS",
+                "Express.js",
+                "Prisma ORM",
+                "PostgreSQL",
+                "MySQL",
+                "TypeScript",
+                "Tailwind CSS",
+                "REST API",
+                "SaaS Architecture",
+              ],
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Malang",
+                addressRegion: "Jawa Timur",
+                addressCountry: "ID",
+              },
+              sameAs: [
+                "https://github.com/MohammadKevin",
+                "https://www.linkedin.com/in/mohammadkevin",
+              ],
+            }),
+          }}
+        />
         <LanguageProvider>
+          <AuroraBackground />
           <Navbar />
-          <div className="flex flex-col min-h-screen">
+          <div className="flex flex-col min-h-screen relative z-0">
             <main className="flex-1">{children}</main>
             <Footer />
           </div>

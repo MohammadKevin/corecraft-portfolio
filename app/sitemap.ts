@@ -3,15 +3,15 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://corecraft.my.id';
 
-  // We can add dynamic routes here if there are individual project pages or blog posts.
-  // Since it's a one-page portfolio, we just need the main routes.
-  
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    }
+  const pages = [
+    { url: baseUrl, priority: 1.0, changeFrequency: 'weekly' as const },
+    { url: `${baseUrl}/cv`, priority: 0.8, changeFrequency: 'monthly' as const },
   ];
+
+  return pages.map((page) => ({
+    url: page.url,
+    lastModified: new Date(),
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
+  }));
 }

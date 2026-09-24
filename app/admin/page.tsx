@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  Plus,
   Trash2,
   Edit2,
   ExternalLink,
@@ -12,7 +11,6 @@ import {
   AlertTriangle,
   LogOut,
   Folder,
-  Layers,
   Activity,
   Award,
   ShieldCheck,
@@ -25,9 +23,6 @@ import {
   Terminal,
   Grid,
   Lock,
-  ArrowRight,
-  User,
-  Key,
 } from "lucide-react";
 import { GithubIcon } from "@/components/icons/SocialIcons";
 
@@ -78,17 +73,13 @@ interface GithubRepo {
   updatedAt: string;
 }
 
-const colorGradients = [
-  { label: "Sky Blue", value: "from-sky-500 to-cyan-500", bg: "bg-sky-500" },
-  { label: "Indigo Cobalt", value: "from-indigo-600 to-sky-500", bg: "bg-indigo-600" },
-  { label: "Emerald Mint", value: "from-emerald-600 to-teal-500", bg: "bg-emerald-600" },
-  { label: "Violet Purple", value: "from-purple-600 to-indigo-500", bg: "bg-purple-600" },
-  { label: "Amber Orange", value: "from-amber-500 to-orange-600", bg: "bg-amber-500" },
-  { label: "Rose Pink", value: "from-rose-500 to-red-600", bg: "bg-rose-500" },
-];
-
 export default function AdminDashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("kevin-analytics-auth") === "true";
+    }
+    return false;
+  });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -125,7 +116,7 @@ export default function AdminDashboard() {
   const [formRepoUrl, setFormRepoUrl] = useState("");
 
   // GitHub Repositories State
-  const [githubUsername, setGithubUsername] = useState("MohammadKevin");
+  const githubUsername = "MohammadKevin";
   const [githubRepos, setGithubRepos] = useState<GithubRepo[]>([]);
   const [loadingGithubRepos, setLoadingGithubRepos] = useState(false);
   const [repoInputSearch, setRepoInputSearch] = useState("");
@@ -142,6 +133,86 @@ export default function AdminDashboard() {
   const [toastVisible, setToastVisible] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const showToast = useCallback((msg: string, type: "success" | "error") => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast({ msg, type });
+    setToastVisible(true);
+    toastTimer.current = setTimeout(() => setToastVisible(false), 3500);
+  }, []);
+
+  const fetchCertificates = useCallback(async (showLoading = false) => {
+    if (showLoading) setLoadingCertificates(true);
+    try {
+      const res = await fetch("/api/certificates");
+      const data = await res.json();
+      if (data.success) {
+        setCertificates(data.certificates);
+      } else {
+        showToast(data.error || "Gagal mengambil data sertifikat", "error");
+      }
+    } catch (err) {
+      console.error("Fetch certificates error:", err);
+      showToast("Error koneksi server", "error");
+    } finally {
+      setLoadingCertificates(false);
+    }
+  }, [showToast]);
+
+  const fetchProjects = useCallback(async (showLoading = false) => {
+    if (showLoading) setLoadingProjects(true);
+    try {
+      const res = await fetch("/api/projects");
+      const data = await res.json();
+      if (data.success) {
+        setProjects(data.projects);
+      } else {
+        showToast(data.error || "Gagal mengambil data proyek", "error");
+      }
+    } catch (err) {
+      console.error("Fetch projects error:", err);
+      showToast("Error koneksi server", "error");
+    } finally {
+      setLoadingProjects(false);
+    }
+  }, [showToast]);
+
+  const fetchAnalytics = useCallback(async (showLoading = false) => {
+    if (showLoading) setLoadingAnalytics(true);
+    try {
+      const res = await fetch("/api/visit");
+      const data = await res.json();
+      if (data.success) {
+        setVisitors(data.visitors);
+      } else {
+        showToast(data.error || "Gagal mengambil data analitik", "error");
+      }
+    } catch (err) {
+      console.error("Fetch analytics error:", err);
+      showToast("Error koneksi server", "error");
+    } finally {
+      setLoadingAnalytics(false);
+    }
+  }, [showToast]);
+
+  const fetchGithubRepos = useCallback(async (user = githubUsername, showLoading = false) => {
+    if (!user.trim()) return;
+    if (showLoading) setLoadingGithubRepos(true);
+    try {
+      const res = await fetch(`/api/github/repos?username=${encodeURIComponent(user.trim())}`);
+      const data = await res.json();
+      if (data.success) {
+        setGithubRepos(data.repos);
+      } else {
+        showToast(data.error || "Gagal mengambil repository GitHub", "error");
+      }
+    } catch (err) {
+      console.error("Fetch GitHub repos error:", err);
+      showToast("Gagal terhubung ke GitHub API", "error");
+    } finally {
+      setLoadingGithubRepos(false);
+    }
+  }, [githubUsername, showToast]);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -153,45 +224,22 @@ export default function AdminDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Authenticate on Load
-  useEffect(() => {
-    if (sessionStorage.getItem("kevin-analytics-auth") === "true") {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
   // Fetch Projects and GitHub Repos if Authenticated
   useEffect(() => {
     if (!isAuthenticated) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProjects();
     fetchGithubRepos("MohammadKevin");
-  }, [isAuthenticated]);
+  }, [isAuthenticated, fetchProjects, fetchGithubRepos]);
 
   // Fetch Certificates if Tab Active or on Load
   useEffect(() => {
     if (!isAuthenticated) return;
     if (activeTab === "certificates") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchCertificates();
     }
-  }, [isAuthenticated, activeTab]);
-
-  const fetchCertificates = () => {
-    setLoadingCertificates(true);
-    fetch("/api/certificates")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setCertificates(data.certificates);
-        } else {
-          showToast(data.error || "Gagal mengambil data sertifikat", "error");
-        }
-      })
-      .catch((err) => {
-        console.error("Fetch certificates error:", err);
-        showToast("Error koneksi server", "error");
-      })
-      .finally(() => setLoadingCertificates(false));
-  };
+  }, [isAuthenticated, activeTab, fetchCertificates]);
 
   const handleSaveCertificate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -267,68 +315,6 @@ export default function AdminDashboard() {
     setCertCategory("Backend");
     setCertSkills("");
     setCertCredentialUrl("");
-  };
-
-  const showToast = (msg: string, type: "success" | "error") => {
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    setToast({ msg, type });
-    setToastVisible(true);
-    toastTimer.current = setTimeout(() => setToastVisible(false), 3500);
-  };
-
-  const fetchProjects = () => {
-    setLoadingProjects(true);
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setProjects(data.projects);
-        } else {
-          showToast(data.error || "Gagal mengambil data proyek", "error");
-        }
-      })
-      .catch((err) => {
-        console.error("Fetch projects error:", err);
-        showToast("Error koneksi server", "error");
-      })
-      .finally(() => setLoadingProjects(false));
-  };
-
-  const fetchAnalytics = () => {
-    setLoadingAnalytics(true);
-    fetch("/api/visit")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setVisitors(data.visitors);
-        } else {
-          showToast(data.error || "Gagal mengambil data analitik", "error");
-        }
-      })
-      .catch((err) => {
-        console.error("Fetch analytics error:", err);
-        showToast("Error koneksi server", "error");
-      })
-      .finally(() => setLoadingAnalytics(false));
-  };
-
-  const fetchGithubRepos = async (user = githubUsername) => {
-    if (!user.trim()) return;
-    setLoadingGithubRepos(true);
-    try {
-      const res = await fetch(`/api/github/repos?username=${encodeURIComponent(user.trim())}`);
-      const data = await res.json();
-      if (data.success) {
-        setGithubRepos(data.repos);
-      } else {
-        showToast(data.error || "Gagal mengambil repository GitHub", "error");
-      }
-    } catch (err) {
-      console.error("Fetch GitHub repos error:", err);
-      showToast("Gagal terhubung ke GitHub API", "error");
-    } finally {
-      setLoadingGithubRepos(false);
-    }
   };
 
   const handleSelectGithubRepo = (repo: GithubRepo) => {

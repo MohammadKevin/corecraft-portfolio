@@ -1,18 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  Activity,
   Laptop,
   Smartphone,
   Tablet,
   RefreshCw,
   Lock,
-  ShieldCheck,
-  Globe,
-  Clock,
   Eye,
   AlertCircle,
 } from "lucide-react";
@@ -32,31 +28,36 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("kevin-analytics-auth") === "true";
+    }
+    return false;
+  });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
 
-  useEffect(() => {
-    if (sessionStorage.getItem("kevin-analytics-auth") === "true") {
-      setIsAuthenticated(true);
+  const fetchVisitors = useCallback(async (showLoading = false) => {
+    if (showLoading) setLoading(true);
+    try {
+      const res = await fetch("/api/visit");
+      const data = await res.json();
+      if (data.success) {
+        setVisitors(data.visitors);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     if (!isAuthenticated) return;
-
-    setLoading(true);
-    fetch("/api/visit")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setVisitors(data.visitors);
-        }
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [refreshKey, isAuthenticated]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchVisitors();
+  }, [refreshKey, isAuthenticated, fetchVisitors]);
 
   const totalVisits = visitors.length;
   const desktopCount = visitors.filter((v) => v.device === "Desktop").length;

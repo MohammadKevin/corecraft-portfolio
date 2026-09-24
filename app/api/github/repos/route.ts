@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
           Accept: "application/vnd.github.v3+json",
           "User-Agent": "Portfolio-Admin-App",
         },
-        next: { revalidate: 60 }, // cache for 1 minute
+        next: { revalidate: 60 },
       }
     );
 
@@ -32,7 +32,6 @@ export async function GET(request: NextRequest) {
 
     const reposData = await githubRes.json();
 
-    // Map relevant fields
     const repos = reposData.map((repo: any) => ({
       id: repo.id,
       name: repo.name,

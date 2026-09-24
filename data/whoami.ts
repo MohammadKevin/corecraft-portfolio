@@ -68,9 +68,9 @@ export const whoamiData: SystemInfo = {
     },
   ],
   contactLinks: {
-    email: "mohammadkevin@example.com",
-    whatsapp: "https://wa.me/6281234567890",
-    linkedin: "https://linkedin.com/in/mohammad-kevin-arif-rudianto-945733347",
+    email: "kvn4.200581@gmail.com",
+    whatsapp: "https://wa.me/6282131588846",
+    linkedin: "https://linkedin.com/in/mohammadkevin",
     github: "https://github.com/MohammadKevin",
   },
 };

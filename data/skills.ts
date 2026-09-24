@@ -2,7 +2,7 @@ import type { LocalizedString } from "./projects";
 
 export interface SkillItem {
   name: string;
-  level: number; // 1-100
+  level: number;
   levelTag: string;
   desc: LocalizedString;
   achievements: LocalizedString[];

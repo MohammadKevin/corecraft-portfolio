@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
@@ -147,7 +147,6 @@ const defaultProjects = [
   }
 ];
 
-// Supabase helper
 async function supabaseFetch(endpoint: string, options: RequestInit = {}) {
   const url = `${supabaseUrl}/rest/v1${endpoint}`;
   return fetch(url, {
@@ -173,7 +172,6 @@ async function parseSupabaseError(res: Response, defaultPrefix: string) {
   return `${defaultPrefix}: ${errText || res.statusText} (${res.status})`;
 }
 
-// Local File helper
 function ensureFileAndRead() {
   const dirPath = path.dirname(filePath);
   if (!fs.existsSync(dirPath)) {
@@ -202,7 +200,6 @@ function writeLocalProjects(projects: any[]) {
 export async function GET() {
   try {
     if (isSupabaseConfigured) {
-      // Fetch from Supabase
       const res = await supabaseFetch("/projects?select=*&order=created_at.desc");
       if (!res.ok) {
         const errorMsg = await parseSupabaseError(res, "Supabase GET error");
@@ -210,7 +207,6 @@ export async function GET() {
       }
       let projects = await res.json();
       
-      // Seed if empty
       if (projects.length === 0) {
         const seedData = defaultProjects.map((p, i) => ({
           ...p,
@@ -225,7 +221,6 @@ export async function GET() {
         }
       }
       
-      // Normalize demoUrl and repoUrl
       projects = projects.map((p: any) => ({
         ...p,
         demoUrl: p.demoUrl ?? p.demo_url ?? p.demourl ?? "",
@@ -234,13 +229,11 @@ export async function GET() {
 
       return NextResponse.json({ success: true, projects, source: "supabase" });
     } else {
-      // Fallback to local files
       const projects = ensureFileAndRead();
       return NextResponse.json({ success: true, projects, source: "local" });
     }
   } catch (error: any) {
     console.error("Projects GET error:", error);
-    // If Supabase fails, fallback to local JSON file
     try {
       const projects = ensureFileAndRead();
       return NextResponse.json({ 
@@ -249,7 +242,7 @@ export async function GET() {
         source: "local-fallback", 
         warning: `Supabase GET failed (${error.message || error}), falling back to local files.` 
       });
-    } catch (fallbackError) {
+    } catch {
       return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
     }
   }
@@ -279,7 +272,6 @@ export async function POST(request: NextRequest) {
         created_at: new Date().toISOString()
       };
 
-      // Attempt 1: camelCase (demoUrl, repoUrl)
       let payload: Record<string, any> = {
         ...baseProject,
         demoUrl: demoUrl || "",
@@ -292,7 +284,6 @@ export async function POST(request: NextRequest) {
       });
 
       if (!res.ok) {
-        // Attempt 2: snake_case (demo_url, repo_url)
         payload = {
           ...baseProject,
           demo_url: demoUrl || "",
@@ -305,7 +296,6 @@ export async function POST(request: NextRequest) {
       }
 
       if (!res.ok) {
-        // Attempt 3: Basic columns only
         payload = { ...baseProject };
         res = await supabaseFetch("/projects", {
           method: "POST",
@@ -336,7 +326,6 @@ export async function POST(request: NextRequest) {
         source: "supabase" 
       });
     } else {
-      // Insert to local file
       const projects = ensureFileAndRead();
       const newProject = {
         id: newId,
@@ -383,7 +372,6 @@ export async function PUT(request: NextRequest) {
         tech: techArray
       };
 
-      // Attempt 1: camelCase
       let payload: Record<string, any> = {
         ...baseProject,
         demoUrl: demoUrl || "",
@@ -396,7 +384,6 @@ export async function PUT(request: NextRequest) {
       });
 
       if (!res.ok) {
-        // Attempt 2: snake_case
         payload = {
           ...baseProject,
           demo_url: demoUrl || "",
@@ -409,7 +396,6 @@ export async function PUT(request: NextRequest) {
       }
 
       if (!res.ok) {
-        // Attempt 3: Basic columns only
         payload = { ...baseProject };
         res = await supabaseFetch(`/projects?id=eq.${id}`, {
           method: "PATCH",
@@ -441,7 +427,6 @@ export async function PUT(request: NextRequest) {
         source: "supabase" 
       });
     } else {
-      // Update in local file
       const projects = ensureFileAndRead();
       const index = projects.findIndex((p: any) => p.id === id);
 
@@ -483,7 +468,6 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (isSupabaseConfigured) {
-      // Delete in Supabase
       const res = await supabaseFetch(`/projects?id=eq.${id}`, {
         method: "DELETE"
       });
@@ -495,7 +479,6 @@ export async function DELETE(request: NextRequest) {
 
       return NextResponse.json({ success: true, message: "Project deleted successfully", source: "supabase" });
     } else {
-      // Delete in local file
       const projects = ensureFileAndRead();
       const filteredProjects = projects.filter((p: any) => p.id !== id);
 

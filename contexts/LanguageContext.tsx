@@ -18,7 +18,6 @@ const LanguageContext = createContext<LanguageContextValue>({
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<Lang>("id");
 
-  // Load from localStorage on mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem("kv-lang") as Lang | null;

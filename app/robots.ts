@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin', '/api/'], // Disallow crawling admin and raw API endpoints
+      disallow: ['/admin', '/api/'],
     },
     sitemap: 'https://corecraft.my.id/sitemap.xml',
   };
