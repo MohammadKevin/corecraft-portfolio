@@ -6,7 +6,7 @@ import Link from "next/link";
 import { 
   Download, FileText, Server, Database, Monitor, 
   ShoppingCart, FolderClosed, RefreshCw, Send, 
-  AlertCircle, Loader2, MapPin, Clock, Check, X, ExternalLink, Award,
+  AlertCircle, Loader2, Check, X, ExternalLink, Award,
   ChevronDown, ChevronUp
 } from "lucide-react";
 import { projectsData, Project } from "@/data/projects";
@@ -33,20 +33,12 @@ export default function Home() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCerts, setShowAllCerts] = useState(false);
   
-  const [copiedEmail, setCopiedEmail] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [projectType, setProjectType] = useState("Proyek Baru");
-  const emailAddress = "kvn4.200581@gmail.com";
 
   const t = translations.hero;
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(emailAddress);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -578,7 +570,7 @@ export default function Home() {
 
       {/* 8. CONTACT SECTION */}
       <section id="contact" aria-label="Contact" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col gap-8 sm:gap-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center gap-8 sm:gap-10 text-center">
           <div>
             <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
               {lang === "id" ? "HUBUNGI SAYA" : "GET IN TOUCH"}
@@ -586,143 +578,102 @@ export default function Home() {
             <h2 className="font-[family-name:var(--font-display)] text-[26px] sm:text-[40px] font-bold text-[#1C1B1D] tracking-tight">
               {lang === "id" ? "Diskusikan Kebutuhan Sistem & Kolaborasi" : "Discuss System Architecture & Engagements"}
             </h2>
+            <p className="text-sm text-[#71717A] mt-2 max-w-xl mx-auto">
+              {lang === "id"
+                ? "Kirim pesan langsung untuk konsultasi proyek, kolaborasi backend, atau peluang magang industri."
+                : "Send a direct inquiry for project consulting, backend engineering, or internship collaboration."}
+            </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
-            <div className="lg:col-span-5 liquid-glass p-6 sm:p-9 rounded-3xl shadow-lg border border-white/80 flex flex-col justify-between gap-6 sm:gap-8">
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[11px] uppercase text-[#71717A] font-mono tracking-wider font-semibold">
-                    {lang === 'id' ? "Email Utama" : "Email Address"}
-                  </span>
-                  <div className="bg-white/70 p-3 rounded-2xl flex items-center justify-between gap-2 border border-white/80 shadow-2xs">
-                    <span className="text-xs font-mono font-bold text-zinc-900 truncate">{emailAddress}</span>
-                    <button 
-                      onClick={copyEmail} 
+
+          <div className="w-full max-w-2xl liquid-glass p-6 sm:p-9 rounded-3xl shadow-lg border border-white/80 text-left">
+            {formStatus === "success" && (
+              <div className="mb-6 p-4 bg-emerald-500/10 text-emerald-950 rounded-2xl text-xs font-mono text-center border border-emerald-400/20">
+                {lang === "id" ? "Pesan terkirim! Terima kasih sudah menghubungi — saya akan segera membalas." : "Message sent! Thank you for reaching out — I will get back to you soon."}
+              </div>
+            )}
+            {formStatus === "error" && (
+              <div className="mb-6 p-4 bg-rose-500/10 text-rose-950 rounded-2xl text-xs font-mono flex items-center gap-2 border border-rose-400/20">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+                <span>{errorMsg}</span>
+              </div>
+            )}
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-1" role="group" aria-label="Project Type">
+                {projectTypeOptions.map((item) => {
+                  const label = item[lang];
+                  const isSelected = projectType === item.id;
+                  return (
+                    <button
+                      key={item.id}
                       type="button"
-                      aria-label="Copy Email"
-                      className="px-3 py-1.5 rounded-xl bg-[#1C1B1D] text-white text-[10px] font-bold uppercase transition-transform active:scale-95 cursor-pointer shrink-0"
+                      onClick={() => setProjectType(item.id)}
+                      className={`py-2 px-3 rounded-2xl text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
+                        isSelected
+                          ? "bg-[#1C1B1D] text-white shadow-xs"
+                          : "bg-white/60 text-[#71717A] hover:bg-white/90 border border-white/80"
+                      }`}
                     >
-                      {copiedEmail ? (lang === "id" ? "Tersalin" : "Copied") : (lang === "id" ? "Salin" : "Copy")}
+                      {label}
                     </button>
-                  </div>
-                </div>
-                <div className="space-y-4 pt-1">
-                  <div className="flex items-center gap-3">
-                    <MapPin className="text-sky-600 w-5 h-5 shrink-0" />
-                    <div>
-                      <p className="text-[10px] text-[#71717A] font-mono uppercase font-semibold">{lang === "id" ? "Lokasi" : "Location"}</p>
-                      <p className="text-sm font-bold text-[#1C1B1D]">{lang === "id" ? "Malang, Jawa Timur, Indonesia" : "Malang, East Java, Indonesia"}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Clock className="text-sky-600 w-5 h-5 shrink-0" />
-                    <div>
-                      <p className="text-[10px] text-[#71717A] font-mono uppercase font-semibold">{lang === "id" ? "Jam Kerja Responsif" : "Response Hours"}</p>
-                      <p className="text-sm font-bold text-[#1C1B1D]">
-                        {lang === "id" ? "Senin – Sabtu (08:00 – 21:00 WIB)" : "Monday – Saturday (08:00 – 21:00 GMT+7)"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
-              <div className="p-3.5 sm:p-4 bg-sky-500/10 rounded-2xl flex items-center gap-3 border border-sky-400/20">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <p className="text-xs text-[#1C1B1D] font-mono font-semibold">
-                  {lang === "id" ? "Tersedia untuk Magang & Kontrak Proyek" : "Available for Internship & Project Contracts"}
-                </p>
-              </div>
-            </div>
-            
-            <div className="lg:col-span-7 liquid-glass p-6 sm:p-9 rounded-3xl shadow-lg border border-white/80">
-              {formStatus === "success" && (
-                <div className="mb-6 p-4 bg-emerald-500/10 text-emerald-950 rounded-2xl text-xs font-mono text-center border border-emerald-400/20">
-                  {lang === "id" ? "Pesan terkirim! Terima kasih sudah menghubungi — saya akan segera membalas." : "Message sent! Thank you for reaching out — I will get back to you soon."}
-                </div>
-              )}
-              {formStatus === "error" && (
-                <div className="mb-6 p-4 bg-rose-500/10 text-rose-950 rounded-2xl text-xs font-mono flex items-center gap-2 border border-rose-400/20">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-                  <span>{errorMsg}</span>
-                </div>
-              )}
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-1" role="group" aria-label="Project Type">
-                  {projectTypeOptions.map((item) => {
-                    const label = item[lang];
-                    const isSelected = projectType === item.id;
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => setProjectType(item.id)}
-                        className={`py-2 px-3 rounded-2xl text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
-                          isSelected
-                            ? "bg-[#1C1B1D] text-white shadow-xs"
-                            : "bg-white/60 text-[#71717A] hover:bg-white/90 border border-white/80"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold text-[#1C1B1D] font-mono uppercase">
-                      {lang === 'id' ? "Nama Lengkap" : "Full Name"}
-                    </label>
-                    <input 
-                      type="text" 
-                      value={form.name} 
-                      onChange={e => setForm({...form, name: e.target.value})} 
-                      placeholder={lang === 'id' ? "Nama Anda / Perusahaan" : "Your Name / Organization"} 
-                      className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm transition-all text-[#1C1B1D]" 
-                      required 
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold text-[#1C1B1D] font-mono uppercase">
-                      Email
-                    </label>
-                    <input 
-                      type="email" 
-                      value={form.email} 
-                      onChange={e => setForm({...form, email: e.target.value})} 
-                      placeholder="nama@perusahaan.com" 
-                      className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm transition-all text-[#1C1B1D]" 
-                      required 
-                    />
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-[#1C1B1D] font-mono uppercase">
-                    {lang === 'id' ? "Deskripsi Kebutuhan / Pesan" : "Project Scope / Message"}
+                    {lang === 'id' ? "Nama Lengkap" : "Full Name"}
                   </label>
-                  <textarea 
-                    value={form.message} 
-                    onChange={e => setForm({...form, message: e.target.value})} 
-                    placeholder={lang === 'id' ? "Jelaskan kebutuhan sistem, arsitektur, estimasi timeline, atau detail proyek..." : "Describe the system scope, architecture, estimated timeline, or project specs..."} 
-                    rows={4} 
-                    className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm resize-none transition-all text-[#1C1B1D]" 
+                  <input 
+                    type="text" 
+                    value={form.name} 
+                    onChange={e => setForm({...form, name: e.target.value})} 
+                    placeholder={lang === 'id' ? "Nama Anda / Perusahaan" : "Your Name / Organization"} 
+                    className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm transition-all text-[#1C1B1D]" 
                     required 
                   />
                 </div>
-                <button 
-                  type="submit" 
-                  disabled={formStatus === 'loading'} 
-                  className="w-full py-3.5 sm:py-4 bg-[#1C1B1D] hover:bg-black text-white rounded-full font-bold text-sm transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-md"
-                >
-                  {formStatus === 'loading' ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" /> 
-                      <span>{lang === 'id' ? "Kirim Pesan" : "Send Message"}</span>
-                    </>
-                  )}
-                </button>
-              </form>
-            </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-[#1C1B1D] font-mono uppercase">
+                    Email
+                  </label>
+                  <input 
+                    type="email" 
+                    value={form.email} 
+                    onChange={e => setForm({...form, email: e.target.value})} 
+                    placeholder="nama@perusahaan.com" 
+                    className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm transition-all text-[#1C1B1D]" 
+                    required 
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-bold text-[#1C1B1D] font-mono uppercase">
+                  {lang === 'id' ? "Deskripsi Kebutuhan / Pesan" : "Project Scope / Message"}
+                </label>
+                <textarea 
+                  value={form.message} 
+                  onChange={e => setForm({...form, message: e.target.value})} 
+                  placeholder={lang === 'id' ? "Jelaskan kebutuhan sistem, arsitektur, estimasi timeline, atau detail proyek..." : "Describe the system scope, architecture, estimated timeline, or project specs..."} 
+                  rows={4} 
+                  className="w-full px-4 py-3 rounded-2xl bg-white/60 border border-white/80 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-200 outline-none text-sm resize-none transition-all text-[#1C1B1D]" 
+                  required 
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={formStatus === 'loading'} 
+                className="w-full py-3.5 sm:py-4 bg-[#1C1B1D] hover:bg-black text-white rounded-full font-bold text-sm transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              >
+                {formStatus === 'loading' ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" /> 
+                    <span>{lang === 'id' ? "Kirim Pesan" : "Send Message"}</span>
+                  </>
+                )}
+              </button>
+            </form>
           </div>
         </div>
       </section>
