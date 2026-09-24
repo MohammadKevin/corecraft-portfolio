@@ -18,6 +18,18 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/data/translations";
 import { send as sendEmail } from "@emailjs/browser";
 
+const AllServicesModal = dynamic(() => import("@/components/AllServicesModal"), {
+  ssr: false,
+});
+
+const AllProjectsModal = dynamic(() => import("@/components/AllProjectsModal"), {
+  ssr: false,
+});
+
+const AllCertificatesModal = dynamic(() => import("@/components/AllCertificatesModal"), {
+  ssr: false,
+});
+
 const CvModal = dynamic(() => import("@/components/CvModal"), {
   ssr: false,
 });
@@ -31,6 +43,11 @@ export default function Home() {
   const [projects] = useState<Project[]>(projectsData);
   const [activeTab, setActiveTab] = useState<string>("backend");
   const [activeCategory, setActiveCategory] = useState<string>("All");
+  
+  // Modals state (Dynamically imported with ssr: false for optimal initial bundle)
+  const [isServicesModalOpen, setIsServicesModalOpen] = useState(false);
+  const [isProjectsModalOpen, setIsProjectsModalOpen] = useState(false);
+  const [isCertsModalOpen, setIsCertsModalOpen] = useState(false);
   const [isCvModalOpen, setIsCvModalOpen] = useState(false);
   
   const [showAllServices, setShowAllServices] = useState(false);
@@ -201,11 +218,12 @@ export default function Home() {
               <div className="liquid-glass w-full aspect-[4/5] rounded-3xl shadow-xl p-3 sm:p-3.5 border border-white/80 relative group">
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-zinc-100/40">
                   <Image 
-                    src="/images/logo.png" 
+                    src="/images/profile-photo.webp" 
                     alt="Mohammad Kevin" 
-                    fill 
-                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 440px, 480px" 
-                    className="object-cover object-top hover:scale-[1.02] transition-transform duration-500" 
+                    width={400}
+                    height={500}
+                    sizes="(max-width: 768px) 100vw, 400px" 
+                    className="w-full h-full object-cover object-top hover:scale-[1.02] transition-transform duration-500" 
                     priority 
                   />
                 </div>
@@ -670,6 +688,24 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <AllServicesModal
+        isOpen={isServicesModalOpen}
+        onClose={() => setIsServicesModalOpen(false)}
+        lang={lang}
+      />
+
+      <AllProjectsModal
+        isOpen={isProjectsModalOpen}
+        onClose={() => setIsProjectsModalOpen(false)}
+        lang={lang}
+      />
+
+      <AllCertificatesModal
+        isOpen={isCertsModalOpen}
+        onClose={() => setIsCertsModalOpen(false)}
+        lang={lang}
+      />
 
       <CvModal 
         isOpen={isCvModalOpen} 
