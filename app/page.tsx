@@ -28,7 +28,6 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [isCvModalOpen, setIsCvModalOpen] = useState(false);
   
-  // Mobile Collapsible States (Prevents endless vertical scrolling)
   const [showAllServices, setShowAllServices] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCerts, setShowAllCerts] = useState(false);
@@ -137,7 +136,6 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
       
-      {/* 1. HERO SECTION */}
       <section id="hero" aria-label="Hero" className="w-full min-h-screen flex flex-col justify-center items-center pt-24 pb-16 scroll-mt-28 bg-transparent">
         <div className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center py-6 w-full">
 
@@ -184,7 +182,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. ABOUT SECTION */}
       <section id="about" aria-label="About" className="w-full py-24 bg-transparent scroll-mt-28">
         <div className="max-w-6xl mx-auto px-6">
           <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
@@ -247,7 +244,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. SERVICES SECTION */}
       <section id="services" aria-label="Services" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
@@ -276,7 +272,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Mobile Show More / Show Less Toggle Button */}
           <div className="flex justify-center pt-6 md:hidden">
             <button
               type="button"
@@ -294,7 +289,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. TECH STACK SECTION */}
       <section id="skills" aria-label="Skills" className="w-full py-24 bg-transparent scroll-mt-28">
         <div className="max-w-6xl mx-auto px-6">
           <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
@@ -347,7 +341,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PROJECTS SECTION */}
       <section id="projects" aria-label="Projects" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-8 sm:gap-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -429,7 +422,6 @@ export default function Home() {
             })}
           </div>
 
-          {/* Mobile Show More / Show Less Toggle for Projects */}
           {filteredProjects.length > 3 && (
             <div className="flex justify-center pt-2 md:hidden">
               <button
@@ -449,7 +441,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. CERTIFICATES & CREDENTIALS SECTION */}
       <section id="certificates" aria-label="Certificates" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-8 sm:gap-10">
           <div>
@@ -514,7 +505,6 @@ export default function Home() {
             })}
           </div>
 
-          {/* Mobile Show More / Show Less Toggle for Certificates */}
           {certificatesData.length > 3 && (
             <div className="flex justify-center pt-2 md:hidden">
               <button
@@ -534,7 +524,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. TIMELINE SECTION */}
       <section id="timeline" aria-label="Timeline" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
@@ -568,7 +557,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8. CONTACT SECTION */}
       <section id="contact" aria-label="Contact" className="w-full py-16 sm:py-24 bg-transparent scroll-mt-28">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center gap-8 sm:gap-10 text-center">
           <div>
@@ -678,7 +666,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8. CURRICULUM VITAE DOWNLOAD & LANGUAGE SELECTOR MODAL */}
       {isCvModalOpen && (
         <div
           role="dialog"
@@ -716,7 +703,6 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col gap-3">
-              {/* Option 1: English (Tech & Global standard) */}
               <div className="p-4 sm:p-4.5 rounded-2xl border border-zinc-200/90 bg-zinc-50/80 hover:bg-sky-500/[0.04] hover:border-sky-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -754,7 +740,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Option 2: Bahasa Indonesia (Magang & Standar Nasional) */}
               <div className="p-4 sm:p-4.5 rounded-2xl border border-zinc-200/90 bg-zinc-50/80 hover:bg-emerald-500/[0.04] hover:border-emerald-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">

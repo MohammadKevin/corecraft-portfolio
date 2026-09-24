@@ -11,7 +11,6 @@ export interface Certificate {
 }
 
 export const certificatesData: Certificate[] = [
-  // ── HackerRank Technical Role & Skill Certificates ───────────────────────
   {
     id: "cert-hr-rest-api",
     category: "Technical Skill",
@@ -132,8 +131,6 @@ export const certificatesData: Certificate[] = [
     url: "https://www.hackerrank.com/certificates/33C5CD52D222",
     skills: ["CSS3", "Responsive UI", "Web Layouts"]
   },
-
-  // ── Hackathons & Competitions ─────────────────────────────────────────────
   {
     id: "cert-codecollab-2024",
     category: "National Hackathon",
@@ -162,8 +159,6 @@ export const certificatesData: Certificate[] = [
     date: "Feb 2026",
     skills: ["Product Strategy", "Business Development", "SaaS Modeling"]
   },
-
-  // ── Dicoding Indonesia & Industry Credentials ────────────────────────────
   {
     id: "cert-dicoding-js",
     category: "Professional Course",

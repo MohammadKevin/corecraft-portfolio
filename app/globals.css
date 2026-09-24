@@ -61,9 +61,6 @@ body {
     0 4px 14px -2px rgba(28, 27, 29, 0.05);
 }
 
-/* ═══════════════════════════════════════════════════
-   DYNAMIC ISLAND SPRING & HOVER EXPANSION
-═══════════════════════════════════════════════════ */
 .dynamic-island-nav {
   transform-origin: top center;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), 

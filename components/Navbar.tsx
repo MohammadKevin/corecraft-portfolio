@@ -82,7 +82,6 @@ export default function Navbar() {
               : "h-12 sm:h-13 px-3.5 sm:px-6 bg-white/60 shadow-[0_10px_24px_rgba(28,27,29,0.06),inset_0_1.5px_1.5px_rgba(255,255,255,0.90)] border-white/80 ring-1 ring-black/[0.03]"
           }`}
         >
-          {/* top glass sheen */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/80 to-transparent" />
 
           <div className="relative flex items-center gap-2 sm:gap-2.5 shrink-0">
@@ -122,7 +121,6 @@ export default function Navbar() {
           </nav>
 
           <div className="relative flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* language toggle in glass capsule */}
             <div
               className="flex items-center bg-black/[0.04] backdrop-blur-md rounded-full p-0.5 border border-black/10 text-[10px] sm:text-[11px] font-mono transition-transform duration-200 hover:scale-[1.02]"
               role="group"
@@ -150,7 +148,6 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* CTA pill button with generous and balanced padding */}
             <Link
               href="/#contact"
               className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1C1B1D] text-white px-3.5 sm:px-4.5 py-1.5 sm:py-2 text-xs font-semibold hover:bg-black transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-md"
@@ -185,7 +182,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Smooth Accordion Sheet Dropdown for Mobile */}
         <div
           className={`md:hidden grid transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             menuOpen
