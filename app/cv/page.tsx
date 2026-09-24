@@ -55,19 +55,21 @@ export default function CVPage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-white border border-zinc-300 shadow-sm print:shadow-none print:border-none rounded-[14px] print:rounded-none overflow-hidden">
-        <div className="px-8 sm:px-10 py-10 border-b border-zinc-200 bg-zinc-50/50 print:bg-white">
+      <div className="max-w-4xl mx-auto bg-white border border-zinc-200/80 shadow-sm print:shadow-none print:border-none rounded-2xl print:rounded-none overflow-hidden">
+        <div className="px-5 sm:px-10 py-6 sm:py-10 border-b border-zinc-200/80 bg-zinc-50/50 print:bg-white">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-zinc-950 tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-zinc-950 tracking-tight">
                 Mohammad <span className="text-sky-600">Kevin</span> Arif Rudianto
               </h1>
-              <p className="text-base sm:text-lg font-semibold text-zinc-700 font-mono mt-1">
+              <p className="text-sm sm:text-lg font-semibold text-zinc-700 font-mono mt-1">
                 {whoamiData.role[lang]}
               </p>
             </div>
-            <div className="text-right sm:text-right">
-              <span className="saas-badge text-xs">SMK Telkom Malang</span>
+            <div className="text-left sm:text-right">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200/60 text-xs font-semibold">
+                SMK Telkom Malang
+              </span>
             </div>
           </div>
 
@@ -104,7 +106,7 @@ export default function CVPage() {
           </div>
         </div>
 
-        <div className="px-8 sm:px-10 py-10 grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div className="px-5 sm:px-10 py-6 sm:py-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10">
           <div className="md:col-span-8 space-y-8">
             <section>
               <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-2 mb-3 font-mono">
