@@ -14,104 +14,103 @@ export default function Preloader() {
     }
     return true;
   });
+
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState("Initializing Core...");
-  const [isFadingOut, setIsFadingOut] = useState(false);
+  const [phase, setPhase] = useState<"compact" | "expanding" | "morphing" | "done">("compact");
 
   useEffect(() => {
     if (!loading) return;
 
+    // Phase 1: Emergence & count up (0 - 2000ms)
+    setTimeout(() => setPhase("expanding"), 300);
+
     const startTime = Date.now();
-    const duration = 2400; // 2.4s count + 0.6s morph/exit = 3.0s total
+    const duration = 2100;
 
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      const currentProgress = Math.min(Math.round((elapsed / duration) * 100), 100);
+      const current = Math.min(Math.round((elapsed / duration) * 100), 100);
+      setProgress(current);
 
-      setProgress(currentProgress);
-
-      if (currentProgress < 35) {
-        setStatusText("Loading Architecture...");
-      } else if (currentProgress < 75) {
-        setStatusText("Optimizing Engine...");
-      } else if (currentProgress < 100) {
-        setStatusText("Calibrating Systems...");
-      } else {
-        setStatusText("Systems Ready");
-        clearInterval(interval);
-
-        // Start morph / fade-out transition
+      if (current >= 100) {
+        clearInterval(timer);
+        
+        // Phase 2: Morph & Elevate to Navbar (2200ms)
         setTimeout(() => {
-          setIsFadingOut(true);
+          setPhase("morphing");
           try {
             sessionStorage.setItem("corecraft-preloader-seen", "true");
           } catch {}
-          setTimeout(() => {
-            setLoading(false);
-          }, 600);
-        }, 200);
-      }
-    }, 25);
 
-    return () => clearInterval(interval);
+          // Phase 3: Done & Unmount
+          setTimeout(() => {
+            setPhase("done");
+            setLoading(false);
+          }, 700);
+        }, 150);
+      }
+    }, 20);
+
+    return () => clearInterval(timer);
   }, [loading]);
 
-  if (!loading) return null;
+  if (!loading || phase === "done") return null;
 
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#FAF8F1] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        isFadingOut
-          ? "opacity-0 pointer-events-none scale-105 backdrop-blur-none"
-          : "opacity-100 backdrop-blur-3xl"
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-all duration-700 pointer-events-none select-none ${
+        phase === "morphing"
+          ? "bg-[#FAF8F1]/0 backdrop-blur-none"
+          : "bg-[#FAF8F1] backdrop-blur-2xl"
       }`}
     >
-      {/* Background ambient liquid glow */}
-      <div className="absolute w-[450px] h-[450px] rounded-full bg-[radial-gradient(circle,rgba(118,192,236,0.35)_0%,rgba(118,192,236,0)_70%)] animate-pulse pointer-events-none" />
-
-      {/* Floating Center Dynamic Island Pill */}
+      {/* Dynamic Island Floating Capsule */}
       <div
-        className={`relative flex flex-col items-center justify-center p-6 sm:p-7 rounded-[32px] bg-white/70 backdrop-blur-2xl border border-white/90 shadow-[0_24px_60px_-10px_rgba(28,27,29,0.12),inset_0_1.5px_1.5px_rgba(255,255,255,0.95)] transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isFadingOut ? "scale-90 -translate-y-12 opacity-0" : "scale-100 translate-y-0"
-        } w-[90%] max-w-[340px] sm:max-w-[380px]`}
+        className={`relative flex items-center justify-between rounded-full bg-[#1C1B1D] text-white border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.3)] transition-all ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          phase === "compact"
+            ? "w-[160px] h-11 px-3.5 scale-90 translate-y-0 opacity-0 duration-300"
+            : phase === "expanding"
+            ? "w-[270px] sm:w-[310px] h-12 sm:h-13 px-4 sm:px-5 scale-100 translate-y-0 opacity-100 duration-500"
+            : "w-[94%] max-w-3xl lg:max-w-4xl h-12 sm:h-13 px-4 sm:px-5 scale-100 -translate-y-[calc(50vh-2rem)] opacity-0 bg-white/80 duration-700"
+        }`}
       >
-        <div className="flex items-center gap-3.5 mb-5 w-full justify-between px-1">
-          <div className="flex items-center gap-2.5">
+        {/* Left: CoreCraft Icon */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center p-1 border border-white/20 shadow-xs">
             <Image
               src="/images/corecraft-logo-dark.svg"
-              alt="CoreCraft Logo"
-              width={36}
-              height={36}
-              className="w-9 h-9 object-contain rounded-xl shadow-xs animate-bounce duration-1000"
+              alt="CoreCraft"
+              width={24}
+              height={24}
+              className="w-full h-full object-contain invert"
               priority
             />
-            <div className="flex flex-col text-left leading-tight">
-              <span className="text-[15px] font-bold text-[#1C1B1D] tracking-tight">
-                CoreCraft
-              </span>
-              <span className="text-[10px] font-mono text-[#71717A] tracking-wider">
-                MOHAMMAD KEVIN
-              </span>
-            </div>
           </div>
-
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-mono font-semibold border border-emerald-200/60">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>{progress}%</span>
-          </div>
+          <span className="text-[13px] sm:text-[14px] font-bold tracking-tight text-white/90">
+            Kevin
+          </span>
         </div>
 
-        {/* Dynamic Status Text */}
-        <div className="w-full flex items-center justify-between text-xs font-mono text-[#71717A] mb-2 px-1">
-          <span className="truncate">{statusText}</span>
-          <span className="text-[11px] font-bold text-[#1C1B1D]">{progress}/100</span>
+        {/* Center: Kinetic Waveform Equalizer */}
+        <div className="flex items-center gap-1 px-2">
+          <span className="w-0.5 h-3.5 bg-sky-400 rounded-full animate-[pulse_0.8s_ease-in-out_infinite]" />
+          <span className="w-0.5 h-5 bg-sky-300 rounded-full animate-[pulse_0.6s_ease-in-out_infinite_0.15s]" />
+          <span className="w-0.5 h-2.5 bg-sky-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite_0.3s]" />
+          <span className="w-0.5 h-4 bg-sky-300 rounded-full animate-[pulse_0.7s_ease-in-out_infinite_0.45s]" />
         </div>
 
-        {/* Liquid Progress Bar */}
-        <div className="w-full h-1.5 bg-black/[0.06] rounded-full overflow-hidden p-0.5 border border-black/[0.04]">
+        {/* Right: Counter */}
+        <div className="flex items-center gap-1.5 shrink-0 font-mono">
+          <span className="text-xs sm:text-[13px] font-bold text-sky-400">
+            {progress}%
+          </span>
+        </div>
+
+        {/* Bottom edge neon ray progress */}
+        <div className="absolute inset-x-4 bottom-0.5 h-[1.5px] bg-white/10 rounded-full overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-sky-400 to-[#1C1B1D] transition-all duration-75 ease-out"
+            className="h-full bg-gradient-to-r from-sky-400 via-sky-300 to-white rounded-full transition-all duration-75"
             style={{ width: `${progress}%` }}
           />
         </div>
