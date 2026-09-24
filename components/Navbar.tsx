@@ -25,6 +25,7 @@ export default function Navbar() {
     { label: n.services[lang], href: "/#services", id: "services" },
     { label: n.skills[lang], href: "/#skills", id: "skills" },
     { label: n.projects[lang], href: "/#projects", id: "projects" },
+    { label: n.certs[lang], href: "/#certificates", id: "certificates" },
     { label: n.timeline[lang], href: "/#timeline", id: "timeline" },
     { label: "CV", href: "/cv", id: "cv" },
   ];
@@ -38,7 +39,7 @@ export default function Navbar() {
         return;
       }
 
-      const sectionIds = ["hero", "about", "services", "skills", "projects", "timeline", "contact"];
+      const sectionIds = ["hero", "about", "services", "skills", "projects", "certificates", "timeline", "contact"];
       const scrollY = window.scrollY;
 
       if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 90) {

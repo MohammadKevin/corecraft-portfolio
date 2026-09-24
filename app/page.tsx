@@ -6,11 +6,12 @@ import Link from "next/link";
 import { 
   Download, FileText, Server, Database, Monitor, 
   ShoppingCart, FolderClosed, RefreshCw, Send, 
-  AlertCircle, Loader2, MapPin, Clock, Check, X, ExternalLink
+  AlertCircle, Loader2, MapPin, Clock, Check, X, ExternalLink, Award
 } from "lucide-react";
 import { projectsData, Project } from "@/data/projects";
 import { skillCategories } from "@/data/skills";
 import { timelineLogs } from "@/data/timeline";
+import { certificatesData } from "@/data/certificates";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/data/translations";
 import { send as sendEmail } from "@emailjs/browser";
@@ -399,7 +400,72 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. TIMELINE SECTION */}
+      {/* 6. CERTIFICATES & CREDENTIALS SECTION */}
+      <section id="certificates" aria-label="Certificates" className="w-full py-24 bg-transparent scroll-mt-28">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col gap-10">
+          <div>
+            <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
+              {lang === "id" ? "SERTIFIKASI & KREDENSIAL" : "CERTIFICATIONS & CREDENTIALS"}
+            </span>
+            <h2 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[38px] font-bold text-[#1C1B1D] tracking-tight">
+              {lang === "id" ? "Kompetensi Terverifikasi & Resmi" : "Verified Industry Credentials"}
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {certificatesData.map((cert) => {
+              const titleText = typeof cert.title === "string" ? cert.title : cert.title[lang];
+              const issuerText = typeof cert.issuer === "string" ? cert.issuer : cert.issuer[lang];
+
+              return (
+                <div
+                  key={cert.id}
+                  className="liquid-glass rounded-3xl p-6 sm:p-7 shadow-sm border border-white/80 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-900 border border-emerald-400/20 text-[10px] font-mono font-bold">
+                        <Award className="w-3 h-3 text-emerald-600" />
+                        <span>{cert.category}</span>
+                      </div>
+                      <span className="text-[11px] font-mono text-zinc-400 font-medium">
+                        {cert.date}
+                      </span>
+                    </div>
+
+                    <h3 className="text-[17px] font-bold text-[#1C1B1D] mb-2 leading-snug group-hover:text-sky-700 transition-colors">
+                      {titleText}
+                    </h3>
+
+                    <p className="text-xs font-mono text-sky-700 font-semibold mb-4">
+                      {issuerText}
+                    </p>
+                  </div>
+
+                  {cert.url && (
+                    <div className="pt-3 border-t border-zinc-200/50 flex items-center justify-between">
+                      <a
+                        href={cert.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1C1B1D] hover:text-sky-600 transition-colors group/link"
+                      >
+                        <span>{lang === "id" ? "Verifikasi Kredensial" : "Verify Credential"}</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover/link:text-sky-600 group-hover/link:translate-x-0.5 transition-all" />
+                      </a>
+                      <span className="text-[10px] font-mono text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/50">
+                        ✓ Verified
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. TIMELINE SECTION */}
       <section id="timeline" aria-label="Timeline" className="w-full py-24 bg-transparent scroll-mt-28">
         <div className="max-w-6xl mx-auto px-6">
           <span className="font-mono text-xs uppercase text-sky-700 font-semibold mb-2 block tracking-wider">
