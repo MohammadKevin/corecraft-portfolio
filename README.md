@@ -49,7 +49,8 @@ npm run dev
 **Mohammad Kevin**
 - **Domain:** [corecraft.my.id](https://corecraft.my.id)
 - **GitHub:** [@MohammadKevin](https://github.com/MohammadKevin)
-- **LinkedIn:** [Mohammad Kevin](https://www.linkedin.com/in/mohammadkevin)
+- **LinkedIn:** [Mohammad Kevin](https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/)
+- **Instagram:** [@mhmdkevin_1](https://www.instagram.com/mhmdkevin_1/?hl=en)
 - **Email:** [kvn4.200581@gmail.com](mailto:kvn4.200581@gmail.com)
 
 ---

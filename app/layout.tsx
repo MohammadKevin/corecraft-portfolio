@@ -140,7 +140,8 @@ export default function RootLayout({
               },
               sameAs: [
                 "https://github.com/MohammadKevin",
-                "https://www.linkedin.com/in/mohammadkevin",
+                "https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/",
+                "https://www.instagram.com/mhmdkevin_1/?hl=en",
               ],
             }),
           }}

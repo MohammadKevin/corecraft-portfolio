@@ -70,7 +70,7 @@ export const whoamiData: SystemInfo = {
   contactLinks: {
     email: "kvn4.200581@gmail.com",
     whatsapp: "https://wa.me/6282131588846",
-    linkedin: "https://linkedin.com/in/mohammadkevin",
+    linkedin: "https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/",
     github: "https://github.com/MohammadKevin",
   },
 };
