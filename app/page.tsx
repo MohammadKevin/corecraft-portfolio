@@ -149,15 +149,11 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
       
-      {/* 1. HERO SECTION (Clean 1-Column Editorial) */}
+      {/* 1. HERO SECTION */}
       <section id="hero" aria-label="Hero" className="w-full min-h-screen flex flex-col justify-center items-center pt-24 pb-16 scroll-mt-28 bg-transparent">
         <div className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center py-6 w-full">
-          <div className="liquid-glass inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-emerald-800 text-[11px] font-semibold mb-8 shadow-xs border border-white/80 font-mono">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Fullstack & Backend Engineer • Malang, ID
-          </div>
 
-          <h1 className="font-[family-name:var(--font-display)] text-[36px] sm:text-[50px] lg:text-[60px] leading-[1.12] tracking-tight font-extrabold text-[#1C1B1D] mb-6">
+          <h1 className="font-[family-name:var(--font-display)] text-[38px] sm:text-[52px] lg:text-[62px] leading-[1.12] tracking-tight font-extrabold text-[#1C1B1D] mb-6">
             {lang === "id" ? "Membangun Arsitektur API Scalable & Sistem Fullstack Modern." : "Architecting Scalable APIs & Modern Fullstack Systems."}
           </h1>
 
@@ -219,7 +215,6 @@ export default function Home() {
                 />
               </div>
               <div className="liquid-glass absolute -bottom-4 right-2 px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-2 text-sm font-semibold text-[#1C1B1D] border border-white/80">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                 {lang === "id" ? "Siap untuk Proyek & Magang" : "Open for Projects & Internship"}
               </div>
             </div>
@@ -489,7 +484,6 @@ export default function Home() {
                 </div>
               </div>
               <div className="p-4 bg-sky-500/10 rounded-2xl flex items-center gap-3 border border-sky-400/20">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                 <p className="text-xs text-[#1C1B1D] font-mono font-semibold">
                   {lang === "id" ? "Tersedia untuk Kontrak & Magang" : "Available for Contracts & Internships"}
                 </p>
