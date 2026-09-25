@@ -19,17 +19,18 @@ import {
   CheckCircle2,
   Loader2
 } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/icons/SocialIcons";
+import { GithubIcon } from "@/components/icons/SocialIcons";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
 export default function CVPage() {
   const { lang } = useLanguage();
   const cvRef = useRef<HTMLDivElement>(null);
+  const pdfTemplateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDirectDownloadPDF = async () => {
-    if (!cvRef.current || isDownloading) return;
+    if (isDownloading) return;
     setIsDownloading(true);
 
     try {
@@ -37,13 +38,17 @@ export default function CVPage() {
         await document.fonts.ready;
       }
 
-      const element = cvRef.current;
+      // Capture from the fixed A4 template container for 100% pixel-perfect output on all devices
+      const targetElement = pdfTemplateRef.current || cvRef.current;
+      if (!targetElement) return;
 
-      const dataUrl = await toPng(element, {
+      const dataUrl = await toPng(targetElement, {
         quality: 1.0,
         pixelRatio: 2.5,
         backgroundColor: "#ffffff",
         cacheBust: true,
+        width: 794,
+        height: 1123,
       });
 
       const pdf = new jsPDF({
@@ -56,7 +61,7 @@ export default function CVPage() {
       pdf.addImage(dataUrl, "PNG", 0, 0, 210, 297, undefined, "FAST");
       pdf.save(`CV_Mohammad_Kevin_${lang === "id" ? "ID" : "EN"}.pdf`);
     } catch (error) {
-      console.error("Direct PDF generation error:", error);
+      console.error("Direct PDF generation error, using print fallback:", error);
       const originalTitle = document.title;
       document.title = `CV_Mohammad_Kevin_${lang === "id" ? "ID" : "EN"}`;
       window.print();
@@ -128,10 +133,10 @@ export default function CVPage() {
         </button>
       </div>
 
-      {/* Full A4 Resume Document Sheet */}
+      {/* On-Screen Responsive CV View */}
       <div 
         ref={cvRef}
-        className="cv-a4-sheet max-w-[850px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-5 sm:p-7 md:p-9 flex flex-col justify-between"
+        className="cv-a4-sheet max-w-[850px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-5 sm:p-7 md:p-8 flex flex-col justify-between"
       >
         <div>
           {/* Header Section */}
@@ -139,12 +144,12 @@ export default function CVPage() {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
               
               {/* Rounded Photo Frame */}
-              <div className="relative w-22 h-22 sm:w-26 sm:h-26 rounded-2xl overflow-hidden border border-zinc-200 shadow-sm ring-4 ring-sky-50 bg-zinc-100 shrink-0">
+              <div className="relative w-22 h-22 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border border-zinc-200 shadow-sm ring-4 ring-sky-50 bg-zinc-100 shrink-0">
                 <Image 
                   src="/images/logo.png" 
                   alt="Mohammad Kevin" 
                   fill 
-                  sizes="104px" 
+                  sizes="96px" 
                   className="object-cover object-top" 
                   priority 
                   unoptimized
@@ -212,10 +217,10 @@ export default function CVPage() {
           </header>
 
           {/* Main Two-Column Grid */}
-          <div className="cv-grid pt-3.5 grid grid-cols-1 md:grid-cols-12 print:grid-cols-12 gap-5 sm:gap-6">
+          <div className="pt-3.5 grid grid-cols-1 md:grid-cols-12 print:grid-cols-12 gap-5 sm:gap-6">
             
             {/* Left Column (7 cols) */}
-            <div className="cv-col-left md:col-span-7 print:col-span-7 space-y-3.5">
+            <div className="md:col-span-7 print:col-span-7 space-y-3.5">
               
               {/* Professional Summary */}
               <section>
@@ -367,7 +372,7 @@ export default function CVPage() {
             </div>
 
             {/* Right Column (5 cols) */}
-            <div className="cv-col-right md:col-span-5 print:col-span-5 space-y-3.5">
+            <div className="md:col-span-5 print:col-span-5 space-y-3.5">
               
               {/* Technical Skills */}
               <section>
@@ -509,6 +514,353 @@ export default function CVPage() {
 
             </div>
 
+          </div>
+        </div>
+      </div>
+
+      {/* Hidden Pristine Fixed A4 Export Container (Strictly 794px x 1123px = Exact A4 ratio) */}
+      <div 
+        aria-hidden="true" 
+        style={{ 
+          position: "fixed", 
+          left: "-9999px", 
+          top: 0, 
+          width: "794px", 
+          height: "1123px", 
+          overflow: "hidden",
+          pointerEvents: "none",
+          zIndex: -9999
+        }}
+      >
+        <div 
+          ref={pdfTemplateRef}
+          style={{ width: "794px", height: "1123px" }}
+          className="bg-white text-zinc-900 p-8 flex flex-col justify-between font-sans"
+        >
+          <div>
+            {/* Header */}
+            <header className="pb-3.5 border-b border-zinc-200 flex items-start gap-4">
+              <div className="relative w-22 h-22 rounded-2xl overflow-hidden border border-zinc-200 shadow-xs ring-4 ring-sky-50 bg-zinc-100 shrink-0">
+                <Image 
+                  src="/images/logo.png" 
+                  alt="Mohammad Kevin" 
+                  width={88}
+                  height={88}
+                  className="w-full h-full object-cover object-top" 
+                  priority 
+                  unoptimized
+                />
+              </div>
+
+              <div className="flex-1 text-left">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h1 className="text-2xl font-extrabold text-[#1C1B1D] tracking-tight leading-none">
+                    Mohammad <span className="text-sky-600">Kevin</span> Arif Rudianto
+                  </h1>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 text-[9.5px] font-bold font-mono uppercase tracking-wider">
+                    SMK Telkom Malang
+                  </span>
+                </div>
+
+                <p className="text-xs font-semibold text-zinc-600 font-mono mb-2">
+                  Fullstack & Backend Software Engineer
+                </p>
+
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10.5px] text-zinc-600 font-medium pt-1.5 border-t border-zinc-100">
+                  <div className="flex items-center gap-1">
+                    <Mail className="w-3 h-3 text-sky-600 shrink-0" />
+                    <span>kvn4.200581@gmail.com</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Phone className="w-3 h-3 text-sky-600 shrink-0" />
+                    <span>+62 821-3158-8846</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-sky-600 shrink-0" />
+                    <span>{lang === "id" ? "Malang, Jawa Timur" : "Malang, East Java, ID"}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <GithubIcon className="w-3 h-3 text-zinc-800 shrink-0" />
+                    <span>github.com/MohammadKevin</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Globe className="w-3 h-3 text-sky-600 shrink-0" />
+                    <span>corecraft.my.id</span>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            {/* Two Columns Grid */}
+            <div className="pt-3 grid grid-cols-12 gap-5">
+              
+              {/* Left Column (7 cols) */}
+              <div className="col-span-7 space-y-3">
+                {/* Summary */}
+                <section>
+                  <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1">
+                    <Sparkles className="w-3 h-3 text-sky-600" />
+                    <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                      {lang === "id" ? "Ringkasan Profesional" : "Professional Summary"}
+                    </h2>
+                  </div>
+                  <p className="text-[10px] leading-relaxed text-zinc-700 bg-zinc-50/70 p-2 rounded-lg border border-zinc-200/60">
+                    {lang === "id"
+                      ? "Siswa SMK Telkom Malang jurusan Rekayasa Perangkat Lunak dengan dedikasi tinggi pada pengembangan aplikasi web Fullstack & Backend. Berpengalaman merancang arsitektur API modular, mengelola basis data relasional (MySQL), serta membangun solusi sistem kasir (POS) dan arsip digital tingkat instansi. Memiliki pemikiran analitis, teliti, adaptif, dan siap berkontribusi secara profesional melalui Praktik Kerja Lapangan (PKL) maupun proyek industri."
+                      : "Software Engineering student at SMK Telkom Malang dedicated to Fullstack & Backend web development. Experienced in architecting modular APIs, managing relational databases (MySQL), and engineering enterprise-grade POS and digital archive solutions. Highly analytical, detail-oriented, adaptable, and eager to contribute through professional internship programs and engineering projects."}
+                  </p>
+                </section>
+
+                {/* Experience */}
+                <section>
+                  <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1.5">
+                    <Briefcase className="w-3 h-3 text-sky-600" />
+                    <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                      {lang === "id" ? "Pengalaman & Proyek Nyata" : "Experience & Key Projects"}
+                    </h2>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="relative pl-3 border-l-2 border-sky-500/40 space-y-0.5">
+                      <div className="absolute -left-[4px] top-1 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                      <div className="flex items-baseline justify-between gap-1">
+                        <div className="flex items-center gap-1">
+                          <h3 className="text-[11px] font-bold text-zinc-950">
+                            {lang === "id" ? "Aplikasi Kasir (Point of Sale)" : "Point of Sale (POS) Application"}
+                          </h3>
+                          <span className="text-[9.5px] font-semibold text-sky-700 font-mono">• Fullstack</span>
+                        </div>
+                        <span className="text-[9px] font-mono text-zinc-500">{lang === "id" ? "2024 – Sekarang" : "2024 – Present"}</span>
+                      </div>
+                      <p className="text-[10px] text-zinc-600 leading-tight">
+                        {lang === "id"
+                          ? "Mengembangkan sistem kasir offline-first dengan sinkronisasi data otomatis untuk manajemen transaksi yang efisien, mutasi stok cepat, dan laporan audit penjualan."
+                          : "Developed an offline-first POS cashier system with automated data synchronization for seamless transaction workflows, real-time stock mutation, and sales audit reporting."}
+                      </p>
+                      <div className="flex flex-wrap gap-1 pt-0.5">
+                        {["Node.js", "Express.js", "Next.js", "MySQL"].map((t) => (
+                          <span key={t} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-700 text-[8.5px] font-mono border border-zinc-200/50">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="relative pl-3 border-l-2 border-sky-500/40 space-y-0.5">
+                      <div className="absolute -left-[4px] top-1 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                      <div className="flex items-baseline justify-between gap-1">
+                        <div className="flex items-center gap-1">
+                          <h3 className="text-[11px] font-bold text-zinc-950">Raknesia (SuratApp - Digital Archive)</h3>
+                          <span className="text-[9.5px] font-semibold text-sky-700 font-mono">• Backend</span>
+                        </div>
+                        <span className="text-[9px] font-mono text-zinc-500">{lang === "id" ? "2024 – Sekarang" : "2024 – Present"}</span>
+                      </div>
+                      <p className="text-[10px] text-zinc-600 leading-tight">
+                        {lang === "id"
+                          ? "Membangun platform manajemen arsip & berkas digital (fitur Google Drive) dengan kontrol akses peran (RBAC) tingkat instansi."
+                          : "Engineered a web-based digital archiving platform (similar to Google Drive) with role-based access control (RBAC) and metadata indexing for institutions."}
+                      </p>
+                      <div className="flex flex-wrap gap-1 pt-0.5">
+                        {["NestJS", "Prisma ORM", "MySQL", "REST API"].map((t) => (
+                          <span key={t} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-700 text-[8.5px] font-mono border border-zinc-200/50">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="relative pl-3 border-l-2 border-sky-500/40 space-y-0.5">
+                      <div className="absolute -left-[4px] top-1 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                      <div className="flex items-baseline justify-between gap-1">
+                        <div className="flex items-center gap-1">
+                          <h3 className="text-[11px] font-bold text-zinc-950">Quality Assurance & API Testing</h3>
+                          <span className="text-[9.5px] font-semibold text-sky-700 font-mono">• SIDIGS</span>
+                        </div>
+                        <span className="text-[9px] font-mono text-zinc-500">2025 – 2026</span>
+                      </div>
+                      <p className="text-[10px] text-zinc-600 leading-tight">
+                        {lang === "id"
+                          ? "Melakukan pengujian fungsional aplikasi web, validasi integrasi endpoint API via Postman, dan pelaporan bug terstruktur."
+                          : "Executed functional testing, REST API endpoint validation via Postman, query debugging, and structured defect reporting."}
+                      </p>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Education */}
+                <section>
+                  <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1">
+                    <GraduationCap className="w-3 h-3 text-sky-600" />
+                    <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                      {lang === "id" ? "Pendidikan Formal" : "Education"}
+                    </h2>
+                  </div>
+                  
+                  <div className="space-y-1.5">
+                    <div className="relative pl-3 border-l-2 border-sky-500/40 space-y-0.5">
+                      <div className="absolute -left-[4px] top-1 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                      <div className="flex items-baseline justify-between gap-1">
+                        <h3 className="text-[11px] font-bold text-zinc-950">SMK Telkom Malang</h3>
+                        <span className="text-[9px] font-mono text-zinc-500">{lang === "id" ? "2024 – Sekarang" : "2024 – Present"}</span>
+                      </div>
+                      <p className="text-[9.5px] text-sky-600 font-semibold">
+                        {lang === "id" ? "Rekayasa Perangkat Lunak" : "Software Engineering Major"}
+                      </p>
+                      <p className="text-[9.5px] text-zinc-600 leading-tight">
+                        {lang === "id"
+                          ? "Mempelajari rekayasa perangkat lunak dasar, struktur algoritma pemrograman web terstruktur (PHP & JavaScript), serta konfigurasi server database lokal (MySQL)."
+                          : "Studying software engineering fundamentals, structured web algorithm logic (PHP & JavaScript), and local database server configuration (MySQL)."}
+                      </p>
+                    </div>
+
+                    <div className="relative pl-3 border-l-2 border-sky-500/40 space-y-0.5">
+                      <div className="absolute -left-[4px] top-1 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                      <div className="flex items-baseline justify-between gap-1">
+                        <h3 className="text-[11px] font-bold text-zinc-950">SMPN 1 Purwoasri</h3>
+                        <span className="text-[9px] font-mono text-zinc-500">2021 – 2024</span>
+                      </div>
+                      <p className="text-[9.5px] text-zinc-500">
+                        {lang === "id" ? "Pendidikan Sekolah Menengah Pertama" : "Junior High School Education"}
+                      </p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+
+              {/* Right Column (5 cols) */}
+              <div className="col-span-5 space-y-3">
+                {/* Skills */}
+                <section>
+                  <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1.5">
+                    <Code className="w-3 h-3 text-sky-600" />
+                    <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                      {lang === "id" ? "Keahlian Teknis" : "Technical Skills"}
+                    </h2>
+                  </div>
+                  
+                  <div className="space-y-1.5 text-[9.5px]">
+                    <div>
+                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Frontend</span>
+                      <div className="flex flex-wrap gap-1">
+                        {["HTML5", "CSS3", "JavaScript", "React.js", "Next.js", "Bootstrap"].map((s) => (
+                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Backend & API</span>
+                      <div className="flex flex-wrap gap-1">
+                        {["Node.js", "Express.js", "NestJS", "PHP", "RESTful API"].map((s) => (
+                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Database & ORM</span>
+                      <div className="flex flex-wrap gap-1">
+                        {["MySQL", "PostgreSQL", "Prisma ORM"].map((s) => (
+                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Tools & Workflow</span>
+                      <div className="flex flex-wrap gap-1">
+                        {["Git", "GitHub", "Postman", "Linux", "VS Code"].map((s) => (
+                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Certifications */}
+                <section>
+                  <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1">
+                    <Award className="w-3 h-3 text-sky-600" />
+                    <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                      {lang === "id" ? "Sertifikasi & Prestasi" : "Certifications & Awards"}
+                    </h2>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    {certifications.map((cert, idx) => (
+                      <div key={idx} className="p-1 rounded bg-zinc-50 border border-zinc-200/60 text-[9.5px]">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-sky-700 font-mono text-[8.5px] uppercase">{cert.issuer}</span>
+                          <span className="text-zinc-400 font-mono text-[8.5px]">{cert.year}</span>
+                        </div>
+                        <p className="font-semibold text-zinc-800 leading-tight">{cert.title}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* Competencies */}
+                <section>
+                  <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1">
+                    <CheckCircle2 className="w-3 h-3 text-sky-600" />
+                    <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                      {lang === "id" ? "Kompetensi Utama" : "Core Competencies"}
+                    </h2>
+                  </div>
+                  
+                  <ul className="space-y-0.5 text-[9.5px] text-zinc-600">
+                    <li className="flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
+                      <span>{lang === "id" ? "Pengembangan Aplikasi Web Fullstack" : "Fullstack Web Application Development"}</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
+                      <span>{lang === "id" ? "Pemecahan Masalah & Debugging Cepat" : "Problem Solving & Efficient Debugging"}</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
+                      <span>{lang === "id" ? "Pengujian API & Integrasi (Postman)" : "API Testing & Integration (Postman)"}</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
+                      <span>{lang === "id" ? "Kolaborasi Tim & Komunikasi Terstruktur" : "Teamwork & Structured Communication"}</span>
+                    </li>
+                  </ul>
+                </section>
+
+                {/* Languages */}
+                <section>
+                  <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1">
+                    <Globe className="w-3 h-3 text-sky-600" />
+                    <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                      {lang === "id" ? "Bahasa" : "Languages"}
+                    </h2>
+                  </div>
+                  
+                  <div className="space-y-0.5 text-[9.5px]">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-zinc-700">Bahasa Indonesia</span>
+                      <span className="text-sky-700 font-mono font-semibold text-[8.5px] bg-sky-50 px-1 py-0.2 rounded border border-sky-100">Native</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-zinc-700">English</span>
+                      <span className="text-sky-700 font-mono font-semibold text-[8.5px] bg-sky-50 px-1 py-0.2 rounded border border-sky-100">
+                        {lang === "id" ? "Kerja Profesional" : "Professional Working"}
+                      </span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
