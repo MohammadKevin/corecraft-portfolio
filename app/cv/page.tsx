@@ -25,88 +25,88 @@ export default function CVPage() {
   const academics = timelineLogs.filter((t) => t.type === "academic");
 
   return (
-    <main className="min-h-screen bg-zinc-100 text-zinc-900 font-sans print:bg-white print:text-black pt-24 pb-12 print:py-0">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 print:hidden">
+    <main className="min-h-screen bg-zinc-100 text-zinc-900 font-sans print:bg-white print:text-black pt-20 sm:pt-24 pb-12 print:py-0 px-3 sm:px-6">
+      <div className="max-w-4xl mx-auto mb-5 sm:mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 print:hidden">
         <Link
           href="/"
-          className="inline-flex items-center justify-center sm:justify-start gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2 px-3.5 shadow-2xs transition-all"
+          className="inline-flex items-center justify-center sm:justify-start gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2.5 px-4 shadow-2xs transition-all active:scale-[0.98]"
         >
-          <ArrowLeft className="w-4 h-4 text-zinc-500" />
+          <ArrowLeft className="w-4 h-4 text-zinc-500 shrink-0" />
           <span>{lang === "id" ? "Kembali ke Beranda" : "Back to Overview"}</span>
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <a
             href="/CV%20Mohammad%20Kevin.pdf"
             target="_blank"
             rel="noopener noreferrer"
             download="CV Mohammad Kevin.pdf"
-            className="inline-flex items-center justify-center gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2 px-3.5 shadow-2xs transition-all"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2.5 px-4 shadow-2xs transition-all active:scale-[0.98] whitespace-nowrap"
           >
-            <Download className="w-4 h-4 text-zinc-500" />
+            <Download className="w-4 h-4 text-zinc-500 shrink-0" />
             <span>Download PDF</span>
           </a>
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center justify-center gap-2 bg-sky-500 hover:bg-sky-600 active:scale-98 text-white font-bold rounded-xl text-xs py-2 px-3.5 shadow-xs transition-all cursor-pointer"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-sky-500 hover:bg-sky-600 active:scale-[0.98] text-white font-bold rounded-xl text-xs py-2.5 px-4 shadow-xs transition-all cursor-pointer whitespace-nowrap"
           >
-            <Printer className="w-4 h-4 text-white" />
+            <Printer className="w-4 h-4 text-white shrink-0" />
             <span>{lang === "id" ? "Cetak CV" : "Print Resume"}</span>
           </button>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto bg-white border border-zinc-200/80 shadow-sm print:shadow-none print:border-none rounded-2xl print:rounded-none overflow-hidden">
-        <div className="px-5 sm:px-10 py-6 sm:py-10 border-b border-zinc-200/80 bg-zinc-50/50 print:bg-white">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="px-5 sm:px-8 md:px-10 py-6 sm:py-8 md:py-10 border-b border-zinc-200/80 bg-zinc-50/50 print:bg-white">
+          <div className="flex flex-col sm:flex-row sm:items-start md:items-center justify-between gap-3 sm:gap-4">
             <div>
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-zinc-950 tracking-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-zinc-950 tracking-tight leading-tight">
                 Mohammad <span className="text-sky-600">Kevin</span> Arif Rudianto
               </h1>
-              <p className="text-sm sm:text-lg font-semibold text-zinc-700 font-mono mt-1">
+              <p className="text-xs sm:text-base md:text-lg font-semibold text-zinc-700 font-mono mt-1">
                 {whoamiData.role[lang]}
               </p>
             </div>
-            <div className="text-left sm:text-right">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200/60 text-xs font-semibold">
+            <div className="self-start sm:self-auto text-left sm:text-right shrink-0">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200/60 text-xs font-semibold whitespace-nowrap">
                 SMK Telkom Malang
               </span>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-2 mt-6 text-xs text-zinc-600 font-medium">
+          <div className="flex flex-wrap gap-x-5 sm:gap-x-6 gap-y-2.5 mt-5 sm:mt-6 text-xs text-zinc-600 font-medium">
             <a
               href={`mailto:${whoamiData.contactLinks.email}`}
-              className="flex items-center gap-1.5 hover:text-sky-600 transition-colors"
+              className="flex items-center gap-1.5 hover:text-sky-600 transition-colors shrink-0"
             >
-              <Mail className="w-3.5 h-3.5 text-sky-600" />
+              <Mail className="w-3.5 h-3.5 text-sky-600 shrink-0" />
               <span>{whoamiData.contactLinks.email}</span>
             </a>
             <a
               href="https://wa.me/6282131588846"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-sky-600 transition-colors"
+              className="flex items-center gap-1.5 hover:text-sky-600 transition-colors shrink-0"
             >
-              <Phone className="w-3.5 h-3.5 text-sky-600" />
+              <Phone className="w-3.5 h-3.5 text-sky-600 shrink-0" />
               <span>+62 821-3158-8846</span>
             </a>
-            <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-sky-600" />
+            <span className="flex items-center gap-1.5 shrink-0">
+              <MapPin className="w-3.5 h-3.5 text-sky-600 shrink-0" />
               <span>{whoamiData.location}</span>
             </span>
             <a
               href={whoamiData.contactLinks.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-sky-600 transition-colors"
+              className="flex items-center gap-1.5 hover:text-sky-600 transition-colors shrink-0"
             >
-              <GithubIcon className="w-3.5 h-3.5 text-zinc-800" />
+              <GithubIcon className="w-3.5 h-3.5 text-zinc-800 shrink-0" />
               <span>github.com/MohammadKevin</span>
             </a>
           </div>
         </div>
 
-        <div className="px-5 sm:px-10 py-6 sm:py-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10">
+        <div className="px-5 sm:px-8 md:px-10 py-6 sm:py-8 md:py-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10">
           <div className="md:col-span-8 space-y-8">
             <section>
               <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-2 mb-3 font-mono">
@@ -128,11 +128,11 @@ export default function CVPage() {
 
                   return (
                     <div key={exp.id} className="space-y-1.5">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                         <h3 className="text-sm font-bold text-zinc-950">
                           {roleTitle}
                         </h3>
-                        <span className="text-[11px] font-mono text-zinc-500 font-semibold">
+                        <span className="text-[11px] font-mono text-zinc-500 font-semibold shrink-0">
                           {typeof exp.year === 'string' ? exp.year : (exp.year?.[lang] || exp.year?.id || "")}
                         </span>
                       </div>
@@ -148,7 +148,7 @@ export default function CVPage() {
                             const achText = typeof ach === "string" ? ach : ach[lang];
                             return (
                               <li key={idx} className="flex items-start gap-2 text-xs text-zinc-700">
-                                <span className="text-sky-600 font-bold">•</span>
+                                <span className="text-sky-600 font-bold shrink-0">•</span>
                                 <span>{achText}</span>
                               </li>
                             );
@@ -171,19 +171,18 @@ export default function CVPage() {
 
                 return (
                   <div key={acad.id} className="space-y-1">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                       <h3 className="text-sm font-bold text-zinc-950">{acad.org}</h3>
-                      <span className="text-[11px] font-mono text-zinc-500 font-semibold">
+                      <span className="text-[11px] font-mono text-zinc-500 font-semibold shrink-0">
                         {typeof acad.year === 'string' ? acad.year : (acad.year?.[lang] || acad.year?.id || "")}
                       </span>
                     </div>
                     <p className="text-xs text-sky-600 font-medium">{roleTitle}</p>
-                    <p className="text-xs text-zinc-600">{summary}</p>
+                    <p className="text-xs text-zinc-600 leading-relaxed">{summary}</p>
                   </div>
                 );
               })}
             </section>
-
           </div>
 
           <div className="md:col-span-4 space-y-8">
@@ -227,11 +226,8 @@ export default function CVPage() {
                 </div>
               </div>
             </section>
-
           </div>
-
         </div>
-
       </div>
     </main>
   );
