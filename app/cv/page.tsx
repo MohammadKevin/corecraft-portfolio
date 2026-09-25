@@ -33,16 +33,50 @@ export default function CVPage() {
     setIsDownloading(true);
 
     try {
-      const element = cvRef.current;
-      
-      const canvas = await html2canvas(element, {
+      const original = cvRef.current;
+      const clone = original.cloneNode(true) as HTMLElement;
+
+      // Position clone off-screen with fixed standard A4 proportions
+      clone.style.position = "fixed";
+      clone.style.left = "-9999px";
+      clone.style.top = "0";
+      clone.style.width = "820px";
+      clone.style.minHeight = "1140px";
+      clone.style.padding = "32px 36px";
+      clone.style.borderRadius = "0";
+      clone.style.boxShadow = "none";
+      clone.style.border = "none";
+      clone.style.background = "#ffffff";
+      clone.style.zIndex = "-9999";
+
+      // Ensure 2-column layout in export regardless of user screen size
+      const grid = clone.querySelector(".cv-grid") as HTMLElement;
+      if (grid) {
+        grid.style.display = "grid";
+        grid.style.gridTemplateColumns = "repeat(12, minmax(0, 1fr))";
+        grid.style.gap = "24px";
+      }
+      const colLeft = clone.querySelector(".cv-col-left") as HTMLElement;
+      if (colLeft) {
+        colLeft.style.gridColumn = "span 7 / span 7";
+      }
+      const colRight = clone.querySelector(".cv-col-right") as HTMLElement;
+      if (colRight) {
+        colRight.style.gridColumn = "span 5 / span 5";
+      }
+
+      document.body.appendChild(clone);
+
+      const canvas = await html2canvas(clone, {
         scale: 3,
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
         logging: false,
-        windowWidth: 1024,
+        width: 820,
       });
+
+      document.body.removeChild(clone);
 
       const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF({
@@ -95,10 +129,10 @@ export default function CVPage() {
   return (
     <main className="min-h-screen bg-zinc-200/70 text-zinc-900 font-sans print:bg-white print:text-black pt-20 sm:pt-24 pb-16 print:p-0 px-3 sm:px-6">
       {/* Top action toolbar */}
-      <div className="max-w-[850px] mx-auto mb-4 flex items-center justify-between gap-3 print:hidden">
+      <div className="max-w-[850px] mx-auto mb-4 flex items-center justify-between gap-2.5 print:hidden">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2 px-4 shadow-xs transition-all active:scale-[0.98]"
+          className="inline-flex items-center gap-1.5 sm:gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2 px-3 sm:px-4 shadow-xs transition-all active:scale-[0.98]"
         >
           <ArrowLeft className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
           <span>{lang === "id" ? "Kembali ke Beranda" : "Back to Overview"}</span>
@@ -108,7 +142,7 @@ export default function CVPage() {
         <button
           onClick={handleDirectDownloadPDF}
           disabled={isDownloading}
-          className="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs py-2 px-5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
+          className="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs py-2 px-4 sm:px-5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
         >
           {isDownloading ? (
             <>
@@ -127,7 +161,7 @@ export default function CVPage() {
       {/* Full A4 Resume Document Sheet */}
       <div 
         ref={cvRef}
-        className="cv-a4-sheet max-w-[850px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-6 sm:p-8 md:p-9 flex flex-col justify-between"
+        className="cv-a4-sheet max-w-[850px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-5 sm:p-7 md:p-9 flex flex-col justify-between"
       >
         <div>
           {/* Header Section */}
@@ -135,7 +169,7 @@ export default function CVPage() {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
               
               {/* Rounded Photo Frame */}
-              <div className="relative w-24 h-24 sm:w-26 sm:h-26 rounded-2xl overflow-hidden border border-zinc-200 shadow-sm ring-4 ring-sky-50 bg-zinc-100 shrink-0">
+              <div className="relative w-22 h-22 sm:w-26 sm:h-26 rounded-2xl overflow-hidden border border-zinc-200 shadow-sm ring-4 ring-sky-50 bg-zinc-100 shrink-0">
                 <Image 
                   src="/images/logo.png" 
                   alt="Mohammad Kevin" 
@@ -149,7 +183,7 @@ export default function CVPage() {
               {/* Profile Details */}
               <div className="flex-1 text-center sm:text-left">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1C1B1D] tracking-tight leading-none">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#1C1B1D] tracking-tight leading-none">
                     Mohammad <span className="text-sky-600">Kevin</span> Arif Rudianto
                   </h1>
                   <span className="inline-flex items-center px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 text-[10px] font-bold font-mono uppercase tracking-wider">
@@ -162,7 +196,7 @@ export default function CVPage() {
                 </p>
 
                 {/* Contact Links */}
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-[11px] text-zinc-600 font-medium pt-1.5 border-t border-zinc-100">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3.5 sm:gap-x-4 gap-y-1.5 text-[11px] text-zinc-600 font-medium pt-1.5 border-t border-zinc-100">
                   <a
                     href="mailto:kvn4.200581@gmail.com"
                     className="flex items-center gap-1 hover:text-sky-600 transition-colors shrink-0"
@@ -207,10 +241,10 @@ export default function CVPage() {
           </header>
 
           {/* Main Two-Column Grid */}
-          <div className="pt-3.5 grid grid-cols-1 md:grid-cols-12 print:grid-cols-12 gap-5 sm:gap-6">
+          <div className="cv-grid pt-3.5 grid grid-cols-1 md:grid-cols-12 print:grid-cols-12 gap-5 sm:gap-6">
             
             {/* Left Column (7 cols) */}
-            <div className="md:col-span-7 print:col-span-7 space-y-3.5">
+            <div className="cv-col-left md:col-span-7 print:col-span-7 space-y-3.5">
               
               {/* Professional Summary */}
               <section>
@@ -362,7 +396,7 @@ export default function CVPage() {
             </div>
 
             {/* Right Column (5 cols) */}
-            <div className="md:col-span-5 print:col-span-5 space-y-3.5">
+            <div className="cv-col-right md:col-span-5 print:col-span-5 space-y-3.5">
               
               {/* Technical Skills */}
               <section>
