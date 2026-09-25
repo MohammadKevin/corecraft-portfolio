@@ -20,7 +20,7 @@ import {
   Loader2
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons/SocialIcons";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
 export default function CVPage() {
@@ -33,52 +33,19 @@ export default function CVPage() {
     setIsDownloading(true);
 
     try {
-      const original = cvRef.current;
-      const clone = original.cloneNode(true) as HTMLElement;
-
-      // Position clone off-screen with fixed standard A4 proportions
-      clone.style.position = "fixed";
-      clone.style.left = "-9999px";
-      clone.style.top = "0";
-      clone.style.width = "820px";
-      clone.style.minHeight = "1140px";
-      clone.style.padding = "32px 36px";
-      clone.style.borderRadius = "0";
-      clone.style.boxShadow = "none";
-      clone.style.border = "none";
-      clone.style.background = "#ffffff";
-      clone.style.zIndex = "-9999";
-
-      // Ensure 2-column layout in export regardless of user screen size
-      const grid = clone.querySelector(".cv-grid") as HTMLElement;
-      if (grid) {
-        grid.style.display = "grid";
-        grid.style.gridTemplateColumns = "repeat(12, minmax(0, 1fr))";
-        grid.style.gap = "24px";
-      }
-      const colLeft = clone.querySelector(".cv-col-left") as HTMLElement;
-      if (colLeft) {
-        colLeft.style.gridColumn = "span 7 / span 7";
-      }
-      const colRight = clone.querySelector(".cv-col-right") as HTMLElement;
-      if (colRight) {
-        colRight.style.gridColumn = "span 5 / span 5";
+      if (document.fonts) {
+        await document.fonts.ready;
       }
 
-      document.body.appendChild(clone);
+      const element = cvRef.current;
 
-      const canvas = await html2canvas(clone, {
-        scale: 3,
-        useCORS: true,
-        allowTaint: true,
+      const dataUrl = await toPng(element, {
+        quality: 1.0,
+        pixelRatio: 2.5,
         backgroundColor: "#ffffff",
-        logging: false,
-        width: 820,
+        cacheBust: true,
       });
 
-      document.body.removeChild(clone);
-
-      const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -86,13 +53,16 @@ export default function CVPage() {
         compress: true,
       });
 
-      const pdfWidth = 210;
-      const pdfHeight = 297;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
+      pdf.addImage(dataUrl, "PNG", 0, 0, 210, 297, undefined, "FAST");
       pdf.save(`CV_Mohammad_Kevin_${lang === "id" ? "ID" : "EN"}.pdf`);
     } catch (error) {
-      console.error("PDF generation failed:", error);
+      console.error("Direct PDF generation error:", error);
+      const originalTitle = document.title;
+      document.title = `CV_Mohammad_Kevin_${lang === "id" ? "ID" : "EN"}`;
+      window.print();
+      setTimeout(() => {
+        document.title = originalTitle;
+      }, 1000);
     } finally {
       setIsDownloading(false);
     }
@@ -177,6 +147,7 @@ export default function CVPage() {
                   sizes="104px" 
                   className="object-cover object-top" 
                   priority 
+                  unoptimized
                 />
               </div>
 
