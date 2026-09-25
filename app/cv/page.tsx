@@ -24,7 +24,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 export default function CVPage() {
-  const { lang, setLang } = useLanguage();
+  const { lang } = useLanguage();
   const cvRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -104,48 +104,24 @@ export default function CVPage() {
           <span>{lang === "id" ? "Kembali ke Beranda" : "Back to Overview"}</span>
         </Link>
 
-        <div className="flex items-center gap-2.5">
-          {/* Language Switcher */}
-          <div className="flex items-center bg-white rounded-xl p-1 border border-zinc-200 shadow-xs text-xs font-mono">
-            <button
-              type="button"
-              onClick={() => setLang("id")}
-              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                lang === "id" ? "bg-[#1C1B1D] text-white font-bold shadow-xs" : "text-zinc-600 hover:text-zinc-900"
-              }`}
-            >
-              ID
-            </button>
-            <button
-              type="button"
-              onClick={() => setLang("en")}
-              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                lang === "en" ? "bg-[#1C1B1D] text-white font-bold shadow-xs" : "text-zinc-600 hover:text-zinc-900"
-              }`}
-            >
-              EN
-            </button>
-          </div>
-
-          {/* Direct Automatic Download PDF Button */}
-          <button
-            onClick={handleDirectDownloadPDF}
-            disabled={isDownloading}
-            className="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs py-2 px-5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
-          >
-            {isDownloading ? (
-              <>
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>{lang === "id" ? "Memproses PDF..." : "Generating PDF..."}</span>
-              </>
-            ) : (
-              <>
-                <Download className="w-3.5 h-3.5 text-white shrink-0" />
-                <span>{lang === "id" ? "Unduh PDF" : "Download PDF"}</span>
-              </>
-            )}
-          </button>
-        </div>
+        {/* Direct Automatic Download PDF Button */}
+        <button
+          onClick={handleDirectDownloadPDF}
+          disabled={isDownloading}
+          className="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs py-2 px-5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
+        >
+          {isDownloading ? (
+            <>
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <span>{lang === "id" ? "Memproses PDF..." : "Generating PDF..."}</span>
+            </>
+          ) : (
+            <>
+              <Download className="w-3.5 h-3.5 text-white shrink-0" />
+              <span>{lang === "id" ? "Unduh PDF" : "Download PDF"}</span>
+            </>
+          )}
+        </button>
       </div>
 
       {/* Full A4 Resume Document Sheet */}
