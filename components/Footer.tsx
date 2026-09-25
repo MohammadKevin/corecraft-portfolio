@@ -9,7 +9,7 @@ export default function Footer() {
   const { lang } = useLanguage();
 
   return (
-    <footer className="w-full bg-white/70 backdrop-blur-md border-t border-zinc-200/60">
+    <footer className="w-full bg-white/70 backdrop-blur-md border-t border-zinc-200/60 print:hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3">
           <Image

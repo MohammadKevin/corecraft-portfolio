@@ -61,7 +61,7 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="fixed top-2.5 sm:top-4 inset-x-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none transition-all duration-300">
+    <header className="fixed top-2.5 sm:top-4 inset-x-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none transition-all duration-300 print:hidden">
       <div className="pointer-events-auto w-full max-w-5xl xl:max-w-6xl transition-all duration-300">
         <div
           className={`relative flex items-center justify-between gap-2 sm:gap-4 rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] liquid-glass-nav h-12 sm:h-14 px-3.5 sm:px-5 lg:px-6 ${

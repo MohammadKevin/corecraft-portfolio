@@ -12,7 +12,6 @@ import {
   Mail,
   Phone,
   MapPin,
-  Printer,
   ArrowLeft,
   Download,
   Briefcase,
@@ -35,6 +34,15 @@ export default function CVPage() {
   const academics = timelineLogs.filter((t) => t.type === "academic");
   const topCerts = certificatesData.slice(0, 4);
 
+  const handleDownloadPDF = () => {
+    const originalTitle = document.title;
+    document.title = lang === "id" ? "CV Mohammad Kevin Arif Rudianto" : "Resume Mohammad Kevin Arif Rudianto";
+    window.print();
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 1000);
+  };
+
   return (
     <main className="min-h-screen bg-zinc-100 text-zinc-900 font-sans print:bg-white print:text-black pt-20 sm:pt-24 pb-16 print:py-0 px-3 sm:px-6">
       {/* Top action toolbar */}
@@ -46,25 +54,13 @@ export default function CVPage() {
           <ArrowLeft className="w-4 h-4 text-zinc-500 shrink-0" />
           <span>{lang === "id" ? "Kembali ke Beranda" : "Back to Overview"}</span>
         </Link>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <a
-            href="/CV%20Mohammad%20Kevin.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            download="CV Mohammad Kevin.pdf"
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2.5 px-4 shadow-2xs transition-all active:scale-[0.98] whitespace-nowrap"
-          >
-            <Download className="w-4 h-4 text-zinc-500 shrink-0" />
-            <span>Download PDF</span>
-          </a>
-          <button
-            onClick={() => window.print()}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] text-white font-bold rounded-xl text-xs py-2.5 px-4 shadow-xs transition-all cursor-pointer whitespace-nowrap"
-          >
-            <Printer className="w-4 h-4 text-white shrink-0" />
-            <span>{lang === "id" ? "Cetak CV" : "Print Resume"}</span>
-          </button>
-        </div>
+        <button
+          onClick={handleDownloadPDF}
+          className="inline-flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] text-white font-bold rounded-xl text-xs py-2.5 px-5 shadow-xs transition-all cursor-pointer whitespace-nowrap"
+        >
+          <Download className="w-4 h-4 text-white shrink-0" />
+          <span>{lang === "id" ? "Unduh PDF" : "Download PDF"}</span>
+        </button>
       </div>
 
       {/* Main CV Document Card */}
