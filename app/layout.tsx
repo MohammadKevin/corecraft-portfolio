@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuroraBackground from "@/components/AuroraBackground";
 import Preloader from "@/components/Preloader";
+import AiAssistant from "@/components/AiAssistant";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -154,6 +155,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
+          <AiAssistant />
         </LanguageProvider>
       </body>
     </html>
