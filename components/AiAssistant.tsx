@@ -163,36 +163,27 @@ export default function AiAssistant() {
           <button
             onClick={() => setIsOpen(true)}
             aria-label="Open CoreCraft AI Assistant"
-            className="group relative flex items-center gap-2.5 p-2.5 sm:px-4 sm:py-3 rounded-full bg-[#1C1B1D] text-white shadow-[0_12px_32px_rgba(28,27,29,0.25)] border border-white/20 hover:bg-black transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+            title={lang === "id" ? "Buka CoreCraft AI Assistant" : "Open CoreCraft AI Assistant"}
+            className="group relative flex items-center justify-center w-12 h-12 sm:w-13 sm:h-13 rounded-2xl bg-[#1C1B1D] text-white shadow-[0_12px_30px_rgba(0,0,0,0.25)] border border-white/20 hover:bg-black transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
           >
-            {/* Pulsing ring aura */}
-            <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-sky-400/30 via-cyan-300/30 to-sky-500/30 blur-sm group-hover:opacity-100 opacity-60 transition-opacity -z-10 animate-pulse" />
+            {/* Subtle glowing ring aura */}
+            <span className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-sky-400/30 via-cyan-300/30 to-sky-500/30 blur-xs group-hover:opacity-100 opacity-50 transition-opacity -z-10 animate-pulse" />
             
-            {/* CoreCraft Logo */}
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center p-1 border border-white/20 shadow-xs shrink-0">
+            {/* CoreCraft White Logo */}
+            <div className="w-6.5 h-6.5 sm:w-7.5 sm:h-7.5 flex items-center justify-center">
               <Image
                 src="/images/corecraft-logo-dark.svg"
                 alt="CoreCraft AI"
-                width={26}
-                height={26}
-                className="w-full h-full object-contain invert"
+                width={30}
+                height={30}
+                className="w-full h-full object-contain invert transition-transform group-hover:scale-110 duration-300"
               />
             </div>
 
-            {/* Label */}
-            <div className="hidden sm:flex flex-col text-left pr-1">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold tracking-tight text-white leading-none">
-                  CoreCraft AI
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              </div>
-              <span className="text-[10px] font-mono text-zinc-400 leading-tight">
-                {lang === "id" ? "Tanya seputar Kevin" : "Ask about Kevin"}
-              </span>
-            </div>
-
-            <Sparkles className="w-3.5 h-3.5 text-sky-400 group-hover:rotate-12 transition-transform shrink-0" />
+            {/* Sparkle Badge at top-right */}
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-sky-500 border-2 border-[#1C1B1D] flex items-center justify-center shadow-xs">
+              <Sparkles className="w-2 h-2 text-white" />
+            </span>
           </button>
         )}
       </aside>
