@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,22 +16,52 @@ import {
   Globe,
   Code,
   Sparkles,
-  Layers,
-  ExternalLink,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons/SocialIcons";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function CVPage() {
-  const { lang } = useLanguage();
+  const { lang, setLang } = useLanguage();
+  const cvRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const handleDownloadPDF = () => {
-    const originalTitle = document.title;
-    document.title = lang === "id" ? "CV Mohammad Kevin Arif Rudianto" : "Resume Mohammad Kevin Arif Rudianto";
-    window.print();
-    setTimeout(() => {
-      document.title = originalTitle;
-    }, 1000);
+  const handleDirectDownloadPDF = async () => {
+    if (!cvRef.current || isDownloading) return;
+    setIsDownloading(true);
+
+    try {
+      const element = cvRef.current;
+      
+      const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        windowWidth: 1024,
+      });
+
+      const imgData = canvas.toDataURL("image/png", 1.0);
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+        compress: true,
+      });
+
+      const pdfWidth = 210;
+      const pdfHeight = 297;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
+      pdf.save(`CV_Mohammad_Kevin_${lang === "id" ? "ID" : "EN"}.pdf`);
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const certifications = [
@@ -46,13 +76,13 @@ export default function CVPage() {
       year: "2026",
     },
     {
-      issuer: "Kompetisi",
-      title: "Future Founders League 2026 (BMC) — Peserta",
+      issuer: lang === "id" ? "Kompetisi" : "Competition",
+      title: lang === "id" ? "Future Founders League 2026 (BMC) — Peserta" : "Future Founders League 2026 (BMC) — Participant",
       year: "2026",
     },
     {
-      issuer: "Kompetisi",
-      title: "Ultimate Showdown 2026 — Peserta",
+      issuer: lang === "id" ? "Kompetisi" : "Competition",
+      title: lang === "id" ? "Ultimate Showdown 2026 — Peserta" : "Ultimate Showdown 2026 — Participant",
       year: "2026",
     },
     {
@@ -63,7 +93,7 @@ export default function CVPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-zinc-200/70 text-zinc-900 font-sans print:bg-white print:text-black pt-20 sm:pt-22 pb-16 print:p-0 px-3 sm:px-6">
+    <main className="min-h-screen bg-zinc-200/70 text-zinc-900 font-sans print:bg-white print:text-black pt-20 sm:pt-24 pb-16 print:p-0 px-3 sm:px-6">
       {/* Top action toolbar */}
       <div className="max-w-[850px] mx-auto mb-4 flex items-center justify-between gap-3 print:hidden">
         <Link
@@ -73,17 +103,56 @@ export default function CVPage() {
           <ArrowLeft className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
           <span>{lang === "id" ? "Kembali ke Beranda" : "Back to Overview"}</span>
         </Link>
-        <button
-          onClick={handleDownloadPDF}
-          className="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] text-white font-bold rounded-xl text-xs py-2 px-5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
-        >
-          <Download className="w-3.5 h-3.5 text-white shrink-0" />
-          <span>{lang === "id" ? "Unduh PDF" : "Download PDF"}</span>
-        </button>
+
+        <div className="flex items-center gap-2.5">
+          {/* Language Switcher */}
+          <div className="flex items-center bg-white rounded-xl p-1 border border-zinc-200 shadow-xs text-xs font-mono">
+            <button
+              type="button"
+              onClick={() => setLang("id")}
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                lang === "id" ? "bg-[#1C1B1D] text-white font-bold shadow-xs" : "text-zinc-600 hover:text-zinc-900"
+              }`}
+            >
+              ID
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang("en")}
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                lang === "en" ? "bg-[#1C1B1D] text-white font-bold shadow-xs" : "text-zinc-600 hover:text-zinc-900"
+              }`}
+            >
+              EN
+            </button>
+          </div>
+
+          {/* Direct Automatic Download PDF Button */}
+          <button
+            onClick={handleDirectDownloadPDF}
+            disabled={isDownloading}
+            className="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs py-2 px-5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
+          >
+            {isDownloading ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>{lang === "id" ? "Memproses PDF..." : "Generating PDF..."}</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5 text-white shrink-0" />
+                <span>{lang === "id" ? "Unduh PDF" : "Download PDF"}</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Full A4 Resume Document Sheet */}
-      <div className="cv-a4-sheet max-w-[850px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-6 sm:p-8 md:p-9 flex flex-col justify-between">
+      <div 
+        ref={cvRef}
+        className="cv-a4-sheet max-w-[850px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-6 sm:p-8 md:p-9 flex flex-col justify-between"
+      >
         <div>
           {/* Header Section */}
           <header className="pb-4 border-b border-zinc-200">
@@ -113,7 +182,7 @@ export default function CVPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm font-semibold text-zinc-600 font-mono mb-2">
-                  {lang === "id" ? "Fullstack & Backend Software Engineer" : "Fullstack & Backend Software Engineer"}
+                  Fullstack & Backend Software Engineer
                 </p>
 
                 {/* Contact Links */}
@@ -136,7 +205,7 @@ export default function CVPage() {
                   </a>
                   <span className="flex items-center gap-1 shrink-0">
                     <MapPin className="w-3 h-3 text-sky-600 shrink-0" />
-                    <span>Malang, Jawa Timur</span>
+                    <span>{lang === "id" ? "Malang, Jawa Timur" : "Malang, East Java, ID"}</span>
                   </span>
                   <a
                     href="https://github.com/MohammadKevin"
@@ -178,7 +247,7 @@ export default function CVPage() {
                 <p className="text-[11px] leading-relaxed text-zinc-700 bg-zinc-50/70 p-2.5 rounded-xl border border-zinc-200/60 print:bg-transparent print:p-0 print:border-none">
                   {lang === "id"
                     ? "Siswa SMK Telkom Malang jurusan Rekayasa Perangkat Lunak dengan dedikasi tinggi pada pengembangan aplikasi web Fullstack & Backend. Berpengalaman merancang arsitektur API modular, mengelola basis data relasional (MySQL), serta membangun solusi sistem kasir (POS) dan arsip digital tingkat instansi. Memiliki pemikiran analitis, teliti, adaptif, dan siap berkontribusi secara profesional melalui Praktik Kerja Lapangan (PKL) maupun proyek industri."
-                    : "Software Engineering student at SMK Telkom Malang dedicated to Fullstack & Backend web development. Experienced in architecting modular APIs, managing relational databases (MySQL), and building enterprise-grade POS and digital archive solutions. Highly analytical, detail-oriented, adaptable, and eager to contribute through professional internship programs and engineering projects."}
+                    : "Software Engineering student at SMK Telkom Malang dedicated to Fullstack & Backend web development. Experienced in architecting modular APIs, managing relational databases (MySQL), and engineering enterprise-grade POS and digital archive solutions. Highly analytical, detail-oriented, adaptable, and eager to contribute through professional internship programs and engineering projects."}
                 </p>
               </section>
 
@@ -187,7 +256,7 @@ export default function CVPage() {
                 <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
                   <Briefcase className="w-3.5 h-3.5 text-sky-600" />
                   <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                    {lang === "id" ? "Pengalaman & Proyek Nyata" : "Experience & Production Work"}
+                    {lang === "id" ? "Pengalaman & Proyek Nyata" : "Experience & Key Projects"}
                   </h2>
                 </div>
                 
@@ -198,10 +267,14 @@ export default function CVPage() {
                     
                     <div className="flex items-baseline justify-between gap-1 flex-wrap">
                       <div className="flex items-center gap-1.5">
-                        <h3 className="text-xs font-bold text-zinc-950">Aplikasi Kasir (Point of Sale)</h3>
+                        <h3 className="text-xs font-bold text-zinc-950">
+                          {lang === "id" ? "Aplikasi Kasir (Point of Sale)" : "Point of Sale (POS) Application"}
+                        </h3>
                         <span className="text-[10px] font-semibold text-sky-700 font-mono">• Fullstack Dev</span>
                       </div>
-                      <span className="text-[10px] font-mono text-zinc-500 font-semibold">2024 – Sekarang</span>
+                      <span className="text-[10px] font-mono text-zinc-500 font-semibold">
+                        {lang === "id" ? "2024 – Sekarang" : "2024 – Present"}
+                      </span>
                     </div>
 
                     <p className="text-[11px] text-zinc-600 leading-snug">
@@ -228,7 +301,9 @@ export default function CVPage() {
                         <h3 className="text-xs font-bold text-zinc-950">Raknesia (SuratApp - Digital Archive)</h3>
                         <span className="text-[10px] font-semibold text-sky-700 font-mono">• Backend Dev</span>
                       </div>
-                      <span className="text-[10px] font-mono text-zinc-500 font-semibold">2024 – Sekarang</span>
+                      <span className="text-[10px] font-mono text-zinc-500 font-semibold">
+                        {lang === "id" ? "2024 – Sekarang" : "2024 – Present"}
+                      </span>
                     </div>
 
                     <p className="text-[11px] text-zinc-600 leading-snug">
@@ -281,7 +356,9 @@ export default function CVPage() {
                     <div className="absolute -left-[4.5px] top-1.5 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
                     <div className="flex items-baseline justify-between gap-1">
                       <h3 className="text-xs font-bold text-zinc-950">SMK Telkom Malang</h3>
-                      <span className="text-[10px] font-mono text-zinc-500 font-semibold">2024 – Sekarang</span>
+                      <span className="text-[10px] font-mono text-zinc-500 font-semibold">
+                        {lang === "id" ? "2024 – Sekarang" : "2024 – Present"}
+                      </span>
                     </div>
                     <p className="text-[10.5px] text-sky-600 font-semibold">
                       {lang === "id" ? "Rekayasa Perangkat Lunak (Software Engineering)" : "Software Engineering Major"}
@@ -409,19 +486,19 @@ export default function CVPage() {
                 <ul className="space-y-1 text-[10.5px] text-zinc-600">
                   <li className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>Fullstack Web Development</span>
+                    <span>{lang === "id" ? "Pengembangan Aplikasi Web Fullstack" : "Fullstack Web Application Development"}</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>Problem Solving & Debugging</span>
+                    <span>{lang === "id" ? "Pemecahan Masalah & Debugging Cepat" : "Problem Solving & Efficient Debugging"}</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>API Testing & Integration (Postman)</span>
+                    <span>{lang === "id" ? "Pengujian API & Integrasi (Postman)" : "API Testing & Integration (Postman)"}</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>Kerja Tim & Komunikasi Efektif</span>
+                    <span>{lang === "id" ? "Kolaborasi Tim & Komunikasi Terstruktur" : "Teamwork & Structured Communication"}</span>
                   </li>
                 </ul>
               </section>
@@ -442,7 +519,9 @@ export default function CVPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-zinc-700">English</span>
-                    <span className="text-sky-700 font-mono font-semibold text-[9.5px] bg-sky-50 px-1.5 py-0.5 rounded border border-sky-100">Professional</span>
+                    <span className="text-sky-700 font-mono font-semibold text-[9.5px] bg-sky-50 px-1.5 py-0.5 rounded border border-sky-100">
+                      {lang === "id" ? "Kerja Profesional" : "Professional Working"}
+                    </span>
                   </div>
                 </div>
               </section>
