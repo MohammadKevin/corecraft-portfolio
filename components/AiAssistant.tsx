@@ -169,14 +169,14 @@ export default function AiAssistant() {
             {/* Subtle glowing ring aura */}
             <span className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-sky-400/30 via-cyan-300/30 to-sky-500/30 blur-xs group-hover:opacity-100 opacity-50 transition-opacity -z-10 animate-pulse" />
             
-            {/* CoreCraft White Logo */}
-            <div className="w-6.5 h-6.5 sm:w-7.5 sm:h-7.5 flex items-center justify-center">
+            {/* CoreCraft Logo */}
+            <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl overflow-hidden shadow-xs">
               <Image
                 src="/images/corecraft-logo-dark.svg"
                 alt="CoreCraft AI"
-                width={30}
-                height={30}
-                className="w-full h-full object-contain invert transition-transform group-hover:scale-110 duration-300"
+                width={32}
+                height={32}
+                className="w-full h-full object-contain transition-transform group-hover:scale-110 duration-300"
               />
             </div>
 
@@ -199,13 +199,13 @@ export default function AiAssistant() {
           {/* Header */}
           <header className="px-4 py-3.5 border-b border-zinc-200/80 bg-gradient-to-r from-zinc-50 via-white to-sky-50/40 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-2xl bg-[#1C1B1D] flex items-center justify-center p-1.5 shadow-sm">
+              <div className="w-8 h-8 rounded-xl overflow-hidden flex items-center justify-center shadow-xs shrink-0">
                 <Image
                   src="/images/corecraft-logo-dark.svg"
                   alt="CoreCraft AI"
-                  width={24}
-                  height={24}
-                  className="w-full h-full object-contain invert"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div>

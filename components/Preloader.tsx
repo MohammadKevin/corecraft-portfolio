@@ -62,13 +62,13 @@ export default function Preloader() {
       >
         {/* Brand Left */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center p-1 border border-white/20 shadow-xs">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg overflow-hidden flex items-center justify-center shadow-xs">
             <Image
               src="/images/corecraft-logo-dark.svg"
               alt="CoreCraft"
-              width={24}
-              height={24}
-              className="w-full h-full object-contain invert"
+              width={32}
+              height={32}
+              className="w-full h-full object-contain"
               priority
             />
           </div>
