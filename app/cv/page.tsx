@@ -17,9 +17,11 @@ import {
   Code,
   Sparkles,
   CheckCircle2,
-  Loader2
+  Loader2,
+  Layers,
+  Cpu
 } from "lucide-react";
-import { GithubIcon } from "@/components/icons/SocialIcons";
+import { GithubIcon, LinkedinIcon } from "@/components/icons/SocialIcons";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
@@ -38,7 +40,6 @@ export default function CVPage() {
         await document.fonts.ready;
       }
 
-      // Capture from the fixed A4 template container for 100% pixel-perfect output on all devices
       const targetElement = pdfTemplateRef.current || cvRef.current;
       if (!targetElement) return;
 
@@ -47,8 +48,8 @@ export default function CVPage() {
         pixelRatio: 2.5,
         backgroundColor: "#ffffff",
         cacheBust: true,
-        width: 794,
-        height: 1123,
+        width: 820,
+        height: 1160,
       });
 
       const pdf = new jsPDF({
@@ -75,6 +76,16 @@ export default function CVPage() {
 
   const certifications = [
     {
+      issuer: "HackerRank",
+      title: "Rest API (Intermediate) Certificate",
+      year: "2026",
+    },
+    {
+      issuer: "HackerRank",
+      title: "Node.js (Intermediate) Certificate",
+      year: "2026",
+    },
+    {
       issuer: "Dicoding Indonesia",
       title: lang === "id" ? "Belajar Dasar Pemrograman JavaScript" : "Basic JavaScript Programming",
       year: "2025",
@@ -94,17 +105,40 @@ export default function CVPage() {
       title: lang === "id" ? "Ultimate Showdown 2026 — Peserta" : "Ultimate Showdown 2026 — Participant",
       year: "2026",
     },
+  ];
+
+  const skillGroups = [
     {
-      issuer: "Dicoding Indonesia",
-      title: "Introduction to Financial Literacy",
-      year: "2026",
+      title: "Frontend Development",
+      skills: ["HTML5", "CSS3", "JavaScript", "TypeScript", "React.js", "Next.js", "Tailwind CSS", "Bootstrap"],
     },
+    {
+      title: "Backend & RESTful API",
+      skills: ["Node.js", "Express.js", "NestJS", "PHP", "RESTful API", "JWT Auth", "DTO Validation"],
+    },
+    {
+      title: "Database & ORM",
+      skills: ["MySQL", "PostgreSQL", "Prisma ORM", "Database Indexing", "SQL Query Tuning"],
+    },
+    {
+      title: "Tools & DevOps Workflow",
+      skills: ["Git", "GitHub", "Postman", "Linux/Bash", "VS Code", "npm/yarn"],
+    },
+  ];
+
+  const competencies = [
+    lang === "id" ? "Pengembangan Aplikasi Web Fullstack Modern" : "Modern Fullstack Web Application Engineering",
+    lang === "id" ? "Arsitektur API RESTful Modular & Skalabilitas" : "Modular RESTful API Architecture & Scalability",
+    lang === "id" ? "Optimasi Kueri & Skema Basis Data Relasional" : "Relational Database Schema & Query Optimization",
+    lang === "id" ? "Pengujian API & Integrasi End-to-End (Postman)" : "End-to-End API Testing & Integration (Postman)",
+    lang === "id" ? "Pemecahan Masalah, Debugging & Refactoring Kode" : "Problem Solving, Debugging & Code Refactoring",
+    lang === "id" ? "Kolaborasi Tim Tangkas & Komunikasi Terstruktur" : "Agile Team Collaboration & Structured Communication",
   ];
 
   return (
     <main className="min-h-screen bg-zinc-200/70 text-zinc-900 font-sans print:bg-white print:text-black pt-20 sm:pt-24 pb-16 print:p-0 px-3 sm:px-6">
       {/* Top action toolbar */}
-      <div className="max-w-[850px] mx-auto mb-4 flex items-center justify-between gap-2.5 print:hidden">
+      <div className="max-w-[860px] mx-auto mb-4 flex items-center justify-between gap-2.5 print:hidden">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 sm:gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold rounded-xl text-xs py-2 px-3 sm:px-4 shadow-xs transition-all active:scale-[0.98]"
@@ -136,20 +170,20 @@ export default function CVPage() {
       {/* On-Screen Responsive CV View */}
       <div 
         ref={cvRef}
-        className="cv-a4-sheet max-w-[850px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-5 sm:p-7 md:p-8 flex flex-col justify-between"
+        className="cv-a4-sheet max-w-[860px] mx-auto bg-white border border-zinc-200 shadow-xl rounded-2xl p-6 sm:p-8 md:p-9 flex flex-col justify-between"
       >
         <div>
           {/* Header Section */}
           <header className="pb-4 border-b border-zinc-200">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
               
               {/* Rounded Photo Frame */}
-              <div className="relative w-22 h-22 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border border-zinc-200 shadow-sm ring-4 ring-sky-50 bg-zinc-100 shrink-0">
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-white shadow-md ring-4 ring-sky-500/15 bg-zinc-100 shrink-0">
                 <Image 
                   src="/images/logo.png" 
                   alt="Mohammad Kevin" 
                   fill 
-                  sizes="96px" 
+                  sizes="112px" 
                   className="object-cover object-top" 
                   priority 
                   unoptimized
@@ -158,120 +192,138 @@ export default function CVPage() {
 
               {/* Profile Details */}
               <div className="flex-1 text-center sm:text-left">
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#1C1B1D] tracking-tight leading-none">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1.5">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1C1B1D] tracking-tight leading-none">
                     Mohammad <span className="text-sky-600">Kevin</span> Arif Rudianto
                   </h1>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 text-[10px] font-bold font-mono uppercase tracking-wider">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-[10.5px] font-bold font-mono uppercase tracking-wider">
                     SMK Telkom Malang
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-sm font-semibold text-zinc-600 font-mono mb-2">
-                  Fullstack & Backend Software Engineer
+                <p className="text-xs sm:text-sm font-bold text-zinc-700 font-mono mb-2.5">
+                  {lang === "id" ? "Backend & Fullstack Software Engineer" : "Backend & Fullstack Software Engineer"}
                 </p>
 
-                {/* Contact Links */}
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3.5 sm:gap-x-4 gap-y-1.5 text-[11px] text-zinc-600 font-medium pt-1.5 border-t border-zinc-100">
+                {/* Contact Links Row */}
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-xs text-zinc-600 font-medium pt-2 border-t border-zinc-100">
                   <a
                     href="mailto:kvn4.200581@gmail.com"
-                    className="flex items-center gap-1 hover:text-sky-600 transition-colors shrink-0"
+                    className="flex items-center gap-1.5 hover:text-sky-600 transition-colors shrink-0"
                   >
-                    <Mail className="w-3 h-3 text-sky-600 shrink-0" />
+                    <Mail className="w-3.5 h-3.5 text-sky-600 shrink-0" />
                     <span>kvn4.200581@gmail.com</span>
                   </a>
                   <a
                     href="https://wa.me/6282131588846"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:text-sky-600 transition-colors shrink-0"
+                    className="flex items-center gap-1.5 hover:text-sky-600 transition-colors shrink-0"
                   >
-                    <Phone className="w-3 h-3 text-sky-600 shrink-0" />
+                    <Phone className="w-3.5 h-3.5 text-sky-600 shrink-0" />
                     <span>+62 821-3158-8846</span>
                   </a>
-                  <span className="flex items-center gap-1 shrink-0">
-                    <MapPin className="w-3 h-3 text-sky-600 shrink-0" />
-                    <span>{lang === "id" ? "Malang, Jawa Timur" : "Malang, East Java, ID"}</span>
+                  <span className="flex items-center gap-1.5 shrink-0">
+                    <MapPin className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                    <span>{lang === "id" ? "Malang, Jawa Timur, Indonesia" : "Malang, East Java, Indonesia"}</span>
                   </span>
                   <a
                     href="https://github.com/MohammadKevin"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:text-sky-600 transition-colors shrink-0"
+                    className="flex items-center gap-1.5 hover:text-sky-600 transition-colors shrink-0"
                   >
-                    <GithubIcon className="w-3 h-3 text-zinc-800 shrink-0" />
+                    <GithubIcon className="w-3.5 h-3.5 text-zinc-800 shrink-0" />
                     <span>github.com/MohammadKevin</span>
                   </a>
                   <a
                     href="https://www.corecraft.my.id"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:text-sky-600 transition-colors shrink-0"
+                    className="flex items-center gap-1.5 hover:text-sky-600 transition-colors shrink-0"
                   >
-                    <Globe className="w-3 h-3 text-sky-600 shrink-0" />
+                    <Globe className="w-3.5 h-3.5 text-sky-600 shrink-0" />
                     <span>corecraft.my.id</span>
                   </a>
                 </div>
               </div>
             </div>
+
+            {/* Quick Metrics Bar */}
+            <div className="mt-3.5 pt-2.5 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-zinc-600">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
+                <span className="font-bold text-zinc-900">2+ {lang === "id" ? "Tahun Pengalaman Praktis" : "Years Practical Experience"}</span>
+              </span>
+              <span className="hidden sm:inline text-zinc-300">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
+                <span className="font-bold text-zinc-900">10+ {lang === "id" ? "Proyek Teruji & Terdistribusi" : "Production Tested Projects"}</span>
+              </span>
+              <span className="hidden sm:inline text-zinc-300">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
+                <span className="font-bold text-sky-700">Next.js • NestJS • Prisma • PostgreSQL/MySQL</span>
+              </span>
+            </div>
           </header>
 
           {/* Main Two-Column Grid */}
-          <div className="pt-3.5 grid grid-cols-1 md:grid-cols-12 print:grid-cols-12 gap-5 sm:gap-6">
+          <div className="pt-4 grid grid-cols-1 md:grid-cols-12 print:grid-cols-12 gap-6 sm:gap-7">
             
             {/* Left Column (7 cols) */}
-            <div className="md:col-span-7 print:col-span-7 space-y-3.5">
+            <div className="md:col-span-7 print:col-span-7 space-y-4">
               
               {/* Professional Summary */}
               <section>
-                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-1.5">
+                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
                   <Sparkles className="w-3.5 h-3.5 text-sky-600" />
-                  <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
                     {lang === "id" ? "Ringkasan Profesional" : "Professional Summary"}
                   </h2>
                 </div>
-                <p className="text-[11px] leading-relaxed text-zinc-700 bg-zinc-50/70 p-2.5 rounded-xl border border-zinc-200/60 print:bg-transparent print:p-0 print:border-none">
+                <p className="text-xs leading-relaxed text-zinc-700 bg-zinc-50/80 p-3 rounded-xl border border-zinc-200/70 print:bg-transparent print:p-0 print:border-none">
                   {lang === "id"
-                    ? "Siswa SMK Telkom Malang jurusan Rekayasa Perangkat Lunak dengan dedikasi tinggi pada pengembangan aplikasi web Fullstack & Backend. Berpengalaman merancang arsitektur API modular, mengelola basis data relasional (MySQL), serta membangun solusi sistem kasir (POS) dan arsip digital tingkat instansi. Memiliki pemikiran analitis, teliti, adaptif, dan siap berkontribusi secara profesional melalui Praktik Kerja Lapangan (PKL) maupun proyek industri."
-                    : "Software Engineering student at SMK Telkom Malang dedicated to Fullstack & Backend web development. Experienced in architecting modular APIs, managing relational databases (MySQL), and engineering enterprise-grade POS and digital archive solutions. Highly analytical, detail-oriented, adaptable, and eager to contribute through professional internship programs and engineering projects."}
+                    ? "Siswa SMK Telkom Malang jurusan Rekayasa Perangkat Lunak dengan dedikasi tinggi pada arsitektur backend andal dan ekosistem fullstack modern (Next.js, NestJS, Prisma ORM, MySQL/PostgreSQL). Berpengalaman membangun sistem Point of Sale (POS) multi-cabang offline-first, platform manajemen arsip digital berbasis cloud, serta integrasi API berkinerja tinggi. Memiliki fondasi analitikal kuat, pemahaman optimasi query database, disiplin clean code, serta siap berkontribusi penuh dalam program Praktik Kerja Lapangan (PKL) maupun proyek industri berskala besar."
+                    : "Software Engineering student at SMK Telkom Malang dedicated to high-performance backend architecture and modern fullstack systems (Next.js, NestJS, Prisma ORM, MySQL/PostgreSQL). Experienced in engineering offline-first multi-branch POS cashier systems, institutional digital archive platforms, and modular RESTful APIs. Possesses strong analytical problem-solving skills, database indexing competency, clean code discipline, and readiness to deliver high-impact value in professional internship programs and software industry projects."}
                 </p>
               </section>
 
-              {/* Experience & Key Projects */}
+              {/* Experience & Production Projects */}
               <section>
-                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
+                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2.5">
                   <Briefcase className="w-3.5 h-3.5 text-sky-600" />
-                  <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                    {lang === "id" ? "Pengalaman & Proyek Nyata" : "Experience & Key Projects"}
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                    {lang === "id" ? "Pengalaman Kerja & Proyek Nyata" : "Experience & Production Projects"}
                   </h2>
                 </div>
                 
-                <div className="space-y-2.5">
+                <div className="space-y-3">
                   {/* Item 1: POS Cashier */}
-                  <div className="relative pl-3.5 border-l-2 border-sky-500/40 space-y-0.5">
-                    <div className="absolute -left-[4.5px] top-1.5 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                  <div className="relative pl-4 border-l-2 border-sky-500/50 space-y-1">
+                    <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-sky-500 ring-2 ring-white" />
                     
                     <div className="flex items-baseline justify-between gap-1 flex-wrap">
                       <div className="flex items-center gap-1.5">
                         <h3 className="text-xs font-bold text-zinc-950">
-                          {lang === "id" ? "Aplikasi Kasir (Point of Sale)" : "Point of Sale (POS) Application"}
+                          {lang === "id" ? "Aplikasi Kasir (Point of Sale Offline-First)" : "Point of Sale (POS) Offline-First System"}
                         </h3>
-                        <span className="text-[10px] font-semibold text-sky-700 font-mono">• Fullstack Dev</span>
+                        <span className="text-[10px] font-bold text-sky-700 font-mono">• Fullstack Dev</span>
                       </div>
                       <span className="text-[10px] font-mono text-zinc-500 font-semibold">
                         {lang === "id" ? "2024 – Sekarang" : "2024 – Present"}
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-zinc-600 leading-snug">
+                    <p className="text-xs text-zinc-600 leading-snug">
                       {lang === "id"
-                        ? "Mengembangkan sistem kasir offline-first dengan sinkronisasi data otomatis untuk manajemen transaksi yang efisien, pencatatan mutasi stok cepat, dan laporan audit penjualan."
-                        : "Developed an offline-first POS cashier system with automated data synchronization for seamless transaction workflows, real-time stock mutation, and sales audit reporting."}
+                        ? "Merancang dan membangun sistem kasir ritel offline-first dengan sinkronisasi data transaksi otomatis ketika online, manajemen barcode scanner kilat, mutasi stok realtime, serta laporan analitik laba-rugi terperinci."
+                        : "Architected and built an offline-first retail POS system featuring automated data synchronization upon reconnection, rapid barcode scanning, real-time stock mutation, and comprehensive revenue audit reporting."}
                     </p>
 
                     <div className="flex flex-wrap gap-1 pt-0.5">
-                      {["Node.js", "Express.js", "Next.js", "MySQL"].map((t) => (
-                        <span key={t} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-700 text-[9.5px] font-mono border border-zinc-200/50">
+                      {["Next.js", "Node.js", "Express.js", "MySQL", "Tailwind CSS"].map((t) => (
+                        <span key={t} className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-700 text-[10px] font-mono border border-zinc-200/60">
                           {t}
                         </span>
                       ))}
@@ -279,28 +331,28 @@ export default function CVPage() {
                   </div>
 
                   {/* Item 2: Raknesia */}
-                  <div className="relative pl-3.5 border-l-2 border-sky-500/40 space-y-0.5">
-                    <div className="absolute -left-[4.5px] top-1.5 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                  <div className="relative pl-4 border-l-2 border-sky-500/50 space-y-1">
+                    <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-sky-500 ring-2 ring-white" />
                     
                     <div className="flex items-baseline justify-between gap-1 flex-wrap">
                       <div className="flex items-center gap-1.5">
-                        <h3 className="text-xs font-bold text-zinc-950">Raknesia (SuratApp - Digital Archive)</h3>
-                        <span className="text-[10px] font-semibold text-sky-700 font-mono">• Backend Dev</span>
+                        <h3 className="text-xs font-bold text-zinc-950">Raknesia (SuratApp - Digital Archive System)</h3>
+                        <span className="text-[10px] font-bold text-sky-700 font-mono">• Backend Dev</span>
                       </div>
                       <span className="text-[10px] font-mono text-zinc-500 font-semibold">
                         {lang === "id" ? "2024 – Sekarang" : "2024 – Present"}
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-zinc-600 leading-snug">
+                    <p className="text-xs text-zinc-600 leading-snug">
                       {lang === "id"
-                        ? "Membangun aplikasi manajemen arsip dan penyimpanan dokumen digital berbasis web (fungsionalitas mirip Google Drive) dengan kontrol akses peran (RBAC) tingkat instansi."
-                        : "Engineered a web-based digital archiving and file storage platform (similar to Google Drive) with role-based access control (RBAC) and structured metadata indexing for institutions."}
+                        ? "Mengembangkan platform manajemen arsip surat dan repositori berkas digital berbasis web tingkat instansi (fungsionalitas mirip Google Drive) dengan kontrol akses peran bertingkat (RBAC), enkripsi berkas, dan pencarian metadata cepat."
+                        : "Engineered an institutional-grade digital document archiving platform (Google Drive-like functionality) with multi-tier role-based access control (RBAC), encrypted file storage, and high-speed metadata search."}
                     </p>
 
                     <div className="flex flex-wrap gap-1 pt-0.5">
-                      {["NestJS", "Prisma ORM", "MySQL", "REST API"].map((t) => (
-                        <span key={t} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-700 text-[9.5px] font-mono border border-zinc-200/50">
+                      {["NestJS", "TypeScript", "Prisma ORM", "MySQL", "RESTful API"].map((t) => (
+                        <span key={t} className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-700 text-[10px] font-mono border border-zinc-200/60">
                           {t}
                         </span>
                       ))}
@@ -308,62 +360,70 @@ export default function CVPage() {
                   </div>
 
                   {/* Item 3: QA & Testing */}
-                  <div className="relative pl-3.5 border-l-2 border-sky-500/40 space-y-0.5">
-                    <div className="absolute -left-[4.5px] top-1.5 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                  <div className="relative pl-4 border-l-2 border-sky-500/50 space-y-1">
+                    <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-sky-500 ring-2 ring-white" />
                     
                     <div className="flex items-baseline justify-between gap-1 flex-wrap">
                       <div className="flex items-center gap-1.5">
                         <h3 className="text-xs font-bold text-zinc-950">Quality Assurance & API Testing</h3>
-                        <span className="text-[10px] font-semibold text-sky-700 font-mono">• SIDIGS</span>
+                        <span className="text-[10px] font-bold text-sky-700 font-mono">• SIDIGS</span>
                       </div>
                       <span className="text-[10px] font-mono text-zinc-500 font-semibold">2025 – 2026</span>
                     </div>
 
-                    <p className="text-[11px] text-zinc-600 leading-snug">
+                    <p className="text-xs text-zinc-600 leading-snug">
                       {lang === "id"
-                        ? "Melakukan pengujian aplikasi fungsional, validasi endpoint API menggunakan Postman, debugging query, dan pelaporan bug terstruktur."
-                        : "Executed functional testing, REST API endpoint validation via Postman, query debugging, and structured bug tracking to ensure software reliability."}
+                        ? "Melakukan pengujian fungsional modul web end-to-end, validasi integrasi endpoint REST API menggunakan Postman, verifikasi integritas database SQL, serta pelaporan log bug terstruktur untuk meningkatkan reliabilitas aplikasi."
+                        : "Conducted end-to-end functional web application testing, REST API integration validation using Postman, SQL database integrity checks, and structured defect tracking to maximize software reliability."}
                     </p>
+
+                    <div className="flex flex-wrap gap-1 pt-0.5">
+                      {["Manual Testing", "Postman", "API Validation", "SQL Debugging"].map((t) => (
+                        <span key={t} className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-700 text-[10px] font-mono border border-zinc-200/60">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </section>
 
-              {/* Education */}
+              {/* Formal Education */}
               <section>
-                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-1.5">
+                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
                   <GraduationCap className="w-3.5 h-3.5 text-sky-600" />
-                  <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                    {lang === "id" ? "Pendidikan Formal" : "Education"}
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                    {lang === "id" ? "Pendidikan Formal" : "Formal Education"}
                   </h2>
                 </div>
                 
                 <div className="space-y-2">
-                  <div className="relative pl-3.5 border-l-2 border-sky-500/40 space-y-0.5">
-                    <div className="absolute -left-[4.5px] top-1.5 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                  <div className="relative pl-4 border-l-2 border-sky-500/50 space-y-0.5">
+                    <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-sky-500 ring-2 ring-white" />
                     <div className="flex items-baseline justify-between gap-1">
                       <h3 className="text-xs font-bold text-zinc-950">SMK Telkom Malang</h3>
                       <span className="text-[10px] font-mono text-zinc-500 font-semibold">
                         {lang === "id" ? "2024 – Sekarang" : "2024 – Present"}
                       </span>
                     </div>
-                    <p className="text-[10.5px] text-sky-600 font-semibold">
-                      {lang === "id" ? "Rekayasa Perangkat Lunak (Software Engineering)" : "Software Engineering Major"}
+                    <p className="text-[11px] text-sky-700 font-semibold">
+                      {lang === "id" ? "Rekayasa Perangkat Lunak (Software Engineering Major)" : "Software Engineering Major"}
                     </p>
-                    <p className="text-[10.5px] text-zinc-600 leading-tight">
+                    <p className="text-xs text-zinc-600 leading-snug">
                       {lang === "id"
-                        ? "Mempelajari rekayasa perangkat lunak dasar, struktur algoritma pemrograman web terstruktur (PHP & JavaScript), serta konfigurasi server database lokal (MySQL)."
-                        : "Studying software engineering fundamentals, structured web algorithm logic (PHP & JavaScript), and local database server configuration (MySQL)."}
+                        ? "Mendalami algoritma pemrograman web terstruktur (PHP, JavaScript, TypeScript), arsitektur basis data relasional (MySQL, PostgreSQL), konfigurasi server lokal, serta pengembangan sistem berbasis proyek nyata."
+                        : "Specializing in structured web algorithm logic (PHP, JavaScript, TypeScript), relational database architecture (MySQL, PostgreSQL), local server environments, and project-based production software engineering."}
                     </p>
                   </div>
 
-                  <div className="relative pl-3.5 border-l-2 border-sky-500/40 space-y-0.5">
-                    <div className="absolute -left-[4.5px] top-1.5 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
+                  <div className="relative pl-4 border-l-2 border-sky-500/50 space-y-0.5">
+                    <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-sky-500 ring-2 ring-white" />
                     <div className="flex items-baseline justify-between gap-1">
                       <h3 className="text-xs font-bold text-zinc-950">SMPN 1 Purwoasri</h3>
                       <span className="text-[10px] font-mono text-zinc-500 font-semibold">2021 – 2024</span>
                     </div>
-                    <p className="text-[10.5px] text-zinc-500">
-                      {lang === "id" ? "Pendidikan Sekolah Menengah Pertama" : "Junior High School Education"}
+                    <p className="text-xs text-zinc-500">
+                      {lang === "id" ? "Pendidikan Sekolah Menengah Pertama (Lulus dengan predikat memuaskan)" : "Junior High School Education (Graduated with distinction)"}
                     </p>
                   </div>
                 </div>
@@ -372,140 +432,95 @@ export default function CVPage() {
             </div>
 
             {/* Right Column (5 cols) */}
-            <div className="md:col-span-5 print:col-span-5 space-y-3.5">
+            <div className="md:col-span-5 print:col-span-5 space-y-4">
               
               {/* Technical Skills */}
               <section>
                 <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
                   <Code className="w-3.5 h-3.5 text-sky-600" />
-                  <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                    {lang === "id" ? "Keahlian Teknis" : "Technical Skills"}
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                    {lang === "id" ? "Keahlian Teknis" : "Technical Stack"}
                   </h2>
                 </div>
                 
-                <div className="space-y-2 text-[10.5px]">
-                  <div>
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-1">
-                      Frontend
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {["HTML5", "CSS3", "JavaScript", "React.js", "Next.js", "Bootstrap"].map((s) => (
-                        <span key={s} className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-800 text-[10px] font-medium border border-zinc-200/60">
-                          {s}
-                        </span>
-                      ))}
+                <div className="space-y-2 text-xs">
+                  {skillGroups.map((group) => (
+                    <div key={group.title}>
+                      <span className="text-[10.5px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-1">
+                        {group.title}
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {group.skills.map((s) => (
+                          <span key={s} className="px-2 py-0.5 rounded bg-zinc-100 text-zinc-800 text-[10.5px] font-medium border border-zinc-200/70">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-1">
-                      Backend & API
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {["Node.js", "Express.js", "NestJS", "PHP", "RESTful API"].map((s) => (
-                        <span key={s} className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-800 text-[10px] font-medium border border-zinc-200/60">
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-1">
-                      Database & ORM
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {["MySQL", "PostgreSQL", "Prisma ORM"].map((s) => (
-                        <span key={s} className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-800 text-[10px] font-medium border border-zinc-200/60">
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-1">
-                      Tools & Workflow
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {["Git", "GitHub", "Postman", "Linux", "VS Code"].map((s) => (
-                        <span key={s} className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-800 text-[10px] font-medium border border-zinc-200/60">
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </section>
 
               {/* Certifications & Competitions */}
               <section>
-                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-1.5">
+                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
                   <Award className="w-3.5 h-3.5 text-sky-600" />
-                  <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
                     {lang === "id" ? "Sertifikasi & Prestasi" : "Certifications & Awards"}
                   </h2>
                 </div>
                 
                 <div className="space-y-1.5">
                   {certifications.map((cert, idx) => (
-                    <div key={idx} className="p-1.5 rounded-lg bg-zinc-50 border border-zinc-200/60 text-[10.5px]">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-sky-700 font-mono text-[9.5px] uppercase">{cert.issuer}</span>
-                        <span className="text-zinc-400 font-mono text-[9px]">{cert.year}</span>
+                    <div key={idx} className="p-2 rounded-lg bg-zinc-50 border border-zinc-200/70 text-xs">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className="font-bold text-sky-700 font-mono text-[10px] uppercase">{cert.issuer}</span>
+                        <span className="text-zinc-400 font-mono text-[10px]">{cert.year}</span>
                       </div>
-                      <p className="font-semibold text-zinc-800 leading-tight">{cert.title}</p>
+                      <p className="font-semibold text-zinc-800 text-[11px] leading-tight">{cert.title}</p>
                     </div>
                   ))}
                 </div>
               </section>
 
-              {/* Core Competencies */}
+              {/* Core Engineering Competencies */}
               <section>
-                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-1.5">
+                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
-                  <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
                     {lang === "id" ? "Kompetensi Utama" : "Core Competencies"}
                   </h2>
                 </div>
                 
-                <ul className="space-y-1 text-[10.5px] text-zinc-600">
-                  <li className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>{lang === "id" ? "Pengembangan Aplikasi Web Fullstack" : "Fullstack Web Application Development"}</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>{lang === "id" ? "Pemecahan Masalah & Debugging Cepat" : "Problem Solving & Efficient Debugging"}</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>{lang === "id" ? "Pengujian API & Integrasi (Postman)" : "API Testing & Integration (Postman)"}</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
-                    <span>{lang === "id" ? "Kolaborasi Tim & Komunikasi Terstruktur" : "Teamwork & Structured Communication"}</span>
-                  </li>
+                <ul className="space-y-1 text-xs text-zinc-600">
+                  {competencies.map((comp, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0 mt-1.5" />
+                      <span className="leading-snug">{comp}</span>
+                    </li>
+                  ))}
                 </ul>
               </section>
 
               {/* Languages */}
               <section>
-                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-1.5">
+                <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-1 mb-2">
                   <Globe className="w-3.5 h-3.5 text-sky-600" />
-                  <h2 className="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                    {lang === "id" ? "Bahasa" : "Languages"}
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 font-mono">
+                    {lang === "id" ? "Kemampuan Bahasa" : "Languages"}
                   </h2>
                 </div>
                 
-                <div className="space-y-1 text-[10.5px]">
+                <div className="space-y-1.5 text-xs">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-zinc-700">Bahasa Indonesia</span>
-                    <span className="text-sky-700 font-mono font-semibold text-[9.5px] bg-sky-50 px-1.5 py-0.5 rounded border border-sky-100">Native</span>
+                    <span className="font-semibold text-zinc-700">Bahasa Indonesia</span>
+                    <span className="text-sky-700 font-mono font-semibold text-[10px] bg-sky-50 px-2 py-0.5 rounded border border-sky-100">
+                      {lang === "id" ? "Penutur Asli (Native)" : "Native Proficiency"}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-zinc-700">English</span>
-                    <span className="text-sky-700 font-mono font-semibold text-[9.5px] bg-sky-50 px-1.5 py-0.5 rounded border border-sky-100">
+                    <span className="font-semibold text-zinc-700">English</span>
+                    <span className="text-sky-700 font-mono font-semibold text-[10px] bg-sky-50 px-2 py-0.5 rounded border border-sky-100">
                       {lang === "id" ? "Kerja Profesional" : "Professional Working"}
                     </span>
                   </div>
@@ -518,15 +533,15 @@ export default function CVPage() {
         </div>
       </div>
 
-      {/* Hidden Pristine Fixed A4 Export Container (Strictly 794px x 1123px = Exact A4 ratio) */}
+      {/* Hidden Pristine Fixed A4 Export Container (Strictly 820px x 1160px = Exact A4 ratio for download) */}
       <div 
         aria-hidden="true" 
         style={{ 
           position: "fixed", 
           left: "-9999px", 
           top: 0, 
-          width: "794px", 
-          height: "1123px", 
+          width: "820px", 
+          height: "1160px", 
           overflow: "hidden",
           pointerEvents: "none",
           zIndex: -9999
@@ -534,18 +549,18 @@ export default function CVPage() {
       >
         <div 
           ref={pdfTemplateRef}
-          style={{ width: "794px", height: "1123px" }}
+          style={{ width: "820px", height: "1160px" }}
           className="bg-white text-zinc-900 p-8 flex flex-col justify-between font-sans"
         >
           <div>
             {/* Header */}
             <header className="pb-3.5 border-b border-zinc-200 flex items-start gap-4">
-              <div className="relative w-22 h-22 rounded-2xl overflow-hidden border border-zinc-200 shadow-xs ring-4 ring-sky-50 bg-zinc-100 shrink-0">
+              <div className="relative w-24 h-24 rounded-2xl overflow-hidden border border-zinc-200 shadow-xs ring-4 ring-sky-50 bg-zinc-100 shrink-0">
                 <Image 
                   src="/images/logo.png" 
                   alt="Mohammad Kevin" 
-                  width={88}
-                  height={88}
+                  width={96}
+                  height={96}
                   className="w-full h-full object-cover object-top" 
                   priority 
                   unoptimized
@@ -557,16 +572,16 @@ export default function CVPage() {
                   <h1 className="text-2xl font-extrabold text-[#1C1B1D] tracking-tight leading-none">
                     Mohammad <span className="text-sky-600">Kevin</span> Arif Rudianto
                   </h1>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 text-[9.5px] font-bold font-mono uppercase tracking-wider">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 text-[10px] font-bold font-mono uppercase tracking-wider">
                     SMK Telkom Malang
                   </span>
                 </div>
 
                 <p className="text-xs font-semibold text-zinc-600 font-mono mb-2">
-                  Fullstack & Backend Software Engineer
+                  Backend & Fullstack Software Engineer
                 </p>
 
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10.5px] text-zinc-600 font-medium pt-1.5 border-t border-zinc-100">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-zinc-600 font-medium pt-1.5 border-t border-zinc-100">
                   <div className="flex items-center gap-1">
                     <Mail className="w-3 h-3 text-sky-600 shrink-0" />
                     <span>kvn4.200581@gmail.com</span>
@@ -577,7 +592,7 @@ export default function CVPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-sky-600 shrink-0" />
-                    <span>{lang === "id" ? "Malang, Jawa Timur" : "Malang, East Java, ID"}</span>
+                    <span>{lang === "id" ? "Malang, Jawa Timur, ID" : "Malang, East Java, ID"}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <GithubIcon className="w-3 h-3 text-zinc-800 shrink-0" />
@@ -590,6 +605,15 @@ export default function CVPage() {
                 </div>
               </div>
             </header>
+
+            {/* Quick Metrics Bar */}
+            <div className="mt-2.5 pt-2 border-t border-zinc-100 flex items-center justify-between text-[10px] font-mono text-zinc-600">
+              <span className="font-bold text-zinc-900">2+ {lang === "id" ? "Tahun Pengalaman Praktis" : "Years Experience"}</span>
+              <span className="text-zinc-300">•</span>
+              <span className="font-bold text-zinc-900">10+ {lang === "id" ? "Proyek Web & API" : "Web & API Projects"}</span>
+              <span className="text-zinc-300">•</span>
+              <span className="font-bold text-sky-700">Next.js • NestJS • Prisma • PostgreSQL/MySQL</span>
+            </div>
 
             {/* Two Columns Grid */}
             <div className="pt-3 grid grid-cols-12 gap-5">
@@ -606,8 +630,8 @@ export default function CVPage() {
                   </div>
                   <p className="text-[10px] leading-relaxed text-zinc-700 bg-zinc-50/70 p-2 rounded-lg border border-zinc-200/60">
                     {lang === "id"
-                      ? "Siswa SMK Telkom Malang jurusan Rekayasa Perangkat Lunak dengan dedikasi tinggi pada pengembangan aplikasi web Fullstack & Backend. Berpengalaman merancang arsitektur API modular, mengelola basis data relasional (MySQL), serta membangun solusi sistem kasir (POS) dan arsip digital tingkat instansi. Memiliki pemikiran analitis, teliti, adaptif, dan siap berkontribusi secara profesional melalui Praktik Kerja Lapangan (PKL) maupun proyek industri."
-                      : "Software Engineering student at SMK Telkom Malang dedicated to Fullstack & Backend web development. Experienced in architecting modular APIs, managing relational databases (MySQL), and engineering enterprise-grade POS and digital archive solutions. Highly analytical, detail-oriented, adaptable, and eager to contribute through professional internship programs and engineering projects."}
+                      ? "Siswa SMK Telkom Malang jurusan Rekayasa Perangkat Lunak dengan dedikasi tinggi pada arsitektur backend andal dan ekosistem fullstack modern (Next.js, NestJS, Prisma ORM, MySQL/PostgreSQL). Berpengalaman membangun sistem Point of Sale (POS) offline-first, platform manajemen arsip digital berbasis cloud, serta integrasi API berkinerja tinggi. Disiplin clean code dan siap berkontribusi profesional dalam program PKL maupun proyek industri."
+                      : "Software Engineering student at SMK Telkom Malang dedicated to high-performance backend architecture and modern fullstack systems (Next.js, NestJS, Prisma ORM, MySQL/PostgreSQL). Experienced in engineering offline-first POS cashier systems, institutional digital archive platforms, and modular RESTful APIs. Ready to deliver high-impact value in professional internship programs."}
                   </p>
                 </section>
 
@@ -616,7 +640,7 @@ export default function CVPage() {
                   <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1.5">
                     <Briefcase className="w-3 h-3 text-sky-600" />
                     <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                      {lang === "id" ? "Pengalaman & Proyek Nyata" : "Experience & Key Projects"}
+                      {lang === "id" ? "Pengalaman & Proyek Nyata" : "Experience & Production Projects"}
                     </h2>
                   </div>
                   
@@ -626,7 +650,7 @@ export default function CVPage() {
                       <div className="flex items-baseline justify-between gap-1">
                         <div className="flex items-center gap-1">
                           <h3 className="text-[11px] font-bold text-zinc-950">
-                            {lang === "id" ? "Aplikasi Kasir (Point of Sale)" : "Point of Sale (POS) Application"}
+                            {lang === "id" ? "Aplikasi Kasir (Point of Sale Offline-First)" : "Point of Sale (POS) Offline-First System"}
                           </h3>
                           <span className="text-[9.5px] font-semibold text-sky-700 font-mono">• Fullstack</span>
                         </div>
@@ -634,11 +658,11 @@ export default function CVPage() {
                       </div>
                       <p className="text-[10px] text-zinc-600 leading-tight">
                         {lang === "id"
-                          ? "Mengembangkan sistem kasir offline-first dengan sinkronisasi data otomatis untuk manajemen transaksi yang efisien, mutasi stok cepat, dan laporan audit penjualan."
-                          : "Developed an offline-first POS cashier system with automated data synchronization for seamless transaction workflows, real-time stock mutation, and sales audit reporting."}
+                          ? "Sistem kasir offline-first dengan sinkronisasi otomatis, barcode scanning kilat, mutasi stok realtime, dan laporan audit penjualan."
+                          : "Offline-first POS cashier system with automated synchronization, rapid barcode scanning, real-time stock mutation, and revenue audit reporting."}
                       </p>
                       <div className="flex flex-wrap gap-1 pt-0.5">
-                        {["Node.js", "Express.js", "Next.js", "MySQL"].map((t) => (
+                        {["Next.js", "Node.js", "Express.js", "MySQL"].map((t) => (
                           <span key={t} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-700 text-[8.5px] font-mono border border-zinc-200/50">
                             {t}
                           </span>
@@ -650,18 +674,18 @@ export default function CVPage() {
                       <div className="absolute -left-[4px] top-1 w-1.5 h-1.5 rounded-full bg-sky-500 ring-2 ring-white" />
                       <div className="flex items-baseline justify-between gap-1">
                         <div className="flex items-center gap-1">
-                          <h3 className="text-[11px] font-bold text-zinc-950">Raknesia (SuratApp - Digital Archive)</h3>
+                          <h3 className="text-[11px] font-bold text-zinc-950">Raknesia (SuratApp - Digital Archive System)</h3>
                           <span className="text-[9.5px] font-semibold text-sky-700 font-mono">• Backend</span>
                         </div>
                         <span className="text-[9px] font-mono text-zinc-500">{lang === "id" ? "2024 – Sekarang" : "2024 – Present"}</span>
                       </div>
                       <p className="text-[10px] text-zinc-600 leading-tight">
                         {lang === "id"
-                          ? "Membangun platform manajemen arsip & berkas digital (fitur Google Drive) dengan kontrol akses peran (RBAC) tingkat instansi."
-                          : "Engineered a web-based digital archiving platform (similar to Google Drive) with role-based access control (RBAC) and metadata indexing for institutions."}
+                          ? "Platform manajemen arsip berkas digital instansi (fitur Google Drive) dengan kontrol akses peran (RBAC) dan enkripsi berkas."
+                          : "Institutional digital document archiving platform (Google Drive-like) with role-based access control (RBAC) and encrypted storage."}
                       </p>
                       <div className="flex flex-wrap gap-1 pt-0.5">
-                        {["NestJS", "Prisma ORM", "MySQL", "REST API"].map((t) => (
+                        {["NestJS", "TypeScript", "Prisma ORM", "MySQL"].map((t) => (
                           <span key={t} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-700 text-[8.5px] font-mono border border-zinc-200/50">
                             {t}
                           </span>
@@ -680,8 +704,8 @@ export default function CVPage() {
                       </div>
                       <p className="text-[10px] text-zinc-600 leading-tight">
                         {lang === "id"
-                          ? "Melakukan pengujian fungsional aplikasi web, validasi integrasi endpoint API via Postman, dan pelaporan bug terstruktur."
-                          : "Executed functional testing, REST API endpoint validation via Postman, query debugging, and structured defect reporting."}
+                          ? "Pengujian fungsional web end-to-end, validasi integrasi endpoint API via Postman, dan pelaporan bug terstruktur."
+                          : "End-to-end functional testing, REST API validation via Postman, database integrity checks, and structured bug tracking."}
                       </p>
                     </div>
                   </div>
@@ -739,49 +763,18 @@ export default function CVPage() {
                   </div>
                   
                   <div className="space-y-1.5 text-[9.5px]">
-                    <div>
-                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Frontend</span>
-                      <div className="flex flex-wrap gap-1">
-                        {["HTML5", "CSS3", "JavaScript", "React.js", "Next.js", "Bootstrap"].map((s) => (
-                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
-                            {s}
-                          </span>
-                        ))}
+                    {skillGroups.map((group) => (
+                      <div key={group.title}>
+                        <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">{group.title}</span>
+                        <div className="flex flex-wrap gap-1">
+                          {group.skills.map((s) => (
+                            <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
+                              {s}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-
-                    <div>
-                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Backend & API</span>
-                      <div className="flex flex-wrap gap-1">
-                        {["Node.js", "Express.js", "NestJS", "PHP", "RESTful API"].map((s) => (
-                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Database & ORM</span>
-                      <div className="flex flex-wrap gap-1">
-                        {["MySQL", "PostgreSQL", "Prisma ORM"].map((s) => (
-                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider font-mono block mb-0.5">Tools & Workflow</span>
-                      <div className="flex flex-wrap gap-1">
-                        {["Git", "GitHub", "Postman", "Linux", "VS Code"].map((s) => (
-                          <span key={s} className="px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-800 text-[9px] font-medium border border-zinc-200/60">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </section>
 
@@ -816,23 +809,13 @@ export default function CVPage() {
                     </h2>
                   </div>
                   
-                  <ul className="space-y-0.5 text-[9.5px] text-zinc-600">
-                    <li className="flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
-                      <span>{lang === "id" ? "Pengembangan Aplikasi Web Fullstack" : "Fullstack Web Application Development"}</span>
-                    </li>
-                    <li className="flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
-                      <span>{lang === "id" ? "Pemecahan Masalah & Debugging Cepat" : "Problem Solving & Efficient Debugging"}</span>
-                    </li>
-                    <li className="flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
-                      <span>{lang === "id" ? "Pengujian API & Integrasi (Postman)" : "API Testing & Integration (Postman)"}</span>
-                    </li>
-                    <li className="flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
-                      <span>{lang === "id" ? "Kolaborasi Tim & Komunikasi Terstruktur" : "Teamwork & Structured Communication"}</span>
-                    </li>
+                  <ul className="space-y-0.5 text-[9px] text-zinc-600">
+                    {competencies.map((comp, idx) => (
+                      <li key={idx} className="flex items-center gap-1">
+                        <span className="w-1 h-1 rounded-full bg-sky-500 shrink-0" />
+                        <span>{comp}</span>
+                      </li>
+                    ))}
                   </ul>
                 </section>
 
@@ -841,7 +824,7 @@ export default function CVPage() {
                   <div className="flex items-center gap-1.5 border-b border-zinc-200 pb-0.5 mb-1">
                     <Globe className="w-3 h-3 text-sky-600" />
                     <h2 className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-900 font-mono">
-                      {lang === "id" ? "Bahasa" : "Languages"}
+                      {lang === "id" ? "Kemampuan Bahasa" : "Languages"}
                     </h2>
                   </div>
                   
