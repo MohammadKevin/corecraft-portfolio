@@ -113,9 +113,9 @@ export const projectsData: Project[] = [
   },
   {
     id: "project-4",
-    title: "Digital Public Record Platform",
+    title: "Website Klinik & Apotek — Public Data Archiving & JWT Auth",
     category: "Web Application",
-    type: "Fullstack",
+    type: "Frontend",
     color: "border-blue-500/40 bg-blue-950/10",
     desc: {
       id: "Platform pengarsipan data publik dan catatan administratif sekolah/organisasi dengan proteksi otentikasi JWT.",
@@ -155,6 +155,29 @@ export const projectsData: Project[] = [
     tech: ["Next.js 16", "Tailwind CSS", "TypeScript", "EmailJS"],
     demoUrl: "https://corecraft.my.id",
     repoUrl: "https://github.com/MohammadKevin/corecraft-portfolio",
+    featured: true
+  },
+  {
+    id: "project-outerco",
+    title: "Outer.Co — Boutique Florist E-Commerce",
+    category: "E-Commerce Platform",
+    type: "Frontend",
+    color: "border-pink-500/40 bg-pink-950/10",
+    desc: {
+      id: "Platform e-commerce florist butik dengan katalog produk kaya, galeri multi-gambar, checkout via WhatsApp, multi-cabang (Surabaya, Kediri, Denpasar), dan admin panel CRUD lengkap.",
+      en: "Boutique florist e-commerce platform with rich product catalog, multi-image galleries, WhatsApp checkout, multi-branch support (Surabaya, Kediri, Denpasar), and full admin CRUD panel."
+    },
+    problem: {
+      id: "Bisnis florist lokal membutuhkan platform online yang mudah dikelola non-programmer dengan checkout yang sederhana tanpa payment gateway.",
+      en: "Local florist businesses need an online platform manageable by non-programmers with simple checkout without a payment gateway."
+    },
+    impact: {
+      id: "Memungkinkan pelanggan memesan buket bunga secara mandiri melalui katalog interaktif dengan checkout WhatsApp instan yang terformat rapi.",
+      en: "Enables customers to independently order flower bouquets through an interactive catalog with neatly formatted instant WhatsApp checkout."
+    },
+    tech: ["Next.js 16", "TypeScript", "Tailwind CSS 4", "Cloudinary", "Google Sheets API"],
+    demoUrl: "https://outerco.id",
+    repoUrl: "",
     featured: true
   }
 ];
