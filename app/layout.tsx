@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import BackgroundGrid from "@/components/BackgroundGrid";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -54,14 +51,7 @@ export const metadata: Metadata = {
     title: "Mohammad Kevin | Backend & Fullstack Software Engineer",
     description: "High-performance backend systems, scalable REST APIs, and modern fullstack applications.",
     siteName: "Mohammad Kevin Portfolio",
-    images: [
-      {
-        url: "/images/logo.png",
-        width: 800,
-        height: 600,
-        alt: "Mohammad Kevin",
-      },
-    ],
+    images: [{ url: "/images/logo.png", width: 800, height: 600, alt: "Mohammad Kevin" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -80,26 +70,14 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: "https://corecraft.my.id",
-  },
-  verification: {
-    google: "P3ie_hBmhRaKPj0kDNKLJSxyvzclf-QUbNXF33Yxkf0",
-  },
+  alternates: { canonical: "https://corecraft.my.id" },
+  verification: { google: "P3ie_hBmhRaKPj0kDNKLJSxyvzclf-QUbNXF33Yxkf0" },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="id"
-      suppressHydrationWarning
-      className={`scroll-smooth ${jetbrainsMono.variable} ${inter.variable} ${jakarta.variable}`}
-    >
-      <body suppressHydrationWarning className="antialiased min-h-screen font-sans selection:bg-accent-yellow selection:text-[#141414]">
+    <html lang="id" suppressHydrationWarning className={`scroll-smooth ${jetbrainsMono.variable} ${inter.variable} ${jakarta.variable}`}>
+      <body suppressHydrationWarning className="antialiased min-h-screen font-sans bg-[#0a0a0f] text-white overflow-hidden">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -110,30 +88,9 @@ export default function RootLayout({
               url: "https://corecraft.my.id",
               image: "/images/logo.png",
               jobTitle: "Backend & Fullstack Software Engineer",
-              description:
-                "High-performance backend systems, scalable REST APIs, and modern fullstack applications. Specialized in Next.js, NestJS, Prisma ORM, PostgreSQL, and MySQL.",
-              alumniOf: {
-                "@type": "EducationalOrganization",
-                name: "SMK Telkom Malang",
-              },
-              knowsAbout: [
-                "Next.js",
-                "NestJS",
-                "Express.js",
-                "Prisma ORM",
-                "PostgreSQL",
-                "MySQL",
-                "TypeScript",
-                "Tailwind CSS",
-                "REST API",
-                "SaaS Architecture",
-              ],
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Malang",
-                addressRegion: "Jawa Timur",
-                addressCountry: "ID",
-              },
+              alumniOf: { "@type": "EducationalOrganization", name: "SMK Telkom Malang" },
+              knowsAbout: ["Next.js", "NestJS", "Express.js", "Prisma ORM", "PostgreSQL", "MySQL", "TypeScript", "Tailwind CSS", "REST API", "SaaS Architecture"],
+              address: { "@type": "PostalAddress", addressLocality: "Malang", addressRegion: "Jawa Timur", addressCountry: "ID" },
               sameAs: [
                 "https://github.com/MohammadKevin",
                 "https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/",
@@ -142,28 +99,7 @@ export default function RootLayout({
             }),
           }}
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem("theme");
-                  if (theme === "dark") {
-                    document.documentElement.setAttribute("data-theme", "dark");
-                  }
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
-        <LanguageProvider>
-          <BackgroundGrid />
-          <Navbar />
-          <div className="flex flex-col min-h-screen relative z-0">
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </LanguageProvider>
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );
