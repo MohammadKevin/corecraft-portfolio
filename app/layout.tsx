@@ -3,9 +3,7 @@ import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import AuroraBackground from "@/components/AuroraBackground";
-import Preloader from "@/components/Preloader";
-import AiAssistant from "@/components/AiAssistant";
+import BackgroundGrid from "@/components/BackgroundGrid";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -101,10 +99,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`scroll-smooth ${jetbrainsMono.variable} ${inter.variable} ${jakarta.variable}`}
     >
-      <body
-        suppressHydrationWarning
-        className="antialiased bg-[#FAF8F1] text-[#1C1B1D] min-h-screen font-sans selection:bg-[#76C0EC] selection:text-white"
-      >
+      <body suppressHydrationWarning className="antialiased min-h-screen font-sans selection:bg-accent-yellow selection:text-[#141414]">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -147,15 +142,27 @@ export default function RootLayout({
             }),
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem("theme");
+                  if (theme === "dark") {
+                    document.documentElement.setAttribute("data-theme", "dark");
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
         <LanguageProvider>
-          <Preloader />
-          <AuroraBackground />
+          <BackgroundGrid />
           <Navbar />
           <div className="flex flex-col min-h-screen relative z-0">
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <AiAssistant />
         </LanguageProvider>
       </body>
     </html>
