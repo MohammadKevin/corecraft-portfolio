@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="POS">
+  <defs>
+    <linearGradient id="bg-pos-5" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eef0f7"/>
+      <stop offset="100%" stop-color="#dfe3f0"/>
+    </linearGradient>
+    <radialGradient id="glow-pos-5" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1c2340" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#1c2340" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid-pos-5" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#1c2340" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg-pos-5)"/>
+  <rect width="1200" height="900" fill="url(#grid-pos-5)"/>
+  <circle cx="336.00000000000006" cy="594" r="504" fill="url(#glow-pos-5)"/>
+
+  <rect x="96" y="90" width="1008" height="720"
+        fill="none" stroke="#1c2340" stroke-opacity="0.12" stroke-width="1"/>
+
+  <text x="120" y="774" font-family="Syne, Inter, sans-serif"
+        font-size="45" font-weight="600" letter-spacing="6"
+        fill="#1c2340" fill-opacity="0.5">SERVICES</text>
+  <text x="120" y="846" font-family="Syne, Inter, sans-serif"
+        font-size="77" font-weight="800" letter-spacing="-1"
+        fill="#1c2340" fill-opacity="0.82">POS</text>
+</svg>

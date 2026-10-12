@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Integrations">
+  <defs>
+    <linearGradient id="bg-integrations-7" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eef4f7"/>
+      <stop offset="100%" stop-color="#dce8ef"/>
+    </linearGradient>
+    <radialGradient id="glow-integrations-7" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0d2b38" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#0d2b38" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid-integrations-7" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#0d2b38" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg-integrations-7)"/>
+  <rect width="1200" height="900" fill="url(#grid-integrations-7)"/>
+  <circle cx="336.00000000000006" cy="594" r="504" fill="url(#glow-integrations-7)"/>
+
+  <rect x="96" y="90" width="1008" height="720"
+        fill="none" stroke="#0d2b38" stroke-opacity="0.12" stroke-width="1"/>
+
+  <text x="120" y="774" font-family="Syne, Inter, sans-serif"
+        font-size="45" font-weight="600" letter-spacing="6"
+        fill="#0d2b38" fill-opacity="0.5">SERVICES</text>
+  <text x="120" y="846" font-family="Syne, Inter, sans-serif"
+        font-size="77" font-weight="800" letter-spacing="-1"
+        fill="#0d2b38" fill-opacity="0.82">Integrations</text>
+</svg>

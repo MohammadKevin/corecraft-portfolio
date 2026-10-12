@@ -1,183 +1,384 @@
-export interface LocalizedString {
-  id: string;
-  en: string;
-}
+import type { Project } from "@/lib/types";
 
-export interface Project {
-  id: string;
-  title: string;
-  category: string;
-  type: "Backend" | "Frontend" | "Fullstack";
-  color: string;
-  desc: LocalizedString | string;
-  problem?: LocalizedString | string;
-  impact?: LocalizedString | string;
-  tech: string[];
-  demoUrl?: string;
-  repoUrl?: string;
-  featured?: boolean;
-}
-
-export const projectsData: Project[] = [
+/**
+ * Remapped from the previous `data/projects.ts` (7 projects).
+ *
+ * Asumsi:
+ * - The old `type` field only knew Backend / Frontend / Fullstack, while the
+ *   new `ProjectCategory` union is Fullstack / Backend / E-Commerce. The two
+ *   former "Frontend" entries were therefore reclassified: the Clinic &
+ *   Pharmacy Portal is a fullstack web app (Next.js + Prisma + JWT), and
+ *   Outer.Co is genuinely an e-commerce build.
+ * - `year`, `role` and `timeline` did not exist before. `year` comes from the
+ *   previous `data/timeline.ts` entries, `role` from each project's stack, and
+ *   `timeline` was written from the problem/impact notes that already existed.
+ * - `client` / `studio` were never recorded. Self-built products use
+ *   `studio: "Independent"`, the portfolio uses `studio: "CoreCraft"`, and
+ *   Outer.Co uses `client: "Outer.Co"`.
+ */
+export const projects: Project[] = [
   {
-    id: "project-worknest",
+    slug: "worknest",
     title: "WorkNest — Smart Space Booking & Management",
-    category: "Fullstack SaaS Platform",
-    type: "Fullstack",
-    color: "border-sky-500/40 bg-sky-950/10",
-    desc: {
-      id: "Platform SaaS reservasi dan manajemen coworking space terintegrasi dengan pencarian ruangan real-time, terminal check-in QR Code, serta multi-role access control.",
-      en: "Comprehensive coworking space reservation and management SaaS platform featuring real-time space search, QR Code check-in terminal, and multi-role access control."
-    },
-    problem: {
-      id: "Kompleksitas penjadwalan ruang kerja bersama dan validasi check-in kehadiran manual yang rentan tumpang tindih waktu.",
-      en: "Complex shared workspace scheduling and manual attendance check-in validation prone to double bookings."
-    },
-    impact: {
-      id: "Menyederhanakan alur reservasi instan dengan validasi jadwal otomatis dan verifikasi check-in berbasis QR code terenkripsi.",
-      en: "Streamlined instant reservation workflows with automated schedule validation and encrypted QR code check-in verification."
-    },
-    tech: ["Next.js 16", "Express.js", "MySQL", "Prisma ORM", "Tailwind CSS", "JWT Auth"],
-    demoUrl: "https://booking.corecraft.my.id",
-    repoUrl: "https://github.com/MohammadKevin",
-    featured: true
+    category: "Fullstack",
+    studio: "Independent",
+    year: 2026,
+    role: ["Fullstack Development", "API Architecture", "Database Design"],
+    tags: [
+      "Next.js 16",
+      "Express.js",
+      "MySQL",
+      "Prisma ORM",
+      "Tailwind CSS",
+      "JWT Auth",
+    ],
+    thumbnail: "/images/work/worknest-cover.svg",
+    summary:
+      "Comprehensive coworking space reservation and management SaaS platform featuring real-time space search, QR Code check-in terminal, and multi-role access control.",
+    liveUrl: "https://booking.corecraft.my.id",
+    sourceUrl: "https://github.com/MohammadKevin",
+    gallery: [
+      {
+        src: "/images/work/worknest-01.svg",
+        alt: "WorkNest real-time space search screen",
+        caption: "Real-time availability search across rooms and time slots.",
+      },
+      {
+        src: "/images/work/worknest-02.svg",
+        alt: "WorkNest QR code check-in terminal",
+        caption: "Encrypted QR code check-in terminal.",
+      },
+      {
+        src: "/images/work/worknest-03.svg",
+        alt: "WorkNest multi-role access control panel",
+        caption: "Multi-role access control for staff, members and admins.",
+      },
+    ],
+    timeline: [
+      {
+        phase: "Discovery",
+        period: "Week 1–2",
+        detail:
+          "Mapped the double-booking problem and defined reservation states before writing any code.",
+      },
+      {
+        phase: "Build",
+        period: "Week 3–7",
+        detail:
+          "Shipped the Express API, the Prisma schema and the Next.js booking flow in parallel.",
+      },
+      {
+        phase: "Ship",
+        period: "Week 8",
+        detail:
+          "Added encrypted QR check-in and deployed the platform for live bookings.",
+      },
+    ],
   },
   {
-    id: "project-1",
+    slug: "invdocs",
     title: "InvDocs — Digital Archive & Document Workflow",
-    category: "Digital Archive System",
-    type: "Fullstack",
-    color: "border-amber-500/40 bg-amber-950/10",
-    desc: {
-      id: "Sistem pengarsipan dan manajemen dokumen digital terstruktur untuk organisasi dengan enkripsi berkas dan hak akses bertingkat (RBAC).",
-      en: "Structured digital document archiving and management system for organizations with file encryption and role-based access control (RBAC)."
-    },
-    problem: {
-      id: "Pengarsipan fisik yang berantakan dan lambatnya pencarian dokumen administratif lama.",
-      en: "Messy physical archiving and slow retrieval of old administrative documents."
-    },
-    impact: {
-      id: "Mempercepat waktu pencarian berkas dari hitungan jam menjadi < 3 detik dengan indeks metadata terstruktur.",
-      en: "Accelerated file retrieval time from hours to < 3 seconds with structured metadata indexing."
-    },
-    tech: ["Next.js", "Express.js", "PostgreSQL", "Prisma ORM", "Tailwind CSS"],
-    demoUrl: "",
-    repoUrl: "https://github.com/MohammadKevin/InvDocs-Archive",
-    featured: true
+    category: "Fullstack",
+    studio: "Independent",
+    year: 2025,
+    role: ["Fullstack Development", "RBAC", "Metadata Indexing"],
+    tags: ["Next.js", "Express.js", "PostgreSQL", "Prisma ORM", "Tailwind CSS"],
+    thumbnail: "/images/work/invdocs-cover.svg",
+    summary:
+      "Structured digital document archiving and management system for organizations with file encryption and role-based access control (RBAC).",
+    sourceUrl: "https://github.com/MohammadKevin/InvDocs-Archive",
+    gallery: [
+      {
+        src: "/images/work/invdocs-01.svg",
+        alt: "InvDocs document archive listing",
+        caption: "Structured archive with metadata-driven search.",
+      },
+      {
+        src: "/images/work/invdocs-02.svg",
+        alt: "InvDocs role-based access control settings",
+        caption: "Role-based access control down to the document level.",
+      },
+      {
+        src: "/images/work/invdocs-03.svg",
+        alt: "InvDocs encrypted document upload flow",
+        caption: "Encrypted uploads with a full audit trail.",
+      },
+    ],
+    timeline: [
+      {
+        phase: "Problem",
+        period: "Phase 01",
+        detail:
+          "Messy physical archiving made retrieving old administrative documents take hours.",
+      },
+      {
+        phase: "Build",
+        period: "Phase 02",
+        detail:
+          "Introduced structured metadata indexing, file encryption and tiered permissions.",
+      },
+      {
+        phase: "Result",
+        period: "Phase 03",
+        detail: "File retrieval time dropped from hours to under 3 seconds.",
+      },
+    ],
   },
   {
-    id: "project-2",
+    slug: "corepos",
     title: "CorePOS — Multi-Outlet Cashier & Stock Engine",
-    category: "Point of Sale System",
-    type: "Fullstack",
-    color: "border-emerald-500/40 bg-emerald-950/10",
-    desc: {
-      id: "Sistem kasir toko & UMKM dengan pencatatan transaksi real-time, barcode scanner, cetak struk faktur, serta rekonsiliasi inventaris harian.",
-      en: "POS system for shops & SMEs with real-time transaction logging, barcode scanner, invoice receipt printing, and daily inventory reconciliation."
-    },
-    problem: {
-      id: "Pencatatan kasir manual yang rawan selisih persediaan barang dan kesalahan kalkulasi kembalian.",
-      en: "Manual cashier recording prone to inventory discrepancies and change calculation errors."
-    },
-    impact: {
-      id: "Menghilangkan selisih persediaan fisik dengan akurasi pemotongan stok otomatis 100% pada transaksi kasir.",
-      en: "Eliminated physical inventory discrepancies with 100% automatic stock deduction accuracy on POS transactions."
-    },
-    tech: ["React.js", "Express.js", "MySQL", "Prisma ORM", "Tailwind CSS"],
-    demoUrl: "",
-    repoUrl: "",
-    featured: true
+    category: "Fullstack",
+    studio: "Independent",
+    year: 2025,
+    role: ["Fullstack Development", "Inventory Logic", "Receipt Printing"],
+    tags: ["React.js", "Express.js", "MySQL", "Prisma ORM", "Tailwind CSS"],
+    thumbnail: "/images/work/corepos-cover.svg",
+    summary:
+      "POS system for shops & SMEs with real-time transaction logging, barcode scanner, invoice receipt printing, and daily inventory reconciliation.",
+    gallery: [
+      {
+        src: "/images/work/corepos-01.svg",
+        alt: "CorePOS cashier transaction screen",
+        caption: "Real-time transaction logging with barcode scanning.",
+      },
+      {
+        src: "/images/work/corepos-02.svg",
+        alt: "CorePOS invoice receipt printing",
+        caption: "Invoice receipt printing tuned for thermal printers.",
+      },
+      {
+        src: "/images/work/corepos-03.svg",
+        alt: "CorePOS daily inventory reconciliation report",
+        caption: "Daily inventory reconciliation across outlets.",
+      },
+    ],
+    timeline: [
+      {
+        phase: "Problem",
+        period: "Phase 01",
+        detail:
+          "Manual cashier recording caused stock discrepancies and change calculation errors.",
+      },
+      {
+        phase: "Build",
+        period: "Phase 02",
+        detail: "Automated stock deduction, barcode scanning and receipt printing.",
+      },
+      {
+        phase: "Result",
+        period: "Phase 03",
+        detail:
+          "100% automatic stock deduction accuracy on every POS transaction.",
+      },
+    ],
   },
   {
-    id: "project-3",
+    slug: "inventory-api",
     title: "Inventory Management High-Throughput API",
-    category: "Backend Engine",
-    type: "Backend",
-    color: "border-cyan-500/40 bg-cyan-950/10",
-    desc: {
-      id: "RESTful API high-throughput untuk pelacakan persediaan gudang, multi-warehouse batch logging, dan notifikasi stok kritis.",
-      en: "High-throughput RESTful API for warehouse inventory tracking, multi-warehouse batch logging, and critical stock notifications."
-    },
-    problem: {
-      id: "Lambatnya query pencarian stok barang dalam jumlah puluhan ribu baris data pada sistem gudang lama.",
-      en: "Slow item stock search queries across tens of thousands of data rows in the legacy warehouse system."
-    },
-    impact: {
-      id: "Mempercepat kueri pencarian persediaan sebesar 40% setelah penerapan database indexing dan Prisma query tuning.",
-      en: "Sped up inventory search queries by 40% after implementing database indexing and Prisma query tuning."
-    },
-    tech: ["NestJS", "Node.js", "PostgreSQL", "Prisma ORM", "Redis"],
-    demoUrl: "",
-    repoUrl: "https://github.com/MohammadKevin/inventory-backend-engine",
-    featured: true
+    category: "Backend",
+    studio: "Independent",
+    year: 2025,
+    role: ["Backend Engineering", "Query Optimization", "API Design"],
+    tags: ["NestJS", "Node.js", "PostgreSQL", "Prisma ORM", "Redis"],
+    thumbnail: "/images/work/inventory-api-cover.svg",
+    summary:
+      "High-throughput RESTful API for warehouse inventory tracking, multi-warehouse batch logging, and critical stock notifications.",
+    sourceUrl: "https://github.com/MohammadKevin/inventory-backend-engine",
+    gallery: [
+      {
+        src: "/images/work/inventory-api-01.svg",
+        alt: "Inventory API endpoint documentation",
+        caption: "Documented REST endpoints with request validation.",
+      },
+      {
+        src: "/images/work/inventory-api-02.svg",
+        alt: "Inventory API multi-warehouse batch logging",
+        caption: "Multi-warehouse batch logging.",
+      },
+      {
+        src: "/images/work/inventory-api-03.svg",
+        alt: "Inventory API critical stock notification flow",
+        caption: "Critical stock notifications pushed to operations.",
+      },
+    ],
+    timeline: [
+      {
+        phase: "Problem",
+        period: "Phase 01",
+        detail:
+          "Legacy warehouse queries crawled across tens of thousands of rows.",
+      },
+      {
+        phase: "Build",
+        period: "Phase 02",
+        detail:
+          "Applied database indexing and Prisma query tuning to the hot paths.",
+      },
+      {
+        phase: "Result",
+        period: "Phase 03",
+        detail: "Inventory search queries became 40% faster.",
+      },
+    ],
   },
   {
-    id: "project-4",
-    title: "Website Klinik & Apotek — Public Data Archiving & JWT Auth",
-    category: "Web Application",
-    type: "Frontend",
-    color: "border-blue-500/40 bg-blue-950/10",
-    desc: {
-      id: "Platform pengarsipan data publik dan catatan administratif sekolah/organisasi dengan proteksi otentikasi JWT.",
-      en: "Public data archiving and school/organization administrative record platform with JWT authentication protection."
-    },
-    problem: {
-      id: "Kebutuhan publikasi data arsip terbuka yang tetap menjamin kerahasiaan berkas internal.",
-      en: "The need for open archive data publication while ensuring the confidentiality of internal files."
-    },
-    impact: {
-      id: "Sistem berhasil menangani ribuan pengunduhan berkas dokumen publik dengan pengamanan akses granular.",
-      en: "The system successfully handled thousands of public document file downloads with granular access security."
-    },
-    tech: ["Next.js", "Tailwind CSS", "Prisma ORM", "MySQL"],
-    demoUrl: "",
-    repoUrl: "",
-    featured: false
+    slug: "clinic-portal",
+    title: "Clinic & Pharmacy Portal — Public Archive & JWT Auth",
+    category: "Fullstack",
+    studio: "Independent",
+    year: 2025,
+    role: ["Fullstack Development", "JWT Authentication", "Public Archiving"],
+    tags: ["Next.js", "Tailwind CSS", "Prisma ORM", "MySQL"],
+    thumbnail: "/images/work/clinic-portal-cover.svg",
+    summary:
+      "Public data archiving and administrative record platform with JWT authentication protection and granular file access security.",
+    gallery: [
+      {
+        src: "/images/work/clinic-portal-01.svg",
+        alt: "Clinic portal public document archive",
+        caption: "Public document archive open to the community.",
+      },
+      {
+        src: "/images/work/clinic-portal-02.svg",
+        alt: "Clinic portal JWT authentication screen",
+        caption: "JWT-protected administrative area.",
+      },
+      {
+        src: "/images/work/clinic-portal-03.svg",
+        alt: "Clinic portal granular file access settings",
+        caption: "Granular access control for internal files.",
+      },
+    ],
+    timeline: [
+      {
+        phase: "Problem",
+        period: "Phase 01",
+        detail:
+          "Public archives had to be published without exposing internal files.",
+      },
+      {
+        phase: "Build",
+        period: "Phase 02",
+        detail: "Split public and internal records behind JWT authentication.",
+      },
+      {
+        phase: "Result",
+        period: "Phase 03",
+        detail:
+          "Thousands of public document downloads handled with granular access security.",
+      },
+    ],
   },
   {
-    id: "project-5",
+    slug: "corecraft",
     title: "CoreCraft Personal Engineering Portfolio",
-    category: "System Interface",
-    type: "Frontend",
-    color: "border-amber-500/40 bg-amber-950/10",
-    desc: {
-      id: "Website portofolio personal bertema studio editorial liquid-glass dengan transisi Dynamic Island, bilingual switch, dan performa tinggi.",
-      en: "Personal engineering portfolio website featuring an editorial liquid-glass aesthetic, Dynamic Island transitions, bilingual switch, and high performance."
-    },
-    problem: {
-      id: "Template portofolio SaaS generik yang tidak mencerminkan fokus arsitektur backend & system dev.",
-      en: "Generic SaaS portfolio templates that do not reflect the focus on backend architecture & system development."
-    },
-    impact: {
-      id: "Memberikan pengalaman visual unik bergaya Apple Dynamic Island dengan skor performa 100% Lighthouse.",
-      en: "Provides a unique visual experience in an Apple Dynamic Island style with 100% Lighthouse performance score."
-    },
-    tech: ["Next.js 16", "Tailwind CSS", "TypeScript", "EmailJS"],
-    demoUrl: "https://corecraft.my.id",
-    repoUrl: "https://github.com/MohammadKevin/corecraft-portfolio",
-    featured: true
+    category: "Fullstack",
+    studio: "CoreCraft",
+    year: 2026,
+    role: ["Design", "Frontend Development", "SEO"],
+    tags: ["Next.js 16", "TypeScript", "Tailwind CSS"],
+    thumbnail: "/images/work/corecraft-cover.svg",
+    summary:
+      "Personal engineering portfolio with an editorial liquid-glass aesthetic, Dynamic Island transitions, and a 100% Lighthouse performance score.",
+    liveUrl: "https://corecraft.my.id",
+    sourceUrl: "https://github.com/MohammadKevin/corecraft-portfolio",
+    gallery: [
+      {
+        src: "/images/work/corecraft-01.svg",
+        alt: "CoreCraft portfolio hero section",
+        caption: "Editorial hero with the liquid-glass surface treatment.",
+      },
+      {
+        src: "/images/work/corecraft-02.svg",
+        alt: "CoreCraft portfolio project gallery",
+        caption: "Project gallery with filterable categories.",
+      },
+      {
+        src: "/images/work/corecraft-03.svg",
+        alt: "CoreCraft portfolio performance score",
+        caption: "100% Lighthouse performance score.",
+      },
+    ],
   },
   {
-    id: "project-outerco",
+    slug: "outerco",
     title: "Outer.Co — Boutique Florist E-Commerce",
-    category: "E-Commerce Platform",
-    type: "Frontend",
-    color: "border-pink-500/40 bg-pink-950/10",
-    desc: {
-      id: "Platform e-commerce florist butik dengan katalog produk kaya, galeri multi-gambar, checkout via WhatsApp, multi-cabang (Surabaya, Kediri, Denpasar), dan admin panel CRUD lengkap.",
-      en: "Boutique florist e-commerce platform with rich product catalog, multi-image galleries, WhatsApp checkout, multi-branch support (Surabaya, Kediri, Denpasar), and full admin CRUD panel."
-    },
-    problem: {
-      id: "Bisnis florist lokal membutuhkan platform online yang mudah dikelola non-programmer dengan checkout yang sederhana tanpa payment gateway.",
-      en: "Local florist businesses need an online platform manageable by non-programmers with simple checkout without a payment gateway."
-    },
-    impact: {
-      id: "Memungkinkan pelanggan memesan buket bunga secara mandiri melalui katalog interaktif dengan checkout WhatsApp instan yang terformat rapi.",
-      en: "Enables customers to independently order flower bouquets through an interactive catalog with neatly formatted instant WhatsApp checkout."
-    },
-    tech: ["Next.js 16", "TypeScript", "Tailwind CSS 4", "Cloudinary", "Google Sheets API"],
-    demoUrl: "https://outerco.id",
-    repoUrl: "",
-    featured: true
-  }
+    category: "E-Commerce",
+    client: "Outer.Co",
+    year: 2025,
+    role: ["Frontend Development", "Catalog Architecture", "Admin Panel"],
+    tags: [
+      "Next.js 16",
+      "TypeScript",
+      "Tailwind CSS 4",
+      "Cloudinary",
+      "Google Sheets API",
+    ],
+    thumbnail: "/images/work/outerco-cover.svg",
+    summary:
+      "Boutique florist e-commerce platform with rich product catalog, multi-image galleries, WhatsApp checkout, multi-branch support (Surabaya, Kediri, Denpasar), and a full admin CRUD panel.",
+    liveUrl: "https://outerco.id",
+    gallery: [
+      {
+        src: "/images/work/outerco-01.svg",
+        alt: "Outer.Co product catalog listing",
+        caption: "Rich product catalog with multi-image galleries.",
+      },
+      {
+        src: "/images/work/outerco-02.svg",
+        alt: "Outer.Co WhatsApp checkout flow",
+        caption: "Formatted WhatsApp checkout without a payment gateway.",
+      },
+      {
+        src: "/images/work/outerco-03.svg",
+        alt: "Outer.Co admin CRUD panel",
+        caption: "Admin CRUD panel built for non-programmers.",
+      },
+    ],
+    timeline: [
+      {
+        phase: "Problem",
+        period: "Phase 01",
+        detail:
+          "A local florist needed an online store manageable by non-programmers, with simple checkout and no payment gateway.",
+      },
+      {
+        phase: "Build",
+        period: "Phase 02",
+        detail:
+          "Built the catalog, multi-branch support and a full admin CRUD panel.",
+      },
+      {
+        phase: "Result",
+        period: "Phase 03",
+        detail:
+          "Customers order bouquets independently through an interactive catalog with instant WhatsApp checkout.",
+      },
+    ],
+  },
 ];
+
+export const projectCategories = [
+  "All",
+  "Fullstack",
+  "Backend",
+  "E-Commerce",
+] as const;
+
+export type ProjectFilter = (typeof projectCategories)[number];
+
+export function getProject(slug: string): Project | undefined {
+  return projects.find((project) => project.slug === slug);
+}
+
+export function getAdjacentProjects(slug: string): {
+  previous: Project;
+  next: Project;
+} {
+  const index = projects.findIndex((project) => project.slug === slug);
+  const safeIndex = index === -1 ? 0 : index;
+  return {
+    previous: projects[(safeIndex - 1 + projects.length) % projects.length],
+    next: projects[(safeIndex + 1) % projects.length],
+  };
+}
