@@ -1,75 +1,71 @@
-import type { Metadata } from "next";
-import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Syne } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
+import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AuroraBackground from "@/components/AuroraBackground";
-import Preloader from "@/components/Preloader";
-import AiAssistant from "@/components/AiAssistant";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import FooterCTA from "@/components/FooterCTA";
+import { profile } from "@/data/profile";
 
-const jetbrainsMono = JetBrains_Mono({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-mono",
+  weight: ["600", "700", "800"],
+  variable: "--font-syne",
   display: "swap",
 });
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
-  display: "swap",
-});
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://corecraft.my.id";
+const fullName = `${profile.firstName} ${profile.lastName}`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://corecraft.my.id"),
-  title: "Mohammad Kevin | Backend & Fullstack Software Engineer",
-  description:
-    "High-performance backend systems, scalable REST APIs, and modern fullstack applications. Specialized in Next.js, NestJS, Express, Prisma, PostgreSQL, and MySQL.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${fullName} — Backend & Fullstack Developer`,
+    template: `%s — ${fullName}`,
+  },
+  description: profile.subtitle,
   keywords: [
     "Mohammad Kevin",
     "Backend Developer",
     "Fullstack Developer",
     "Software Engineer Malang",
-    "SMK Telkom Malang",
     "Next.js Developer",
     "NestJS Developer",
-    "Express.js",
     "Prisma ORM",
     "PostgreSQL",
     "MySQL",
-    "SaaS Architecture",
-    "API Gateway",
-    "POS Systems",
-  ].join(", "),
-  authors: [{ name: "Mohammad Kevin" }],
-  creator: "Mohammad Kevin",
+    "REST API",
+  ],
+  authors: [{ name: fullName }],
+  creator: fullName,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    locale: "id_ID",
-    url: "https://corecraft.my.id",
-    title: "Mohammad Kevin | Backend & Fullstack Software Engineer",
-    description: "High-performance backend systems, scalable REST APIs, and modern fullstack applications.",
-    siteName: "Mohammad Kevin Portfolio",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: `${fullName} Portfolio`,
+    title: `${fullName} — Backend & Fullstack Developer`,
+    description: profile.subtitle,
     images: [
       {
-        url: "/images/logo.png",
+        url: profile.avatar,
         width: 800,
-        height: 600,
-        alt: "Mohammad Kevin",
+        height: 800,
+        alt: fullName,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mohammad Kevin | Backend & Fullstack Software Engineer",
-    description: "High-performance backend systems, scalable REST APIs, and modern fullstack applications.",
-    images: ["/images/logo.png"],
+    title: `${fullName} — Backend & Fullstack Developer`,
+    description: profile.subtitle,
+    images: [profile.avatar],
   },
   robots: {
     index: true,
@@ -77,86 +73,36 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: "https://corecraft.my.id",
-  },
-  verification: {
-    google: "P3ie_hBmhRaKPj0kDNKLJSxyvzclf-QUbNXF33Yxkf0",
-  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#F8F9FA",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="id"
-      suppressHydrationWarning
-      className={`scroll-smooth ${jetbrainsMono.variable} ${inter.variable} ${jakarta.variable}`}
-    >
-      <body
-        suppressHydrationWarning
-        className="antialiased bg-[#FAF8F1] text-[#1C1B1D] min-h-screen font-sans selection:bg-[#76C0EC] selection:text-white"
-      >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Mohammad Kevin",
-              url: "https://corecraft.my.id",
-              image: "/images/logo.png",
-              jobTitle: "Backend & Fullstack Software Engineer",
-              description:
-                "High-performance backend systems, scalable REST APIs, and modern fullstack applications. Specialized in Next.js, NestJS, Prisma ORM, PostgreSQL, and MySQL.",
-              alumniOf: {
-                "@type": "EducationalOrganization",
-                name: "SMK Telkom Malang",
-              },
-              knowsAbout: [
-                "Next.js",
-                "NestJS",
-                "Express.js",
-                "Prisma ORM",
-                "PostgreSQL",
-                "MySQL",
-                "TypeScript",
-                "Tailwind CSS",
-                "REST API",
-                "SaaS Architecture",
-              ],
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Malang",
-                addressRegion: "Jawa Timur",
-                addressCountry: "ID",
-              },
-              sameAs: [
-                "https://github.com/MohammadKevin",
-                "https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/",
-                "https://www.instagram.com/mhmdkevin_1/?hl=en",
-              ],
-            }),
-          }}
-        />
-        <LanguageProvider>
-          <Preloader />
-          <AuroraBackground />
+    <html lang="en" className={`${syne.variable} ${inter.variable}`}>
+      <body className="antialiased">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-5 focus:py-2 focus:text-sm focus:text-bg"
+        >
+          Skip to content
+        </a>
+
+        <SmoothScroll>
+          <CustomCursor />
           <Navbar />
-          <div className="flex flex-col min-h-screen relative z-0">
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <AiAssistant />
-        </LanguageProvider>
+          <main id="main">{children}</main>
+          <FooterCTA />
+        </SmoothScroll>
       </body>
     </html>
   );

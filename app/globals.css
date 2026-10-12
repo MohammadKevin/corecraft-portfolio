@@ -25,6 +25,10 @@
 
   /* Status accent — dot & glow only, never small text */
   --emerald: #10b981;
+
+  /* Focus ring colour. Overridden by `.on-dark` so the ring stays visible
+     on both the light page and the dark Experience band. */
+  --focus-ring: var(--ink);
 }
 
 @theme inline {
@@ -162,11 +166,17 @@ body {
   }
 }
 
-/* Focus ring that is visible on both light and dark surfaces */
+/* Focus ring that is visible on both light and dark surfaces.
+   `.on-dark` re-points --focus-ring so the same rule works everywhere. */
+.on-dark {
+  --focus-ring: var(--ink-dark);
+}
+
 .focus-ring:focus-visible,
 a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--emerald);
+button:focus-visible,
+[role="tab"]:focus-visible {
+  outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
   border-radius: 4px;
 }

@@ -1,17 +1,26 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
+import { projects } from "@/data/projects";
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://corecraft.my.id";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://corecraft.my.id';
+  const lastModified = new Date();
 
-  const pages = [
-    { url: baseUrl, priority: 1.0, changeFrequency: 'weekly' as const },
-    { url: `${baseUrl}/cv`, priority: 0.8, changeFrequency: 'monthly' as const },
+  const staticRoutes: MetadataRoute.Sitemap = [
+    {
+      url: baseUrl,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 1,
+    },
   ];
 
-  return pages.map((page) => ({
-    url: page.url,
-    lastModified: new Date(),
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
+  const workRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${baseUrl}/work/${project.slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.8,
   }));
+
+  return [...staticRoutes, ...workRoutes];
 }
