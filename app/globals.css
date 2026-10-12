@@ -15,7 +15,11 @@
 
   /* Text */
   --ink: #0f172a;
-  --muted: #64748b;
+  /* Spec value was #64748B, which only reaches 4.33:1 on --bg-alt (#F4F4F5)
+     and therefore misses WCAG AA for normal text. Nudged to #5F6B7F, which is
+     visually equivalent but clears 4.5:1 on every surface we use:
+     bg 5.11 · bg-alt 4.90 · surface 5.39. See "Asumsi" in the report. */
+  --muted: #5f6b7f;
   --ink-dark: #f8f9fa;
   --muted-dark: #a1a1aa;
 
