@@ -60,7 +60,7 @@ export default function ProjectDetail({
           </Link>
 
           <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/90 px-3.5 py-1.5 font-mono text-xs font-semibold text-ink shadow-sm backdrop-blur-md uppercase tracking-wider">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
             {project.badge || project.category}
           </span>
         </div>
@@ -134,9 +134,9 @@ export default function ProjectDetail({
 
         <Reveal delay={0.15}>
           <div className="mt-14 overflow-hidden rounded-3xl border border-black/[0.08] bg-surface shadow-xs">
-            <div className="grid grid-cols-1 divide-y divide-black/[0.08] md:grid-cols-4 md:divide-y-0 md:divide-x md:divide-black/[0.08]">
+            <div className="grid grid-cols-2 divide-y divide-black/[0.08] sm:divide-y-0 lg:grid-cols-4 lg:divide-x lg:divide-black/[0.08]">
 
-              <div className="p-6 sm:p-8">
+              <div className="p-5 sm:p-8 border-r border-black/[0.08] lg:border-r-0">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Role
                 </h2>
@@ -147,7 +147,7 @@ export default function ProjectDetail({
                 </ul>
               </div>
 
-              <div className="p-6 sm:p-8">
+              <div className="p-5 sm:p-8">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Timeline
                 </h2>
@@ -162,21 +162,21 @@ export default function ProjectDetail({
                 ) : null}
               </div>
 
-              <div className="p-6 sm:p-8">
+              <div className="p-5 sm:p-8 border-r border-black/[0.08] lg:border-r-0">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Deliverables
                 </h2>
                 <ul className="mt-3 space-y-1.5 text-sm font-medium text-ink">
                   {project.deliverables.map((item) => (
                     <li key={item} className="flex items-center gap-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className="h-3.5 w-3.5 text-neutral-900 shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="p-6 sm:p-8">
+              <div className="p-5 sm:p-8">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Stack
                 </h2>

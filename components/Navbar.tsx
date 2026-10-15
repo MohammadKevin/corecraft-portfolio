@@ -102,10 +102,10 @@ export default function Navbar() {
         scrolled ? "top-2.5" : "top-4"
       }`}
     >
-      <div className="page-container">
+      <div className="w-full flex justify-center px-3 sm:px-4">
         <nav
           aria-label="Primary"
-          className={`mx-auto flex max-w-4xl items-center justify-between gap-3 rounded-full border transition-all duration-300 pointer-events-auto ${
+          className={`w-[94%] sm:w-auto max-w-4xl flex items-center justify-between gap-2 sm:gap-3 rounded-full border transition-all duration-300 pointer-events-auto ${
             scrolled
               ? "h-12 border-black/[0.12] bg-white/90 px-3 shadow-lg backdrop-blur-lg sm:px-4"
               : "h-14 border-black/[0.08] bg-white/80 px-3 shadow-md backdrop-blur-md sm:px-4"
@@ -167,11 +167,11 @@ export default function Navbar() {
             })}
           </ul>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <MagneticButton
               href="#contact"
               variant="solid"
-              className="px-3.5 py-1.5 text-xs font-medium"
+              className="hidden sm:inline-flex px-3.5 py-1.5 text-xs font-medium"
               onClick={(event) => goTo(event, "contact")}
             >
               Let&apos;s Talk
