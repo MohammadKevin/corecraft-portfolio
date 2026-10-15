@@ -22,6 +22,7 @@ const sectionIds = ["hero", ...links.map((link) => link.id), "contact"];
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isDarkSection, setIsDarkSection] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const active = useActiveSection(sectionIds);
   const scrollTo = useScrollToSection();
@@ -32,7 +33,25 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
+
+      // Check if navbar (y ~ 50px) is currently floating above a dark-background section
+      const darkSectionIds = ["about", "experience", "contact"];
+      const navY = 50;
+      let overDark = false;
+
+      for (const id of darkSectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= navY && rect.bottom >= navY) {
+            overDark = true;
+            break;
+          }
+        }
+      }
+      setIsDarkSection(overDark);
     };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -101,9 +120,11 @@ export default function Navbar() {
         <nav
           aria-label="Primary"
           className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-fit rounded-full border backdrop-blur-2xl transition-all duration-300 pointer-events-auto flex items-center justify-between gap-6 md:gap-8 px-5 py-2.5 ${
-            scrolled
-              ? "bg-white/55 dark:bg-[#0A0A0C]/60 border-white/70 dark:border-white/15 shadow-[0_12px_40px_0_rgba(0,0,0,0.1),inset_0_1px_1px_0_rgba(255,255,255,0.8)]"
-              : "bg-white/40 dark:bg-[#0A0A0C]/40 border-white/60 dark:border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.06),inset_0_1px_1px_0_rgba(255,255,255,0.7)]"
+            isDarkSection
+              ? "bg-[#383C46]/90 border-white/25 text-white shadow-[0_16px_40px_rgba(0,0,0,0.45),inset_0_1px_1px_rgba(255,255,255,0.3)]"
+              : scrolled
+              ? "bg-white/85 border-black/15 text-neutral-900 shadow-[0_12px_40px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,0.85)]"
+              : "bg-white/75 border-black/10 text-neutral-900 shadow-[0_8px_32px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.8)]"
           }`}
         >
           {/* Sisi Kiri: Wordmark Corecraft (Tanpa logo gambar, font More Sugar) */}
@@ -119,7 +140,9 @@ export default function Navbar() {
           >
             <span
               style={{ fontFamily: "'More Sugar', cursive, sans-serif" }}
-              className="text-base sm:text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100"
+              className={`text-base sm:text-lg font-bold tracking-tight transition-colors duration-200 ${
+                isDarkSection ? "text-white" : "text-[#0B0C0E]"
+              }`}
             >
               Corecraft
             </span>
@@ -144,8 +167,12 @@ export default function Navbar() {
                     aria-current={isActive ? "true" : undefined}
                     className={`relative block rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer ${
                       isHighlighted
-                        ? "text-black dark:text-white font-semibold"
-                        : "text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white"
+                        ? isDarkSection
+                          ? "text-white font-semibold"
+                          : "text-black font-semibold"
+                        : isDarkSection
+                        ? "text-neutral-300 hover:text-white"
+                        : "text-neutral-700 hover:text-black"
                     }`}
                   >
                     {isHighlighted ? (
@@ -157,7 +184,11 @@ export default function Navbar() {
                           damping: 32,
                         }}
                         aria-hidden="true"
-                        className="absolute inset-0 rounded-full bg-black/[0.07] dark:bg-white/[0.12] border border-black/5 dark:border-white/15 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4)]"
+                        className={`absolute inset-0 rounded-full border transition-colors duration-200 ${
+                          isDarkSection
+                            ? "bg-white/15 border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)]"
+                            : "bg-black/[0.08] border-black/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]"
+                        }`}
                       />
                     ) : null}
                     <span className="relative z-10">{link.label}</span>
@@ -171,7 +202,11 @@ export default function Navbar() {
           <div className="flex items-center gap-2 shrink-0">
             <a
               href="mailto:kvn4.200581@gmail.com"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#0B0C0E] text-white dark:bg-white dark:text-[#0B0C0E] px-4 py-1.5 text-xs font-semibold hover:scale-105 transition-all shrink-0 shadow-sm"
+              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold hover:scale-105 transition-all shrink-0 shadow-sm ${
+                isDarkSection
+                  ? "bg-white text-[#0B0C0E] hover:bg-neutral-200"
+                  : "bg-[#0B0C0E] text-white hover:bg-neutral-800"
+              }`}
             >
               <span>Let&apos;s Talk</span>
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -184,7 +219,11 @@ export default function Navbar() {
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 dark:border-white/15 text-neutral-900 dark:text-neutral-100 transition-colors duration-200 hover:bg-black/5 dark:hover:bg-white/10 lg:hidden"
+              className={`flex h-8 w-8 items-center justify-center rounded-full border transition-colors duration-200 lg:hidden ${
+                isDarkSection
+                  ? "border-white/20 text-white hover:bg-white/10"
+                  : "border-black/10 text-neutral-900 hover:bg-black/5"
+              }`}
             >
               {menuOpen ? (
                 <X className="h-4 w-4" aria-hidden="true" />
