@@ -2,14 +2,14 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { fadeUp, inView } from "@/lib/motion";
+import { fadeUpDelayed, inView } from "@/lib/motion";
 
 /**
  * Client-side entrance wrapper.
  *
  * Lets server components opt into the shared `whileInView` reveal without
- * becoming client components themselves. `viewport` and the variant both come
- * from `lib/motion.ts`, so every section animates with identical timing.
+ * becoming client components themselves. The delay is baked into the variant
+ * (see `fadeUpDelayed`) so it actually applies.
  */
 export default function Reveal({
   children,
@@ -22,11 +22,10 @@ export default function Reveal({
 }) {
   return (
     <motion.div
-      variants={fadeUp}
+      variants={fadeUpDelayed(delay)}
       initial="hidden"
       whileInView="show"
       viewport={inView}
-      transition={{ delay }}
       className={className}
     >
       {children}

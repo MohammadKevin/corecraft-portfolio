@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Syne } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
@@ -7,13 +7,23 @@ import Navbar from "@/components/Navbar";
 import FooterCTA from "@/components/FooterCTA";
 import { profile } from "@/data/profile";
 
-const syne = Syne({
+/** Display face — hero name, section headings. */
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-syne",
+  weight: ["500", "600", "700"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
+/** Mono face — the `/SELECTED WORK` style eyebrows and indices. */
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+/** Body face. */
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -80,7 +90,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F8F9FA",
+  themeColor: "#F6F7F9",
   colorScheme: "light",
 };
 
@@ -88,7 +98,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${syne.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${inter.variable}`}
+    >
       <body className="antialiased">
         <a
           href="#main"

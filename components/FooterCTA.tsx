@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ArrowUpRight, FileText, Mail, Phone } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
 import { profile } from "@/data/profile";
@@ -74,10 +74,24 @@ export default function FooterCTA() {
         </motion.div>
 
         <div className="mt-20 flex flex-col gap-6 border-t border-line pt-8 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-muted">
-            © {year} {profile.firstName} {profile.lastName}. Built with Next.js
-            and Tailwind CSS.
-          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+            <p className="text-sm text-muted">
+              © {year} {profile.firstName} {profile.lastName}. Built with Next.js
+              and Tailwind CSS.
+            </p>
+
+            {/* The PDF lives in /public and keeps its space in the filename,
+                so the path is encoded rather than the file renamed. */}
+            <a
+              href="/CV%20Mohammad%20Kevin.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-muted underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-ink hover:decoration-ink focus-visible:outline-2 focus-visible:outline-offset-4"
+            >
+              <FileText className="h-4 w-4" aria-hidden="true" />
+              Download CV (PDF)
+            </a>
+          </div>
 
           <ul className="flex items-center gap-2">
             {profile.socials.map((social) => {

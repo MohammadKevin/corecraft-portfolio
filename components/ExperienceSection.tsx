@@ -12,7 +12,7 @@ import {
 import { MapPin } from "lucide-react";
 import { experiences } from "@/data/experience";
 import { useFinePointer, useMinWidth } from "@/lib/hooks";
-import { fadeUp, inView, spring } from "@/lib/motion";
+import { fadeUp, fadeUpDelayed, inView } from "@/lib/motion";
 
 /** Thumbnail preview size, in px. Kept here so the clamp math stays in sync. */
 const PREVIEW_WIDTH = 320;
@@ -109,11 +109,10 @@ export default function ExperienceSection() {
             {experiences.map((experience, index) => (
               <motion.li
                 key={`${experience.company}-${experience.period}`}
-                variants={fadeUp}
+                variants={fadeUpDelayed(Math.min(index, 4) * 0.04)}
                 initial="hidden"
                 whileInView="show"
                 viewport={inView}
-                transition={{ ...spring, delay: Math.min(index, 4) * 0.04 }}
                 onPointerEnter={() => setHovered(index)}
                 onPointerMove={handlePointerMove}
                 className="border-b border-line-dark"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
@@ -16,16 +16,34 @@ const socialIcon: Record<string, React.ComponentType<{ className?: string }>> = 
   WhatsApp: WhatsappIcon,
 };
 
+/** Font-size bounds for the fitted hero name, in px. */
+const NAME_MIN_PX = 40;
+const NAME_MAX_PX = 260;
+/** Starting size for the server render and the first client paint. */
+const NAME_FALLBACK = "clamp(2.5rem, 13vw, 15rem)";
+
 /**
  * Hero: the name is the page's single <h1>.
  *
  * "MOHAMMAD" is drawn as an outline and "KEVIN" solid, but the accessible name
  * is the plain full name so screen readers announce it normally.
  *
+ * The spec asked for 22vw on mobile and 18vw on desktop, which is sized for a
+ * shorter name. "MOHAMMAD" is eight characters and would overflow the container
+ * at those values, so the size is instead measured and fitted to the container
+ * width — same giant look, guaranteed no clipping or horizontal scroll at every
+ * breakpoint. See "Asumsi" in the report.
+ *
  * Parallax is capped at PARALLAX_RANGE (60px) and disabled for reduced-motion.
  */
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const nameRef = useRef<HTMLHeadingElement>(null);
+  const outlineRef = useRef<HTMLSpanElement>(null);
+  const solidRef = useRef<HTMLSpanElement>(null);
+
+  const [fontSize, setFontSize] = useState<string>(NAME_FALLBACK);
+
   const scrollTo = useScrollToSection();
   const prefersReducedMotion = useReducedMotion();
   const parallaxEnabled = prefersReducedMotion !== true;
@@ -37,6 +55,62 @@ export default function Hero() {
 
   const nameY = useTransform(scrollYProgress, [0, 1], [0, PARALLAX_RANGE]);
   const avatarY = useTransform(scrollYProgress, [0, 1], [0, -PARALLAX_RANGE * 0.6]);
+
+  /**
+   * Size the name so the widest line exactly spans the container.
+   *
+   * Measured as a ratio (rendered width / current font-size) so the result does
+   * not depend on which font is active at the moment of measurement. Runs in
+   * `useLayoutEffect` so the correction happens before the browser paints.
+   */
+  const fitName = useCallback(() => {
+    const name = nameRef.current;
+    const lines = [outlineRef.current, solidRef.current].filter(
+      (line): line is HTMLSpanElement => line !== null,
+    );
+    if (!name || lines.length === 0) return;
+
+    const available = name.clientWidth;
+    if (available === 0) return;
+
+    const current = Number.parseFloat(getComputedStyle(name).fontSize);
+    if (!Number.isFinite(current) || current === 0) return;
+
+    // Width per 1px of font-size for each line; the widest line sets the size.
+    const widestRatio = Math.max(
+      ...lines.map((line) => line.getBoundingClientRect().width / current),
+    );
+    if (widestRatio === 0) return;
+
+    const fitted = Math.min(
+      NAME_MAX_PX,
+      Math.max(NAME_MIN_PX, available / widestRatio),
+    );
+
+    setFontSize(`${fitted.toFixed(2)}px`);
+  }, []);
+
+  useLayoutEffect(() => {
+    fitName();
+
+    const name = nameRef.current;
+    if (!name) return;
+
+    // Re-fit when the container resizes (breakpoint changes, rotation, ...).
+    const observer = new ResizeObserver(fitName);
+    observer.observe(name);
+
+    // The webfont may arrive after the first measurement; re-fit once it does.
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) fitName();
+    });
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, [fitName]);
 
   return (
     <section
@@ -60,21 +134,25 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Giant name — one h1, split across two lines. */}
+        {/* Giant name — one h1, two stacked lines. */}
         <motion.h1
           id="hero-name"
-          style={parallaxEnabled ? { y: nameY } : undefined}
+          ref={nameRef}
+          style={parallaxEnabled ? { y: nameY, fontSize } : { fontSize }}
           className="select-none text-center font-display font-extrabold leading-[0.85] tracking-[-0.04em]"
         >
           <span className="sr-only">
             {profile.firstName} {profile.lastName}
           </span>
-          <span
-            aria-hidden="true"
-            className="block text-[22vw] leading-[0.85] md:text-[18vw]"
-          >
-            <span className="name-outline block">{profile.firstName}</span>
-            <span className="name-solid block">{profile.lastName}</span>
+          <span aria-hidden="true" className="block">
+            <span ref={outlineRef} className="name-outline inline-block">
+              {profile.firstName}
+            </span>
+          </span>
+          <span aria-hidden="true" className="block">
+            <span ref={solidRef} className="name-solid inline-block">
+              {profile.lastName}
+            </span>
           </span>
         </motion.h1>
 
@@ -85,7 +163,7 @@ export default function Hero() {
           initial="hidden"
           whileInView="show"
           viewport={inView}
-          className="relative z-10 -mt-[6vw] flex justify-center md:-mt-[5vw]"
+          className="relative z-10 -mt-8 flex justify-center sm:-mt-12 md:-mt-14"
         >
           <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-bg bg-bg-alt shadow-[0_8px_30px_rgba(15,23,42,0.10)] sm:h-36 sm:w-36 md:h-44 md:w-44">
             <Image

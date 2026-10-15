@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { services } from "@/data/services";
 import { useFinePointer } from "@/lib/hooks";
-import { fadeUp, inView, spring } from "@/lib/motion";
+import { fadeUp, fadeUpDelayed, inView } from "@/lib/motion";
 
 /**
  * ServicesAccordion: numbered rows, one open at a time.
@@ -60,11 +60,10 @@ export default function ServicesAccordion() {
             return (
               <motion.div
                 key={service.id}
-                variants={fadeUp}
+                variants={fadeUpDelayed(Math.min(index, 4) * 0.04)}
                 initial="hidden"
                 whileInView="show"
                 viewport={inView}
-                transition={{ ...spring, delay: Math.min(index, 4) * 0.04 }}
                 className="border-b border-line"
               >
                 <h3>

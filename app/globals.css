@@ -4,57 +4,62 @@
    Design tokens
    --------------------------------------------------------------------------- */
 :root {
-  /* Light surfaces */
-  --bg: #f8f9fa;
-  --bg-alt: #f4f4f5;
+  /* Light canvas + surfaces */
+  --bg: #f6f7f9;
   --surface: #ffffff;
+  --surface-alt: #efeff1;
 
-  /* Dark surfaces */
-  --dark-deep: #121214;
-  --dark-card: #18181b;
+  /* Dark canvas (Experience band + accents) */
+  --dark-deep: #0d0e11;
+  --dark-card: #121316;
 
-  /* Text */
-  --ink: #0f172a;
-  /* Spec value was #64748B, which only reaches 4.33:1 on --bg-alt (#F4F4F5)
-     and therefore misses WCAG AA for normal text. Nudged to #5F6B7F, which is
-     visually equivalent but clears 4.5:1 on every surface we use:
-     bg 5.11 · bg-alt 4.90 · surface 5.39. See "Asumsi" in the report. */
-  --muted: #5f6b7f;
-  --ink-dark: #f8f9fa;
+  /* Text — light canvas */
+  --ink: #0b0f19;
+  --muted: #525866;
+  /* Tertiary: decorative only. 2.8:1 on --bg, so it never carries body copy. */
+  --muted-3: #8e95a5;
+
+  /* Text — dark canvas */
+  --ink-dark: #f6f7f9;
   --muted-dark: #a1a1aa;
 
-  /* Lines */
-  --line: #e2e8f0;
+  /* Borders */
+  --line: rgba(15, 23, 42, 0.08);
   --line-dark: rgba(255, 255, 255, 0.08);
 
   /* Status accent — dot & glow only, never small text */
   --emerald: #10b981;
 
-  /* Focus ring colour. Overridden by `.on-dark` so the ring stays visible
-     on both the light page and the dark Experience band. */
+  /* Focus ring colour. Re-pointed by `.on-dark` so one rule works on both. */
   --focus-ring: var(--ink);
 }
 
 @theme inline {
   --color-bg: var(--bg);
-  --color-bg-alt: var(--bg-alt);
   --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
   --color-deep: var(--dark-deep);
   --color-card: var(--dark-card);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
+  --color-muted-3: var(--muted-3);
   --color-ink-dark: var(--ink-dark);
   --color-muted-dark: var(--muted-dark);
   --color-line: var(--line);
   --color-line-dark: var(--line-dark);
   --color-emerald: var(--emerald);
 
-  --font-display: var(--font-syne), "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), "Space Grotesk", ui-sans-serif,
+    system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace,
+    monospace;
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --container-page: 1440px;
 
+  /* One shared easing for non-spring transitions (hover/colour). */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* ---------------------------------------------------------------------------
@@ -117,23 +122,37 @@ body {
   }
 }
 
-/* Small uppercase label — /SELECTED WORK */
+/* Mono eyebrow — /SELECTED WORK, /SERVICE, /EXPERIENCE */
 .label-eyebrow {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+}
+
+/* Display heading helper — Space Grotesk 700+ with tight tracking. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 /* Hero name: outline + solid */
 .name-outline {
   color: transparent;
-  -webkit-text-stroke: 1px var(--ink);
+  -webkit-text-stroke: 1.5px var(--ink);
 }
 
 .name-solid {
   color: var(--ink);
+}
+
+/* Fallback when text-stroke is unsupported: paint the line solid instead. */
+@supports not ((-webkit-text-stroke: 1px #000) or (text-stroke: 1px #000)) {
+  .name-outline {
+    color: var(--ink);
+  }
 }
 
 /* Status dot with pulse glow (emerald is used here only) */
@@ -170,7 +189,7 @@ body {
   }
 }
 
-/* Focus ring that is visible on both light and dark surfaces.
+/* Focus ring visible on both light and dark surfaces.
    `.on-dark` re-points --focus-ring so the same rule works everywhere. */
 .on-dark {
   --focus-ring: var(--ink-dark);

@@ -2,17 +2,27 @@ import type { Profile } from "@/lib/types";
 
 /**
  * Source: data/whoami.ts on the previous (main) version of the site.
- * Only the fields the redesign needs are kept.
+ * Only the fields the redesign needs are kept, plus the headline metrics the
+ * Statement section renders.
  */
 export const profile: Profile = {
   firstName: "MOHAMMAD",
   lastName: "KEVIN",
+  fullName: "Mohammad Kevin Arif Rudianto",
+  role: "Backend & Fullstack Software Engineer",
   subtitle:
     "Backend & Fullstack Developer building reliable APIs, POS systems and digital archives.",
+  manifesto: [
+    "I build the unglamorous parts well — the schema, the query plan, the retry that never fires twice.",
+    "Every system I ship is measured by one thing: whether it still holds up a year after launch.",
+  ],
   availableForProjects: true,
   avatar: "/images/profile-photo.webp",
   email: "kvn4.200581@gmail.com",
   whatsappUrl: "https://wa.me/6282131588846",
+  cvUrl: "/CV Mohammad Kevin.pdf",
+  location: "Malang, East Java",
+  timezone: "Asia/Jakarta",
   socials: [
     { label: "GitHub", url: "https://github.com/MohammadKevin" },
     {
@@ -20,6 +30,28 @@ export const profile: Profile = {
       url: "https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/",
     },
     { label: "WhatsApp", url: "https://wa.me/6282131588846" },
+  ],
+  stats: [
+    {
+      value: "3+",
+      label: "Years of Engineering",
+      detail: "Shipping production systems since 2024, from schema to interface.",
+    },
+    {
+      value: "07",
+      label: "Production Platforms Built",
+      detail: "Booking, archiving, POS, inventory and commerce systems in live use.",
+    },
+    {
+      value: "13",
+      label: "Industry Certifications",
+      detail: "Verified by HackerRank, Dicoding and national competition bodies.",
+    },
+    {
+      value: "99.9%",
+      label: "Architecture Uptime Focus",
+      detail: "Explicit state machines, indexed queries and no single points of failure.",
+    },
   ],
 };
 

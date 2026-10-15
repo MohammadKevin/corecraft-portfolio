@@ -1,0 +1,140 @@
+import type { Certificate } from "@/lib/types";
+
+/**
+ * Source: data/certificates.ts on the previous (main) version of the site.
+ *
+ * English-only. Credential IDs are extracted from the public verification
+ * URLs so they can be shown as text next to each badge; certificates issued
+ * without a public URL (the national competitions) carry no ID.
+ */
+export const certificates: Certificate[] = [
+  {
+    id: "cert-hr-rest-api",
+    category: "Technical Skill",
+    title: "REST API (Intermediate) Certificate",
+    issuer: "HackerRank",
+    date: "Aug 2026",
+    credentialId: "36F1F05CB5E0",
+    url: "https://www.hackerrank.com/certificates/36F1F05CB5E0",
+    skills: ["REST APIs", "API Design", "HTTP Endpoints"],
+  },
+  {
+    id: "cert-hr-node",
+    category: "Backend Engineering",
+    title: "Node.js (Intermediate) Certificate",
+    issuer: "HackerRank",
+    date: "Aug 2026",
+    credentialId: "48FE20D3BAC6",
+    url: "https://www.hackerrank.com/certificates/48FE20D3BAC6",
+    skills: ["Node.js", "Express.js", "Async Runtime"],
+  },
+  {
+    id: "cert-hr-swe-role",
+    category: "Role Certification",
+    title: "Software Engineer Certificate",
+    issuer: "HackerRank",
+    date: "Jul 2026",
+    credentialId: "1FA31AF247F3",
+    url: "https://www.hackerrank.com/certificates/1FA31AF247F3",
+    skills: ["Software Engineering", "Algorithms", "Problem Solving"],
+  },
+  {
+    id: "cert-hr-swe-intern",
+    category: "Role Certification",
+    title: "Software Engineer Intern Role Certificate",
+    issuer: "HackerRank",
+    date: "Aug 2026",
+    credentialId: "FDBE98DD2143",
+    url: "https://www.hackerrank.com/certificates/FDBE98DD2143",
+    skills: ["Data Structures", "System Design", "Backend Logic"],
+  },
+  {
+    id: "cert-hr-react",
+    category: "Role Certification",
+    title: "Frontend Developer (React) Role Certificate",
+    issuer: "HackerRank",
+    date: "Aug 2026",
+    credentialId: "88CEC9A68415",
+    url: "https://www.hackerrank.com/certificates/88CEC9A68415",
+    skills: ["React.js", "Component State", "Frontend Architecture"],
+  },
+  {
+    id: "cert-hr-js-inter",
+    category: "Programming Language",
+    title: "JavaScript (Intermediate) Certificate",
+    issuer: "HackerRank",
+    date: "Aug 2026",
+    credentialId: "C29079B0DD25",
+    url: "https://www.hackerrank.com/certificates/C29079B0DD25",
+    skills: ["JavaScript", "ECMAScript", "Async/Await"],
+  },
+  {
+    id: "cert-hr-golang",
+    category: "Programming Language",
+    title: "Go (Basic) Certificate",
+    issuer: "HackerRank",
+    date: "Aug 2026",
+    credentialId: "97910B5C3DFE",
+    url: "https://www.hackerrank.com/certificates/97910B5C3DFE",
+    skills: ["Go (Golang)", "Concurrency", "Backend Web"],
+  },
+  {
+    id: "cert-hr-css",
+    category: "Frontend UI",
+    title: "CSS (Basic) Certificate",
+    issuer: "HackerRank",
+    date: "Aug 2026",
+    credentialId: "33C5CD52D222",
+    url: "https://www.hackerrank.com/certificates/33C5CD52D222",
+    skills: ["CSS3", "Responsive UI", "Web Layouts"],
+  },
+  {
+    id: "cert-codecollab-2024",
+    category: "National Hackathon",
+    title: 'National Hackathon "CodeCollab: Solving Today\u2019s Challenges Together"',
+    issuer: "HMSE Telkom University Purwokerto",
+    date: "Dec 2024",
+    skills: ["Hackathon", "Rapid Prototyping", "Fullstack Engineering"],
+  },
+  {
+    id: "cert-fbc-top10",
+    category: "National Competition",
+    title: "Top 10 Business Model Canvas (BMC) — Future Founders League",
+    issuer: "Forum Bisnis Cendekia",
+    date: "Feb 2026",
+    skills: ["Product Strategy", "Business Development", "SaaS Modelling"],
+  },
+  {
+    id: "cert-dicoding-js",
+    category: "Professional Course",
+    title: "Basic JavaScript Programming",
+    issuer: "Dicoding Indonesia (AWS Validated)",
+    date: "Apr 2026",
+    credentialId: "1OP8R4K8LZQK",
+    url: "https://www.dicoding.com/certificates/1OP8R4K8LZQK",
+    skills: ["JavaScript", "Node.js", "ES6+"],
+  },
+  {
+    id: "cert-dicoding-web",
+    category: "Professional Course",
+    title: "Basic Web Programming",
+    issuer: "Dicoding Indonesia",
+    date: "Apr 2026",
+    credentialId: "QLZ99V0VMZ5D",
+    url: "https://www.dicoding.com/certificates/QLZ99V0VMZ5D",
+    skills: ["HTML5", "CSS3", "Semantic Architecture"],
+  },
+  {
+    id: "cert-dicoding-fin",
+    category: "Specialized Course",
+    title: "Introduction to Financial Literacy",
+    issuer: "Dicoding & DBS Foundation",
+    date: "Dec 2025",
+    credentialId: "N9ZO2170RPG5",
+    url: "https://www.dicoding.com/certificates/N9ZO2170RPG5",
+    skills: ["Financial Planning", "Business Budgeting"],
+  },
+];
+
+/** Number of verified credentials, used by the Statement metrics grid. */
+export const certificateCount = certificates.length;

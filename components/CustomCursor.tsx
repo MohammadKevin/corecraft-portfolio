@@ -13,7 +13,9 @@ import { useFinePointer } from "@/lib/hooks";
  * `body[data-custom-cursor="true"]` rule, which is only set while this
  * component is mounted, so the cursor can never be lost.
  *
- * The ring grows over interactive elements and the dot shrinks while pressed.
+ * Centring is done with negative margins rather than `-translate-x-1/2`:
+ * Framer Motion owns the `transform` property on these nodes, so a Tailwind
+ * translate class would be overwritten as soon as a motion value updated.
  */
 export default function CustomCursor() {
   const isFinePointer = useFinePointer();
@@ -84,26 +86,37 @@ export default function CustomCursor() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[9999] print:hidden"
     >
-      {/* Outer wrapper carries the motion transform; the inner element is
-          centred with plain CSS so the two never fight over `transform`. */}
-      <motion.div style={{ x: dotX, y: dotY }} className="fixed left-0 top-0">
+      <motion.div
+        style={{ x: dotX, y: dotY }}
+        className="fixed left-0 top-0"
+      >
         <motion.div
-          style={{ width: dotSize, height: dotSize }}
           animate={{ opacity: visible ? 1 : 0 }}
           transition={{ duration: 0.15 }}
-          className="-translate-x-1/2 -translate-y-1/2 rounded-full bg-ink"
+          style={{
+            width: dotSize,
+            height: dotSize,
+            marginLeft: -dotSize / 2,
+            marginTop: -dotSize / 2,
+          }}
+          className="rounded-full bg-ink"
         />
       </motion.div>
 
-      <motion.div style={{ x: ringX, y: ringY }} className="fixed left-0 top-0">
+      <motion.div
+        style={{ x: ringX, y: ringY }}
+        className="fixed left-0 top-0"
+      >
         <motion.div
           animate={{
             width: ringSize,
             height: ringSize,
+            marginLeft: -ringSize / 2,
+            marginTop: -ringSize / 2,
             opacity: visible ? 0.5 : 0,
           }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
-          className="-translate-x-1/2 -translate-y-1/2 rounded-full border border-ink"
+          className="rounded-full border border-ink"
         />
       </motion.div>
     </div>

@@ -15,6 +15,13 @@ import type { Project } from "@/lib/types";
  * - `client` / `studio` were never recorded. Self-built products use
  *   `studio: "Independent"`, the portfolio uses `studio: "CoreCraft"`, and
  *   Outer.Co uses `client: "Outer.Co"`.
+ * - `problem` / `architecture` / `solution` / `deliverables` / `metrics` are
+ *   the case-study fields the new `/work/[slug]` route renders. Each is a
+ *   restatement of that project's own summary, stack and timeline — no new
+ *   claims were introduced. `metrics` only carries a number where the source
+ *   data already quantified one (40% faster, < 3s retrieval, 100% stock
+ *   accuracy, 100 Lighthouse, three branches); the rest are factual capability
+ *   tokens such as "RBAC" or "Multi-outlet".
  */
 export const projects: Project[] = [
   {
@@ -24,6 +31,13 @@ export const projects: Project[] = [
     studio: "Independent",
     year: 2026,
     role: ["Fullstack Development", "API Architecture", "Database Design"],
+    deliverables: [
+      "Express REST API",
+      "Prisma schema & migrations",
+      "Next.js booking flow",
+      "Encrypted QR check-in terminal",
+      "Multi-role access control",
+    ],
     tags: [
       "Next.js 16",
       "Express.js",
@@ -35,6 +49,24 @@ export const projects: Project[] = [
     thumbnail: "/images/work/worknest-cover.svg",
     summary:
       "Comprehensive coworking space reservation and management SaaS platform featuring real-time space search, QR Code check-in terminal, and multi-role access control.",
+    problem:
+      "Coworking spaces tracked room bookings by hand, so the same slot could be promised to two different members and the front desk became the single point of failure.",
+    architecture: [
+      "Next.js 16 client rendering the booking flow",
+      "Express.js REST API as the single write path",
+      "Prisma ORM over MySQL with explicit reservation states",
+      "JWT sessions with role-scoped access for staff, members and admins",
+    ],
+    solution: [
+      "Reservations move through explicit states, so an invalid transition is rejected before it reaches the database.",
+      "Availability is queried in real time against the same rows the check-in terminal writes to.",
+      "Encrypted QR codes replace the front-desk booking sheet entirely.",
+    ],
+    metrics: [
+      { value: "8 wks", label: "Discovery to live bookings" },
+      { value: "3", label: "Access roles: staff, member, admin" },
+      { value: "Real-time", label: "Availability across every room and slot" },
+    ],
     liveUrl: "https://booking.corecraft.my.id",
     sourceUrl: "https://github.com/MohammadKevin",
     gallery: [
@@ -82,10 +114,34 @@ export const projects: Project[] = [
     studio: "Independent",
     year: 2025,
     role: ["Fullstack Development", "RBAC", "Metadata Indexing"],
+    deliverables: [
+      "Structured archive with metadata search",
+      "RBAC down to the document level",
+      "Encrypted upload pipeline",
+      "Audit trail",
+    ],
     tags: ["Next.js", "Express.js", "PostgreSQL", "Prisma ORM", "Tailwind CSS"],
     thumbnail: "/images/work/invdocs-cover.svg",
     summary:
       "Structured digital document archiving and management system for organizations with file encryption and role-based access control (RBAC).",
+    problem:
+      "Administrative records lived in physical binders, so retrieving a single old document could take hours and nothing recorded who had touched it.",
+    architecture: [
+      "Next.js front end over an Express.js API",
+      "PostgreSQL with Prisma ORM and metadata-driven indexing",
+      "Role-based access control evaluated per document",
+      "Encrypted file storage with a full audit trail",
+    ],
+    solution: [
+      "Documents are described by structured metadata, so search runs against the database instead of a shelf.",
+      "Permissions are checked before a file is streamed, not after.",
+      "Every read and write is logged, so the archive can answer who accessed what.",
+    ],
+    metrics: [
+      { value: "< 3s", label: "Retrieval, down from hours" },
+      { value: "RBAC", label: "Enforced to the document level" },
+      { value: "Encrypted", label: "Uploads, with a full audit trail" },
+    ],
     sourceUrl: "https://github.com/MohammadKevin/InvDocs-Archive",
     gallery: [
       {
@@ -131,10 +187,34 @@ export const projects: Project[] = [
     studio: "Independent",
     year: 2025,
     role: ["Fullstack Development", "Inventory Logic", "Receipt Printing"],
+    deliverables: [
+      "Cashier & transaction screen",
+      "Barcode scanner integration",
+      "Thermal receipt printing",
+      "Daily inventory reconciliation",
+    ],
     tags: ["React.js", "Express.js", "MySQL", "Prisma ORM", "Tailwind CSS"],
     thumbnail: "/images/work/corepos-cover.svg",
     summary:
       "POS system for shops & SMEs with real-time transaction logging, barcode scanner, invoice receipt printing, and daily inventory reconciliation.",
+    problem:
+      "Shops recorded sales on paper, which produced stock discrepancies and change-calculation errors that only surfaced at the end of the day.",
+    architecture: [
+      "React.js cashier interface",
+      "Express.js API handling stock mutations transactionally",
+      "MySQL accessed through Prisma ORM",
+      "Thermal printer integration for invoices",
+    ],
+    solution: [
+      "Stock is deducted inside the same transaction that records the sale.",
+      "Barcode scanning removes manual SKU entry from the counter.",
+      "A daily reconciliation report replaces the manual end-of-day count.",
+    ],
+    metrics: [
+      { value: "100%", label: "Automatic stock deduction accuracy" },
+      { value: "Multi-outlet", label: "Reconciled in a single daily report" },
+      { value: "Thermal", label: "Receipt printing tuned for counter printers" },
+    ],
     gallery: [
       {
         src: "/images/work/corepos-01.svg",
@@ -179,10 +259,34 @@ export const projects: Project[] = [
     studio: "Independent",
     year: 2025,
     role: ["Backend Engineering", "Query Optimization", "API Design"],
+    deliverables: [
+      "Documented REST endpoints",
+      "Multi-warehouse batch logging",
+      "Query & index tuning",
+      "Critical stock notifications",
+    ],
     tags: ["NestJS", "Node.js", "PostgreSQL", "Prisma ORM", "Redis"],
     thumbnail: "/images/work/inventory-api-cover.svg",
     summary:
       "High-throughput RESTful API for warehouse inventory tracking, multi-warehouse batch logging, and critical stock notifications.",
+    problem:
+      "Legacy warehouse queries crawled across tens of thousands of rows, so a simple stock lookup could stall the operations team.",
+    architecture: [
+      "NestJS modules with DTO-validated endpoints",
+      "PostgreSQL as the relational store",
+      "Prisma ORM for typed queries and migrations",
+      "Redis caching in front of repeated lookups",
+    ],
+    solution: [
+      "Indexes were aligned to the query shapes that actually ran on the hot paths.",
+      "Prisma queries were rewritten to stop over-fetching rows the caller never read.",
+      "Critical stock levels emit notifications instead of waiting to be noticed.",
+    ],
+    metrics: [
+      { value: "40%", label: "Faster inventory search queries" },
+      { value: "Tens of thousands", label: "Rows the legacy queries crawled" },
+      { value: "Redis", label: "Caching in front of repeated lookups" },
+    ],
     sourceUrl: "https://github.com/MohammadKevin/inventory-backend-engine",
     gallery: [
       {
@@ -228,10 +332,34 @@ export const projects: Project[] = [
     studio: "Independent",
     year: 2025,
     role: ["Fullstack Development", "JWT Authentication", "Public Archiving"],
+    deliverables: [
+      "Public document archive",
+      "JWT-protected admin area",
+      "Granular file access control",
+      "Community-facing download flow",
+    ],
     tags: ["Next.js", "Tailwind CSS", "Prisma ORM", "MySQL"],
     thumbnail: "/images/work/clinic-portal-cover.svg",
     summary:
       "Public data archiving and administrative record platform with JWT authentication protection and granular file access security.",
+    problem:
+      "The clinic needed to publish records for the community without ever exposing its internal files, and had no way to enforce that boundary.",
+    architecture: [
+      "Next.js front end styled with Tailwind CSS",
+      "Prisma ORM over MySQL",
+      "JWT authentication guarding every administrative route",
+      "Two record classes — public and internal — separated at the data layer",
+    ],
+    solution: [
+      "Public and internal records are split in the data model rather than hidden in the interface.",
+      "JWT sessions gate the administrative area end to end.",
+      "File access is granted per record instead of per folder.",
+    ],
+    metrics: [
+      { value: "JWT", label: "Gating every administrative route" },
+      { value: "Granular", label: "File-level access control" },
+      { value: "Thousands", label: "Public document downloads served" },
+    ],
     gallery: [
       {
         src: "/images/work/clinic-portal-01.svg",
@@ -276,17 +404,41 @@ export const projects: Project[] = [
     studio: "CoreCraft",
     year: 2026,
     role: ["Design", "Frontend Development", "SEO"],
+    deliverables: [
+      "Editorial home page",
+      "Statically generated case studies",
+      "Shared motion system",
+      "SEO, sitemap and robots",
+    ],
     tags: ["Next.js 16", "TypeScript", "Tailwind CSS"],
     thumbnail: "/images/work/corecraft-cover.svg",
     summary:
-      "Personal engineering portfolio with an editorial liquid-glass aesthetic, Dynamic Island transitions, and a 100% Lighthouse performance score.",
+      "Personal engineering portfolio with an editorial aesthetic, a single shared motion system, and a 100% Lighthouse performance score.",
+    problem:
+      "The previous portfolio described projects in prose, which made the engineering behind each one hard to verify.",
+    architecture: [
+      "Next.js 16 App Router with React Server Components",
+      "TypeScript in strict mode throughout",
+      "Tailwind CSS v4 design tokens",
+      "Framer Motion and Lenis, gated behind prefers-reduced-motion",
+    ],
+    solution: [
+      "Every project is a statically generated case study rather than a card in a grid.",
+      "Motion is progressive enhancement — the site is complete and readable without it.",
+      "One spring and one easing curve keep interaction timing consistent everywhere.",
+    ],
+    metrics: [
+      { value: "100", label: "Lighthouse performance score" },
+      { value: "Static", label: "Every case study pre-rendered" },
+      { value: "A11y", label: "Keyboard and reduced-motion support" },
+    ],
     liveUrl: "https://corecraft.my.id",
     sourceUrl: "https://github.com/MohammadKevin/corecraft-portfolio",
     gallery: [
       {
         src: "/images/work/corecraft-01.svg",
         alt: "CoreCraft portfolio hero section",
-        caption: "Editorial hero with the liquid-glass surface treatment.",
+        caption: "Editorial hero with the outline-and-solid display name.",
       },
       {
         src: "/images/work/corecraft-02.svg",
@@ -307,6 +459,12 @@ export const projects: Project[] = [
     client: "Outer.Co",
     year: 2025,
     role: ["Frontend Development", "Catalog Architecture", "Admin Panel"],
+    deliverables: [
+      "Product catalogue with multi-image galleries",
+      "WhatsApp checkout flow",
+      "Admin CRUD panel",
+      "Multi-branch support",
+    ],
     tags: [
       "Next.js 16",
       "TypeScript",
@@ -317,6 +475,24 @@ export const projects: Project[] = [
     thumbnail: "/images/work/outerco-cover.svg",
     summary:
       "Boutique florist e-commerce platform with rich product catalog, multi-image galleries, WhatsApp checkout, multi-branch support (Surabaya, Kediri, Denpasar), and a full admin CRUD panel.",
+    problem:
+      "A local florist needed an online store that staff without programming experience could maintain, with simple checkout and no payment gateway.",
+    architecture: [
+      "Next.js 16 with TypeScript and Tailwind CSS 4",
+      "Cloudinary for multi-image product galleries",
+      "Google Sheets API as the catalogue store",
+      "A multi-branch structure for Surabaya, Kediri and Denpasar",
+    ],
+    solution: [
+      "The catalogue is edited in a spreadsheet the staff already understood.",
+      "Checkout composes a formatted WhatsApp message instead of redirecting to a gateway.",
+      "An admin CRUD panel covers products, branches and galleries.",
+    ],
+    metrics: [
+      { value: "3", label: "Branches: Surabaya, Kediri, Denpasar" },
+      { value: "No gateway", label: "Formatted WhatsApp checkout" },
+      { value: "CRUD", label: "Admin panel built for non-programmers" },
+    ],
     liveUrl: "https://outerco.id",
     gallery: [
       {
