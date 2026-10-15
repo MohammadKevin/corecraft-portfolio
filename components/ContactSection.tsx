@@ -49,7 +49,7 @@ export default function ContactSection() {
     <footer
       id="contact"
       aria-labelledby="contact-heading"
-      className="section-pad border-t border-black/[0.08] bg-bg relative z-10 overflow-hidden shadow-[0_-25px_60px_rgba(0,0,0,0.04)]"
+      className="section-pad border-t border-black/[0.08] bg-bg relative z-10 overflow-hidden shadow-[0_-25px_60px_rgba(0,0,0,0.06)] md:-mt-24"
     >
       <div className="page-container">
         {/* Monospace Sub-label */}

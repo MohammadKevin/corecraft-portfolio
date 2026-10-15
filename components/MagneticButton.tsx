@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { useFinePointer } from "@/lib/hooks";
-import { MAGNETIC_STRENGTH } from "@/lib/motion";
+import { spring } from "@/lib/motion";
 
 type MagneticButtonProps = {
   /** Destination. Internal paths (`/`, `#`) use next/link, the rest a plain anchor. */
@@ -25,11 +25,11 @@ const variantClasses: Record<
   string
 > = {
   solid:
-    "bg-ink text-bg border border-ink hover:bg-[#1E293B] focus-visible:outline-ink",
+    "bg-ink text-white border border-ink hover:bg-[#1E293B] focus-visible:outline-ink",
   outline:
-    "bg-transparent text-ink border border-line hover:border-ink hover:bg-bg-alt focus-visible:outline-ink",
+    "bg-transparent text-ink border border-black/[0.08] hover:border-ink hover:bg-neutral-100/80 focus-visible:outline-ink",
   ghost:
-    "bg-transparent text-ink-dark border border-line-dark hover:border-ink-dark focus-visible:outline-ink-dark",
+    "bg-transparent text-white border border-white/[0.08] hover:border-white focus-visible:outline-white",
 };
 
 /** `#anchor` and `/route` stay client-side; mailto:, tel: and http(s) do not. */
@@ -37,13 +37,6 @@ function isInternalHref(href: string): boolean {
   return href.startsWith("#") || href.startsWith("/");
 }
 
-/**
- * Pill button that leans toward the pointer.
- *
- * Spec: maximum 8px of travel, spring-driven, and only on `(pointer: fine)`
- * without reduced-motion. The offset is applied to an inner span so the hit
- * area and the focus ring never move — clicking and tabbing stay stable.
- */
 export default function MagneticButton({
   href,
   children,
@@ -89,8 +82,8 @@ export default function MagneticButton({
 
   const classes = [
     "group relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3",
-    "text-sm font-medium tracking-tight transition-colors duration-200 ease-out",
-    "focus-visible:outline-2 focus-visible:outline-offset-4",
+    "text-sm font-medium tracking-tight transition-colors duration-200 ease-out select-none",
+    "focus-visible:outline-2 focus-visible:outline-offset-4 cursor-pointer",
     variantClasses[variant],
     className,
   ]
@@ -102,7 +95,7 @@ export default function MagneticButton({
       {hovered && magneticEnabled ? (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-emerald/40"
+          className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-emerald-500/40"
         />
       ) : null}
       <motion.span
@@ -122,31 +115,43 @@ export default function MagneticButton({
 
   if (isInternalHref(href)) {
     return (
-      <Link
-        ref={wrapperRef}
-        href={href}
-        aria-label={ariaLabel}
-        onClick={onClick}
-        className={classes}
-        {...interactionHandlers}
+      <motion.div
+        whileTap={magneticEnabled ? { scale: 0.96 } : undefined}
+        transition={spring}
+        className="inline-block"
       >
-        {content}
-      </Link>
+        <Link
+          ref={wrapperRef}
+          href={href}
+          aria-label={ariaLabel}
+          onClick={onClick}
+          className={classes}
+          {...interactionHandlers}
+        >
+          {content}
+        </Link>
+      </motion.div>
     );
   }
 
   return (
-    <a
-      ref={wrapperRef}
-      href={href}
-      aria-label={ariaLabel}
-      onClick={onClick}
-      target={newTab ? "_blank" : undefined}
-      rel={newTab ? "noopener noreferrer" : undefined}
-      className={classes}
-      {...interactionHandlers}
+    <motion.div
+      whileTap={magneticEnabled ? { scale: 0.96 } : undefined}
+      transition={spring}
+      className="inline-block"
     >
-      {content}
-    </a>
+      <a
+        ref={wrapperRef}
+        href={href}
+        aria-label={ariaLabel}
+        onClick={onClick}
+        target={newTab ? "_blank" : undefined}
+        rel={newTab ? "noopener noreferrer" : undefined}
+        className={classes}
+        {...interactionHandlers}
+      >
+        {content}
+      </a>
+    </motion.div>
   );
 }

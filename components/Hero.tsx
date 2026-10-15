@@ -54,7 +54,7 @@ export default function Hero() {
   const nameY = useTransform(scrollYProgress, [0, 1], [0, -120]);
   const avatarScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
   const avatarOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.4]);
-  const avatarY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const avatarY = useTransform(scrollYProgress, [0, 1], [0, -72]);
 
   const fitName = useCallback(() => {
     const name = nameRef.current;
