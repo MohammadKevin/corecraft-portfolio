@@ -119,8 +119,11 @@ export default function Hero() {
           <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
             /01 HERO
           </span>
-          <span className="hidden sm:inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-surface px-3.5 py-1 text-xs font-medium tracking-tight text-muted shadow-sm">
-            <span className="status-dot" aria-hidden="true" />
+          <span className="hidden sm:inline-flex items-center gap-2.5 rounded-full border border-black/[0.08] bg-surface px-3.5 py-1 text-xs font-mono font-medium tracking-tight text-ink shadow-sm">
+            <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 ring-1 ring-neutral-400/50 animate-ping" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
+            </span>
             Available for New Project
           </span>
         </motion.div>

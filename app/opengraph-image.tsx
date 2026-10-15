@@ -28,7 +28,8 @@ export default async function Image() {
               width: "12px",
               height: "12px",
               borderRadius: "9999px",
-              background: "#10B981",
+              background: "#FFFFFF",
+              boxShadow: "0 0 10px rgba(255,255,255,0.7)",
             }}
           />
           <span

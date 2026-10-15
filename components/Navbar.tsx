@@ -92,13 +92,16 @@ export default function Navbar() {
           aria-label="Primary"
           className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-3 rounded-full border border-black/[0.08] bg-white/80 px-3 shadow-md backdrop-blur-md pointer-events-auto sm:px-4"
         >
-          {/* Availability indicator — green status beacon */}
+          {/* Availability indicator — pure monochrome/silver pulse */}
           <a
             href="#hero"
             onClick={(e) => goTo(e, "hero")}
-            className="flex min-w-0 items-center gap-2 pl-1 cursor-pointer transition-opacity hover:opacity-80"
+            className="flex min-w-0 items-center gap-2.5 pl-1 cursor-pointer transition-opacity hover:opacity-80"
           >
-            <span className="status-dot shrink-0" aria-hidden="true" />
+            <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 ring-1 ring-neutral-400/50 animate-ping" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
+            </span>
             <span className="hidden truncate font-mono text-xs font-medium tracking-tight text-ink sm:inline">
               Available for New Project
             </span>
@@ -190,7 +193,7 @@ export default function Navbar() {
                   <a
                     href={`#${link.id}`}
                     onClick={(event) => goTo(event, link.id)}
-                    className="block py-2 font-display text-3xl font-extrabold tracking-tight text-ink hover:text-emerald-700"
+                    className="block py-2 font-display text-3xl font-extrabold tracking-tight text-ink hover:text-neutral-500"
                   >
                     {link.label}
                   </a>
@@ -204,7 +207,7 @@ export default function Navbar() {
                 <a
                   href="#contact"
                   onClick={(event) => goTo(event, "contact")}
-                  className="block py-2 font-display text-3xl font-extrabold tracking-tight text-ink hover:text-emerald-700"
+                  className="block py-2 font-display text-3xl font-extrabold tracking-tight text-ink hover:text-neutral-500"
                 >
                   Contact
                 </a>

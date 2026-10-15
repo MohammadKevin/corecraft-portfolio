@@ -95,7 +95,7 @@ export default function MagneticButton({
       {hovered && magneticEnabled ? (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-emerald-500/40"
+          className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-neutral-400/50"
         />
       ) : null}
       <motion.span

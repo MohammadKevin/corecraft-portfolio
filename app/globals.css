@@ -155,14 +155,14 @@ body {
   }
 }
 
-/* Status dot with pulse glow (emerald is used here only) */
+/* Status dot with pulse glow (monochrome) */
 .status-dot {
   position: relative;
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 9999px;
-  background-color: var(--emerald);
+  background-color: var(--ink);
 }
 
 .status-dot::after {
@@ -170,7 +170,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-color: var(--emerald);
+  background-color: var(--ink);
   animation: status-pulse 2.4s var(--ease-out-expo) infinite;
 }
 
