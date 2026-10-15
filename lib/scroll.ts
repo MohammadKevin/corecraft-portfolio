@@ -10,9 +10,19 @@ export function useScrollToSection() {
 
   return useCallback(
     (target: string | HTMLElement) => {
+      const id = typeof target === "string" ? target.replace(/^#/, "") : "";
+      if (id === "hero") {
+        if (lenis) {
+          lenis.scrollTo(0, { duration: 1.2 });
+          return;
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
       const element =
         typeof target === "string"
-          ? document.getElementById(target.replace(/^#/, ""))
+          ? document.getElementById(id)
           : target;
 
       if (!element) return;

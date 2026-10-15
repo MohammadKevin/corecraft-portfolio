@@ -36,7 +36,7 @@ export default function Navbar() {
       setScrolled(window.scrollY > 30);
 
       // Check if navbar (y ~ 50px) is currently floating above a dark-background section
-      const darkSectionIds = ["about", "experience", "contact"];
+      const darkSectionIds = ["about", "services", "experience", "contact"];
       const navY = 50;
       let overDark = false;
 
@@ -63,6 +63,9 @@ export default function Navbar() {
       event.preventDefault();
       setMenuOpen(false);
       scrollTo(id);
+      if (typeof window !== "undefined") {
+        window.history.pushState(null, "", `#${id}`);
+      }
     },
     [scrollTo],
   );
@@ -127,16 +130,16 @@ export default function Navbar() {
               : "bg-white/75 border-black/10 text-neutral-900 shadow-[0_8px_32px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.8)]"
             }`}
         >
-          {/* Sisi Kiri: Wordmark Corecraft (Tanpa logo gambar, font More Sugar) */}
+          {/* Sisi Kiri: Wordmark Corecraft (Routes ke #hero) */}
           <Link
             href="/#hero"
             onClick={(e) => {
               if (typeof window !== "undefined" && window.location.pathname === "/") {
-                e.preventDefault();
                 goTo(e, "hero");
               }
             }}
-            className="flex min-w-0 items-center transition-opacity hover:opacity-80 shrink-0"
+            className="flex min-w-0 items-center transition-opacity hover:opacity-80 shrink-0 cursor-pointer"
+            aria-label="Corecraft - Navigasi ke #hero"
           >
             <span
               style={{ fontFamily: "'More Sugar', cursive, sans-serif" }}

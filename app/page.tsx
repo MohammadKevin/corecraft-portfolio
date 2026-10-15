@@ -309,142 +309,222 @@ export default function HomePage() {
         <section
           id="services"
           aria-labelledby="services-heading"
-          className="w-full min-h-[100svh] md:h-[100svh] bg-white dark:bg-[#0A0A0C] text-neutral-900 dark:text-white px-6 md:px-16 pt-24 md:pt-28 pb-10 flex flex-col justify-between border-t border-black/5 dark:border-white/5"
+          className="w-full min-h-[100svh] bg-[#111216] text-white px-6 md:px-16 pt-24 md:pt-28 pb-10 flex flex-col justify-between border-t border-white/10 relative overflow-hidden"
         >
+          {/* Subtle Architectural Blueprint Grid */}
+          <div 
+            className="absolute inset-0 z-0 pointer-events-none opacity-[0.25] [mask-image:radial-gradient(ellipse_75%_75%_at_50%_50%,black_30%,transparent_100%)]"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
+              `,
+              backgroundSize: "48px 48px",
+            }}
+          />
+
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-4 mb-6">
-            <span className="font-mono text-xs font-semibold tracking-[0.2em] text-neutral-500 dark:text-neutral-400 uppercase">
+          <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+            <span className="font-mono text-xs font-semibold tracking-[0.2em] text-neutral-400 uppercase">
               /03 SERVICES &amp; CAPABILITIES
             </span>
-            <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 uppercase">
-              {String(services.length).padStart(2, "0")} CORE DELIVERABLES
+            <span className="font-mono text-xs text-neutral-400 uppercase">
+              {String(services.length).padStart(2, "0")} CORE DELIVERABLES · INTERACTIVE FOLIO
             </span>
           </div>
 
-          <div className="mb-6">
+          <div className="relative z-10 mb-6">
             <h2
               id="services-heading"
-              className="text-3xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white"
+              className="text-3xl md:text-5xl font-bold tracking-tight text-white"
             >
               Production capabilities delivered end-to-end.
             </h2>
           </div>
 
-          {/* Accordion Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto items-start">
-            {/* Accordion List (Left Column) */}
-            <div className="lg:col-span-7 flex flex-col divide-y divide-black/10 dark:divide-white/10">
-              {services.map((service, index) => {
-                const isOpen = openServiceId === service.id;
-                return (
-                  <div key={service.id} className="py-3">
-                    <button
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={`service-panel-${service.id}`}
-                      id={`service-button-${service.id}`}
-                      onClick={() => setOpenServiceId(service.id)}
-                      className="w-full flex items-center justify-between text-left py-2 font-display text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-neutral-900 dark:text-white transition-opacity hover:opacity-80 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-xs text-neutral-400">
-                          /{String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span>{service.title}</span>
-                      </div>
-                      <ChevronDown
-                        className={`h-5 w-5 text-neutral-400 transition-transform duration-300 ${
-                          isOpen ? "rotate-180 text-neutral-900 dark:text-white" : ""
-                        }`}
-                        aria-hidden="true"
-                      />
-                    </button>
+          {/* Desktop Interactive Folio Columns ("Kotak Panjang Buku Kliping") */}
+          <div className="relative z-10 hidden lg:flex gap-3.5 h-[500px] xl:h-[530px] my-auto items-stretch w-full">
+            {services.map((service, index) => {
+              const isOpen = (openServiceId || services[0]?.id) === service.id;
 
-                    <AnimatePresence initial={false}>
-                      {isOpen ? (
-                        <motion.div
-                          id={`service-panel-${service.id}`}
-                          role="region"
-                          aria-labelledby={`service-button-${service.id}`}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={spring}
-                          className="overflow-hidden pt-2 pb-3"
-                        >
-                          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed max-w-xl mb-3">
-                            {service.description}
-                          </p>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                            {service.deliverables.map((item) => (
-                              <div
-                                key={item}
-                                className="flex items-center gap-2 text-xs font-mono text-neutral-700 dark:text-neutral-300"
-                              >
-                                <span className="h-1.5 w-1.5 rounded-full bg-neutral-900 dark:bg-white shrink-0" />
-                                <span>{item}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      ) : null}
-                    </AnimatePresence>
+              return (
+                <motion.div
+                  key={service.id}
+                  layout
+                  initial={{ opacity: 0, y: 70 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 320,
+                    damping: 32,
+                    delay: index * 0.08,
+                  }}
+                  onMouseEnter={() => setOpenServiceId(service.id)}
+                  onClick={() => setOpenServiceId(service.id)}
+                  className={`relative rounded-3xl border transition-all duration-500 cursor-pointer overflow-hidden flex flex-col justify-between p-6 select-none ${
+                    isOpen
+                      ? "flex-[3.5] bg-[#1A1D24] border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.25)] ring-1 ring-white/15"
+                      : "flex-1 bg-white/[0.03] border-white/10 hover:border-white/25 hover:bg-white/[0.06] opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  {/* Top Bar inside Card */}
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
+                    <span className="font-mono text-xs font-bold text-neutral-300">
+                      /{String(index + 1).padStart(2, "0")}
+                    </span>
+                    {isOpen ? (
+                      <span className="font-mono text-[11px] text-neutral-400 uppercase tracking-wider">
+                        SPEC · {service.id}
+                      </span>
+                    ) : null}
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Right Preview Card (Desktop) */}
-            <div className="hidden lg:block lg:col-span-5 h-full">
-              {(() => {
-                const current = services.find((s) => s.id === openServiceId) ?? services[0];
-                return (
-                  <div className="rounded-3xl border border-black/10 dark:border-white/10 bg-[#F6F7F9] dark:bg-white/[0.03] p-6 shadow-sm flex flex-col justify-between h-[360px]">
-                    <div>
-                      <div className="flex items-center justify-between text-xs font-mono text-neutral-500 mb-4">
-                        <span>ARCHITECTURE SPEC</span>
-                        <span>{current.id}</span>
+                  {/* Body: Collapsed vs Expanded */}
+                  {isOpen ? (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="my-auto flex flex-col justify-between py-2 overflow-hidden"
+                    >
+                      <div>
+                        <h3 className="font-display text-2xl xl:text-3xl font-extrabold text-white tracking-tight leading-snug mb-3">
+                          {service.title}
+                        </h3>
+
+                        <p className="text-xs xl:text-sm text-neutral-300 leading-relaxed max-w-xl mb-5">
+                          {service.description}
+                        </p>
+
+                        {/* Deliverables Checklist */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5 bg-white/[0.03] p-4 rounded-2xl border border-white/5">
+                          {service.deliverables.map((item) => (
+                            <div
+                              key={item}
+                              className="flex items-center gap-2 text-xs font-mono text-neutral-200"
+                            >
+                              <span className="h-1.5 w-1.5 rounded-full bg-white shrink-0" />
+                              <span className="truncate">{item}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
 
-                      <h3 className="font-display text-xl font-bold text-neutral-900 dark:text-white mb-3">
-                        {current.title}
-                      </h3>
-
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {current.stack.map((tech) => (
+                      {/* Tech Stack Chips */}
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {service.stack.map((tech) => (
                           <span
                             key={tech}
-                            className="rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-white/[0.05] px-3 py-1 font-mono text-xs text-neutral-700 dark:text-neutral-300"
+                            className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 font-mono text-xs text-neutral-300"
                           >
                             {tech}
                           </span>
                         ))}
                       </div>
+                    </motion.div>
+                  ) : (
+                    /* Collapsed Vertical Title & Badge */
+                    <div className="my-auto flex flex-col items-center justify-center py-6 h-full">
+                      <span
+                        style={{ writingMode: "vertical-rl" }}
+                        className="font-display text-base xl:text-lg font-bold text-neutral-300 tracking-tight transform rotate-180 uppercase"
+                      >
+                        {service.title}
+                      </span>
                     </div>
+                  )}
 
-                    {/* Simple Monochrome Schema Diagram */}
-                    <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#121316] p-4 flex flex-col gap-2 font-mono text-xs">
-                      <div className="flex items-center justify-between text-[11px] text-neutral-500 pb-2 border-b border-black/5 dark:border-white/5">
-                        <span className="flex items-center gap-1.5">
-                          <Layers className="h-3 w-3" />
-                          <span>CONTRACT DEFINITION</span>
-                        </span>
-                        <span className="text-neutral-400">Strict Schema</span>
-                      </div>
-                      <div className="text-[11px] text-neutral-700 dark:text-neutral-300 font-mono space-y-1">
-                        <div>&gt; Client Interface (Next.js App Router)</div>
-                        <div>&gt; Data Ingress &amp; DTO Validation (Zod / Class-Validator)</div>
-                        <div>&gt; Isolated Persistence Layer (Prisma ORM over SQL)</div>
-                      </div>
-                    </div>
+                  {/* Bottom Bar inside Card */}
+                  <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono text-neutral-400 shrink-0">
+                    <span>{service.deliverables.length} Deliverables</span>
+                    {isOpen ? (
+                      <span className="text-white flex items-center gap-1 font-semibold">
+                        <span>Active Spec</span>
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </span>
+                    ) : (
+                      <span className="opacity-60">+</span>
+                    )}
                   </div>
-                );
-              })()}
-            </div>
+                </motion.div>
+              );
+            })}
           </div>
 
-          <div className="pt-4 border-t border-black/10 dark:border-white/10 flex items-center justify-between font-mono text-xs text-neutral-500">
+          {/* Mobile / Tablet Accordion Cards */}
+          <div className="relative z-10 flex lg:hidden flex-col gap-3 my-4">
+            {services.map((service, index) => {
+              const isOpen = (openServiceId || services[0]?.id) === service.id;
+
+              return (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="rounded-2xl border border-white/10 bg-[#1A1D24] p-4 flex flex-col gap-2"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenServiceId(service.id)}
+                    className="w-full flex items-center justify-between text-left font-display text-lg font-bold text-white cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs text-neutral-400">
+                        /{String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span>{service.title}</span>
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 text-neutral-400 transition-transform ${
+                        isOpen ? "rotate-180 text-white" : ""
+                      }`}
+                    />
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen ? (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden pt-2"
+                      >
+                        <p className="text-xs text-neutral-300 leading-relaxed mb-3">
+                          {service.description}
+                        </p>
+                        <div className="grid grid-cols-1 gap-1.5 mb-3">
+                          {service.deliverables.map((item) => (
+                            <div
+                              key={item}
+                              className="flex items-center gap-2 text-xs font-mono text-neutral-300"
+                            >
+                              <span className="h-1.5 w-1.5 rounded-full bg-white shrink-0" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {service.stack.map((tech) => (
+                            <span
+                              key={tech}
+                              className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-0.5 font-mono text-[10px] text-neutral-300"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-xs text-neutral-400">
             <span>Modular Services</span>
             <span>Available for Full-cycle Engagement</span>
           </div>
