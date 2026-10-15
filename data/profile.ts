@@ -6,8 +6,8 @@ import type { Profile } from "@/lib/types";
  * Statement section renders.
  */
 export const profile: Profile = {
-  firstName: "MOHAMMAD",
-  lastName: "KEVIN",
+  firstName: "Mohammad",
+  lastName: "Kevin",
   fullName: "Mohammad Kevin Arif Rudianto",
   role: "Backend & Fullstack Software Engineer",
   subtitle:

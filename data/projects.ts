@@ -1,28 +1,4 @@
 import type { Project } from "@/lib/types";
-
-/**
- * Remapped from the previous `data/projects.ts` (7 projects).
- *
- * Asumsi:
- * - The old `type` field only knew Backend / Frontend / Fullstack, while the
- *   new `ProjectCategory` union is Fullstack / Backend / E-Commerce. The two
- *   former "Frontend" entries were therefore reclassified: the Clinic &
- *   Pharmacy Portal is a fullstack web app (Next.js + Prisma + JWT), and
- *   Outer.Co is genuinely an e-commerce build.
- * - `year`, `role` and `timeline` did not exist before. `year` comes from the
- *   previous `data/timeline.ts` entries, `role` from each project's stack, and
- *   `timeline` was written from the problem/impact notes that already existed.
- * - `client` / `studio` were never recorded. Self-built products use
- *   `studio: "Independent"`, the portfolio uses `studio: "CoreCraft"`, and
- *   Outer.Co uses `client: "Outer.Co"`.
- * - `problem` / `architecture` / `solution` / `deliverables` / `metrics` are
- *   the case-study fields the new `/work/[slug]` route renders. Each is a
- *   restatement of that project's own summary, stack and timeline — no new
- *   claims were introduced. `metrics` only carries a number where the source
- *   data already quantified one (40% faster, < 3s retrieval, 100% stock
- *   accuracy, 100 Lighthouse, three branches); the rest are factual capability
- *   tokens such as "RBAC" or "Multi-outlet".
- */
 export const projects: Project[] = [
   {
     slug: "worknest",
