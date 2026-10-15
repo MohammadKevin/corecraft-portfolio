@@ -2,8 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
+import Preloader from "@/components/Preloader";
+import Atmosphere from "@/components/Atmosphere";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { profile } from "@/data/profile";
 
 /** Display face — hero name, section headings. */
@@ -35,7 +38,7 @@ const fullName = `${profile.firstName} ${profile.lastName}`;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${fullName} — Backend & Fullstack Developer`,
+    default: `${fullName} — Backend & Fullstack Software Engineer`,
     template: `%s — ${fullName}`,
   },
   description: profile.subtitle,
@@ -110,9 +113,12 @@ export default function RootLayout({
         </a>
 
         <SmoothScroll>
+          <Preloader />
+          <Atmosphere />
           <CustomCursor />
           <Navbar />
           <main id="main">{children}</main>
+          <Footer />
         </SmoothScroll>
       </body>
     </html>

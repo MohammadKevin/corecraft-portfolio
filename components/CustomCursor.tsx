@@ -4,27 +4,13 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { useFinePointer } from "@/lib/hooks";
 
-/**
- * Custom cursor: a small dot that follows the pointer exactly, plus a larger
- * ring that lags behind it with a spring.
- *
- * Spec: only on `(pointer: fine)`, disabled for reduced-motion, and hidden
- * from assistive tech with `aria-hidden`. The native cursor is hidden by the
- * `body[data-custom-cursor="true"]` rule, which is only set while this
- * component is mounted, so the cursor can never be lost.
- *
- * Centring is done with negative margins rather than `-translate-x-1/2`:
- * Framer Motion owns the `transform` property on these nodes, so a Tailwind
- * translate class would be overwritten as soon as a motion value updated.
- */
 export default function CustomCursor() {
   const isFinePointer = useFinePointer();
   const prefersReducedMotion = useReducedMotion();
   const enabled = isFinePointer && prefersReducedMotion !== true;
 
   const [visible, setVisible] = useState(false);
-  const [pressed, setPressed] = useState(false);
-  const [overInteractive, setOverInteractive] = useState(false);
+  const [cursorMode, setCursorMode] = useState<"default" | "interactive" | "view">("default");
 
   const pointerX = useMotionValue(-100);
   const pointerY = useMotionValue(-100);
@@ -32,8 +18,8 @@ export default function CustomCursor() {
   const dotX = useSpring(pointerX, { stiffness: 900, damping: 50, mass: 0.3 });
   const dotY = useSpring(pointerY, { stiffness: 900, damping: 50, mass: 0.3 });
 
-  const ringX = useSpring(pointerX, { stiffness: 180, damping: 24, mass: 0.6 });
-  const ringY = useSpring(pointerY, { stiffness: 180, damping: 24, mass: 0.6 });
+  const ringX = useSpring(pointerX, { stiffness: 280, damping: 28, mass: 0.6 });
+  const ringY = useSpring(pointerY, { stiffness: 280, damping: 28, mass: 0.6 });
 
   useEffect(() => {
     if (!enabled) return;
@@ -46,31 +32,32 @@ export default function CustomCursor() {
       setVisible(true);
 
       const target = event.target as HTMLElement | null;
-      setOverInteractive(
-        Boolean(
-          target?.closest(
-            "a, button, [role='tab'], input, textarea, select, summary, [data-cursor-hover]",
-          ),
+      const isView = Boolean(target?.closest("[data-cursor='view']"));
+      const isInteractive = Boolean(
+        target?.closest(
+          "a, button, [role='tab'], input, textarea, select, summary, [data-cursor-hover]",
         ),
       );
+
+      if (isView) {
+        setCursorMode("view");
+      } else if (isInteractive) {
+        setCursorMode("interactive");
+      } else {
+        setCursorMode("default");
+      }
     };
 
-    const onPointerDown = () => setPressed(true);
-    const onPointerUp = () => setPressed(false);
     const onPointerLeave = () => setVisible(false);
     const onPointerEnter = () => setVisible(true);
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
-    window.addEventListener("pointerdown", onPointerDown);
-    window.addEventListener("pointerup", onPointerUp);
     document.addEventListener("pointerleave", onPointerLeave);
     document.addEventListener("pointerenter", onPointerEnter);
 
     return () => {
       delete document.body.dataset.customCursor;
       window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerdown", onPointerDown);
-      window.removeEventListener("pointerup", onPointerUp);
       document.removeEventListener("pointerleave", onPointerLeave);
       document.removeEventListener("pointerenter", onPointerEnter);
     };
@@ -78,31 +65,31 @@ export default function CustomCursor() {
 
   if (!enabled) return null;
 
-  const dotSize = pressed ? 5 : 7;
-  const ringSize = overInteractive ? 48 : 30;
+  const isView = cursorMode === "view";
+  const isInteractive = cursorMode === "interactive";
+
+  const ringSize = isView ? 84 : isInteractive ? 48 : 28;
 
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[9999] print:hidden"
+      className="pointer-events-none fixed inset-0 z-[9999] print:hidden mix-blend-difference"
     >
-      <motion.div
-        style={{ x: dotX, y: dotY }}
-        className="fixed left-0 top-0"
-      >
+      {/* Center dot - hidden in view mode */}
+      {!isView ? (
         <motion.div
-          animate={{ opacity: visible ? 1 : 0 }}
-          transition={{ duration: 0.15 }}
-          style={{
-            width: dotSize,
-            height: dotSize,
-            marginLeft: -dotSize / 2,
-            marginTop: -dotSize / 2,
-          }}
-          className="rounded-full bg-ink"
-        />
-      </motion.div>
+          style={{ x: dotX, y: dotY }}
+          className="fixed left-0 top-0"
+        >
+          <motion.div
+            animate={{ opacity: visible ? 1 : 0 }}
+            transition={{ duration: 0.15 }}
+            className="h-1.5 w-1.5 -ml-[3px] -mt-[3px] rounded-full bg-white"
+          />
+        </motion.div>
+      ) : null}
 
+      {/* Kinetic Ring */}
       <motion.div
         style={{ x: ringX, y: ringY }}
         className="fixed left-0 top-0"
@@ -113,11 +100,21 @@ export default function CustomCursor() {
             height: ringSize,
             marginLeft: -ringSize / 2,
             marginTop: -ringSize / 2,
-            opacity: visible ? 0.5 : 0,
+            opacity: visible ? 1 : 0,
+            backgroundColor: isView ? "#FFFFFF" : "transparent",
+            borderColor: isView ? "#FFFFFF" : "#FFFFFF",
           }}
-          transition={{ type: "spring", stiffness: 260, damping: 24 }}
-          className="rounded-full border border-ink"
-        />
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
+          className={`flex items-center justify-center rounded-full border ${
+            isView ? "border-transparent" : "border-white/80"
+          }`}
+        >
+          {isView ? (
+            <span className="font-mono text-[11px] font-bold text-black tracking-wider">
+              VIEW ↗
+            </span>
+          ) : null}
+        </motion.div>
       </motion.div>
     </div>
   );
