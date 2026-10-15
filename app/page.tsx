@@ -158,15 +158,11 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ============================================================ */}
-      {/* /01 HERO */}
-      {/* ============================================================ */}
       <section
         id="hero"
         aria-labelledby="hero-title"
         className="sticky top-0 z-0 w-full min-h-[100svh] md:h-[100svh] flex flex-col justify-between py-10 px-6 md:px-14 overflow-hidden bg-[#F6F7F9] dark:bg-[#F6F7F9] text-[#0B0C0E] relative"
       >
-        {/* Pure CSS Architectural Grid Pattern */}
         <div 
           className="absolute inset-0 z-0 pointer-events-none opacity-[0.55] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black_40%,transparent_100%)]"
           style={{
@@ -178,7 +174,6 @@ export default function HomePage() {
           }}
         />
 
-        {/* Meta Top */}
         <div className="relative z-10 flex items-center justify-between shrink-0 pt-2 sm:pt-4">
           <span className="font-mono text-xs font-semibold tracking-[0.2em] text-neutral-500 uppercase">
             /01 HERO
@@ -188,17 +183,16 @@ export default function HomePage() {
           </span>
         </div>
 
-        {/* Middle: Giant Pure Typography */}
         <div className="relative z-10 my-auto py-4 sm:py-8 flex flex-col items-center justify-center shrink-0 select-none">
           <h1
             id="hero-title"
             className="font-display text-[14vw] md:text-[11.5vw] font-black uppercase tracking-tighter leading-[0.82] text-center"
           >
             <span className="block text-transparent [-webkit-text-stroke:2px_#0B0C0E] md:[-webkit-text-stroke:3.5px_#0B0C0E] font-black uppercase tracking-tighter leading-[0.82] cursor-default">
-              MOHAMMAD
+              {profile.firstName}
             </span>
             <span className="block text-[#0B0C0E] opacity-100 font-black uppercase tracking-tighter leading-[0.82] select-none mt-1 sm:mt-2">
-              KEVIN
+              {profile.lastName}
             </span>
           </h1>
         </div>
@@ -208,12 +202,12 @@ export default function HomePage() {
           {/* Bottom Left: Manifesto & CTA Pills */}
           <div className="flex flex-col gap-4 max-w-xl">
             <p className="text-base sm:text-lg md:text-xl font-medium tracking-tight text-neutral-900 leading-snug">
-              I build the unglamorous parts well — the schema, the query plan, the retry that never fires twice.
+              {profile.manifesto[0]}
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
               <a
-                href="mailto:kvn4.200581@gmail.com"
+                href={`mailto:${profile.email}`}
                 className="inline-flex items-center gap-1.5 rounded-full bg-[#0B0C0E] text-white hover:bg-neutral-800 px-5 py-2.5 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 active:scale-95 shadow-sm"
               >
                 <span>Let&apos;s collaborate</span>
@@ -235,35 +229,19 @@ export default function HomePage() {
 
           {/* Bottom Right: Vertical Social Links */}
           <div className="flex items-center md:items-end gap-6 md:gap-8 font-mono text-xs text-neutral-800">
-            <a
-              href="https://github.com/MohammadKevin"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-black transition-colors flex items-center gap-1"
-            >
-              <span>GitHub</span>
-              <span className="text-[10px] opacity-70">MohammadKevin</span>
-            </a>
-            <span className="hidden md:inline text-neutral-400">/</span>
-            <a
-              href="https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-black transition-colors flex items-center gap-1"
-            >
-              <span>LinkedIn</span>
-              <span className="text-[10px] opacity-70">mohammad-kevin</span>
-            </a>
-            <span className="hidden md:inline text-neutral-400">/</span>
-            <a
-              href="https://wa.me/6282131588846"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-black transition-colors flex items-center gap-1"
-            >
-              <span>WhatsApp</span>
-              <span className="text-[10px] opacity-70">+62 821-3158-8846</span>
-            </a>
+            {profile.socials.map((social, idx) => (
+              <React.Fragment key={social.label}>
+                {idx > 0 ? <span className="hidden md:inline text-neutral-400">/</span> : null}
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-black transition-colors flex items-center gap-1"
+                >
+                  <span>{social.label}</span>
+                </a>
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </section>
@@ -308,10 +286,11 @@ export default function HomePage() {
               {/* Avatar Frame */}
               <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] min-h-[280px] md:min-h-[340px] mb-6 flex items-end justify-center">
                 <Image
-                  src="/images/profile-removebg.png"
-                  alt="Mohammad Kevin"
+                  src={profile.avatar}
+                  alt={profile.fullName}
                   fill
                   priority
+                  unoptimized
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-contain object-bottom grayscale contrast-110 [mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]"
                 />
@@ -319,32 +298,16 @@ export default function HomePage() {
 
               {/* 2x2 Bento Metrics Grid */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                  <span className="font-display text-3xl sm:text-4xl font-black text-white block">
-                    3+
-                  </span>
-                  <span className="mt-1 font-mono text-xs text-neutral-300 block">
-                    Years of Engineering
-                  </span>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                  <span className="font-display text-3xl sm:text-4xl font-black text-white block">
-                    07
-                  </span>
-                  <span className="mt-1 font-mono text-xs text-neutral-300 block">
-                    Production Platforms Built
-                  </span>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                  <span className="font-display text-3xl sm:text-4xl font-black text-white block">
-                    13
-                  </span>
-                  <span className="mt-1 font-mono text-xs text-neutral-300 block">
-                    Industry Certifications
-                  </span>
-                </div>
+                {profile.stats.map((stat) => (
+                  <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <span className="font-display text-3xl sm:text-4xl font-black text-white block">
+                      {stat.value}
+                    </span>
+                    <span className="mt-1 font-mono text-xs text-neutral-300 block">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col justify-center">
                   <span className="font-display text-lg sm:text-xl font-bold text-white block leading-snug">
@@ -1017,26 +980,26 @@ export default function HomePage() {
 
             <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4 w-full sm:w-auto">
               <a
-                href="mailto:kvn4.200581@gmail.com"
+                href={`mailto:${profile.email}`}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-white text-neutral-900 px-7 py-3.5 text-sm font-semibold tracking-tight hover:opacity-90 active:scale-95 transition-all shadow-md"
               >
                 <Mail className="h-4 w-4" aria-hidden="true" />
-                <span>kvn4.200581@gmail.com</span>
+                <span>{profile.email}</span>
               </a>
 
               <a
-                href="https://wa.me/6282131588846"
+                href={profile.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.04] text-white px-7 py-3.5 text-sm font-medium tracking-tight hover:border-white/50 active:scale-95 transition-all shadow-md"
               >
                 <Phone className="h-4 w-4" aria-hidden="true" />
-                <span>WhatsApp (+62 821-3158-8846)</span>
+                <span>WhatsApp</span>
                 <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
               </a>
 
               <a
-                href={encodeURI("/CV Mohammad Kevin.pdf")}
+                href={encodeURI(profile.cvUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.04] text-white px-7 py-3.5 text-sm font-medium tracking-tight hover:border-white/50 active:scale-95 transition-all shadow-md"
