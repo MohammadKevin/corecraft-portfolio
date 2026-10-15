@@ -97,16 +97,16 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 print:hidden pointer-events-none">
-      <div className="w-full flex justify-center px-4 sm:px-6">
+      <div className="w-full flex justify-center px-4">
         <nav
           aria-label="Primary"
-          className={`fixed left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-5xl rounded-full border backdrop-blur-2xl transition-all duration-300 pointer-events-auto flex items-center justify-between gap-4 sm:gap-6 ${
+          className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-fit rounded-full border backdrop-blur-2xl transition-all duration-300 pointer-events-auto flex items-center justify-between gap-6 md:gap-8 px-5 py-2.5 ${
             scrolled
-              ? "top-4 px-4 sm:px-5 py-2 bg-white/85 dark:bg-[#0A0A0C]/85 border-black/15 dark:border-white/15 shadow-[0_12px_36px_rgba(0,0,0,0.12)]"
-              : "top-6 px-4 sm:px-6 py-2.5 bg-white/70 dark:bg-[#0A0A0C]/70 border-black/10 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
+              ? "bg-white/85 dark:bg-[#0A0A0C]/85 border-black/15 dark:border-white/15 shadow-[0_12px_36px_rgba(0,0,0,0.12)]"
+              : "bg-white/70 dark:bg-[#0A0A0C]/70 border-black/10 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
           }`}
         >
-          {/* Brand Left */}
+          {/* Sisi Kiri: Logo + Wordmark Corecraft */}
           <Link
             href="/"
             onClick={(e) => {
@@ -115,29 +115,23 @@ export default function Navbar() {
                 goTo(e, "hero");
               }
             }}
-            className="flex min-w-0 items-center gap-2.5 pl-0.5 transition-opacity hover:opacity-80 shrink-0"
+            className="flex min-w-0 items-center gap-2.5 transition-opacity hover:opacity-80 shrink-0"
           >
             <Image
               src="/images/logo-corecraft.png"
               alt="Corecraft"
-              width={28}
-              height={28}
+              width={26}
+              height={26}
               priority
-              className="h-7 w-7 object-contain"
+              className="h-6.5 w-6.5 object-contain"
             />
             <span className="font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
               Corecraft
             </span>
-
-            {/* Static silver status pill (xl: and above only) */}
-            <span className="hidden xl:inline-flex items-center gap-2 ml-1 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.04] px-3 py-0.5 font-mono text-[11px] text-neutral-600 dark:text-neutral-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-400 dark:bg-neutral-300" />
-              <span>Available for New Project</span>
-            </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <ul className="hidden items-center gap-1 lg:flex">
+          {/* Bagian Tengah: Tautan Navigasi */}
+          <ul className="hidden items-center gap-6 md:gap-8 lg:flex">
             {links.map((link) => {
               const isActive = active === link.id;
               return (
@@ -146,10 +140,10 @@ export default function Navbar() {
                     href={`#${link.id}`}
                     onClick={(event) => goTo(event, link.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={`relative rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 cursor-pointer ${
+                    className={`relative py-1 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer ${
                       isActive
-                        ? "text-neutral-900 dark:text-white font-semibold"
-                        : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white"
+                        ? "text-black dark:text-white font-semibold"
+                        : "text-neutral-700 dark:text-neutral-200 hover:text-black dark:hover:text-white"
                     }`}
                   >
                     {isActive ? (
@@ -157,7 +151,7 @@ export default function Navbar() {
                         layoutId="activePillIndicator"
                         transition={spring}
                         aria-hidden="true"
-                        className="absolute inset-0 rounded-full bg-black/[0.08] dark:bg-white/[0.12]"
+                        className="absolute inset-0 -mx-2.5 rounded-full bg-black/[0.06] dark:bg-white/[0.1]"
                       />
                     ) : null}
                     <span className="relative z-10">{link.label}</span>
@@ -167,11 +161,11 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* Right CTA & Mobile Toggle */}
+          {/* Sisi Kanan: Tombol CTA & Mobile Toggle */}
           <div className="flex items-center gap-2 shrink-0">
             <a
               href="mailto:kvn4.200581@gmail.com"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 px-4 py-1.5 text-xs font-semibold tracking-tight transition-all duration-200 hover:opacity-90 active:scale-95 shrink-0"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#0B0C0E] text-white dark:bg-white dark:text-[#0B0C0E] px-4 py-1.5 text-xs font-semibold hover:scale-105 transition-all shrink-0 shadow-sm"
             >
               <span>Let&apos;s Talk</span>
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
