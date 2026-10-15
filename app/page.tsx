@@ -301,14 +301,14 @@ export default function HomePage() {
                 }
                 className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
               >
-                <div className="relative h-64 w-64 sm:h-80 sm:w-80 md:h-[390px] md:w-[390px] lg:h-[430px] lg:w-[430px]">
+                <div className="relative z-10 mx-auto -mb-12 mt-6 h-[340px] w-[260px] md:h-[460px] md:w-[360px] [mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]">
                   <Image
-                    src={profile.avatar || "/images/profile-photo.webp"}
-                    alt={profile.fullName}
+                    src="/images/profile-removebg.png"
+                    alt="Mohammad Kevin"
                     fill
                     priority
-                    sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, 430px"
-                    className="object-contain grayscale contrast-110 drop-shadow-[0_20px_40px_rgba(0,0,0,0.22)] [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)]"
+                    sizes="(max-width: 768px) 260px, 360px"
+                    className="object-contain object-bottom grayscale contrast-105"
                   />
                 </div>
               </motion.div>

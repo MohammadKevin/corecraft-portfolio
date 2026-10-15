@@ -17,7 +17,7 @@ export const profile: Profile = {
     "Every system I ship is measured by one thing: whether it still holds up a year after launch.",
   ],
   availableForProjects: true,
-  avatar: "/images/profile-photo.webp",
+  avatar: "/images/profile-removebg.png",
   email: "kvn4.200581@gmail.com",
   whatsappUrl: "https://wa.me/6282131588846",
   cvUrl: "/CV Mohammad Kevin.pdf",
