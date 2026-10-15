@@ -176,6 +176,36 @@ button:focus-visible,
   border-radius: 4px;
 }
 
+@keyframes marquee-to-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes marquee-to-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-right {
+  animation: marquee-to-right 28s linear infinite;
+}
+
+.animate-marquee-left {
+  animation: marquee-to-left 26s linear infinite;
+}
+
+.animate-marquee-slow {
+  animation: marquee-to-left 36s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -188,5 +218,11 @@ button:focus-visible,
 
   .status-dot::after {
     display: none;
+  }
+
+  .animate-marquee-right,
+  .animate-marquee-left,
+  .animate-marquee-slow {
+    animation: none !important;
   }
 }
