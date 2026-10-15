@@ -39,6 +39,10 @@ import {
   ShieldCheck,
   Terminal,
   ArrowUp,
+  Award,
+  Eye,
+  X,
+  BadgeCheck,
 } from "lucide-react";
 import { profile, bio } from "@/data/profile";
 import { projects } from "@/data/projects";
@@ -106,10 +110,12 @@ function CredentialCard({
   cert,
   isFine,
   prefersReducedMotion,
+  onOpenPreview,
 }: {
   cert: (typeof certificates)[0];
   isFine: boolean;
   prefersReducedMotion: boolean | null;
+  onOpenPreview: (cert: (typeof certificates)[0]) => void;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
@@ -125,8 +131,8 @@ function CredentialCard({
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rX = ((y - centerY) / centerY) * -8;
-    const rY = ((x - centerX) / centerX) * 8;
+    const rX = ((y - centerY) / centerY) * -6;
+    const rY = ((x - centerX) / centerX) * 6;
 
     setRotateX(rX);
     setRotateY(rY);
@@ -157,68 +163,112 @@ function CredentialCard({
       style={{
         transformStyle: "preserve-3d",
       }}
-      className="relative w-[320px] shrink-0 rounded-2xl border border-[#14162B]/10 bg-white p-5 shadow-xs flex flex-col justify-between select-none hover:border-[var(--accent)] hover:shadow-md transition-colors will-change-transform overflow-hidden group"
+      className="relative w-[340px] sm:w-[360px] shrink-0 rounded-2xl border border-[#14162B]/10 bg-white p-4 shadow-xs flex flex-col justify-between select-none hover:border-[var(--accent)] hover:shadow-xl transition-all duration-300 will-change-transform overflow-hidden group"
     >
       {/* Radial highlight sheen following cursor */}
       {isHovered && isFine && !prefersReducedMotion ? (
         <div
           className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
           style={{
-            background: `radial-gradient(circle 160px at ${radialPos.x}px ${radialPos.y}px, rgba(90, 75, 255, 0.12), transparent 80%)`,
+            background: `radial-gradient(circle 180px at ${radialPos.x}px ${radialPos.y}px, rgba(90, 75, 255, 0.12), transparent 80%)`,
           }}
         />
       ) : null}
 
-      <div className="relative z-10">
-        <div className="flex items-center justify-between text-[11px] font-mono text-[var(--muted)] mb-2">
+      <div className="relative z-10 flex flex-col gap-3">
+        {/* Card Header: Category & Date */}
+        <div className="flex items-center justify-between text-[11px] font-mono text-[var(--muted)]">
           <span className="inline-flex items-center gap-1.5 font-semibold text-[var(--accent)]">
-            <svg
-              className="h-3.5 w-3.5 shrink-0"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <motion.circle
-                cx="12"
-                cy="12"
-                r="10"
-                initial={prefersReducedMotion ? undefined : { pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-              />
-              <motion.path
-                d="m9 12 2 2 4-4"
-                initial={prefersReducedMotion ? undefined : { pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
-              />
-            </svg>
+            <BadgeCheck className="h-3.5 w-3.5 shrink-0" />
             <span>{cert.category}</span>
           </span>
           <span>{cert.date}</span>
         </div>
 
-        <h3 className="font-display text-sm font-bold text-[var(--fg)] leading-snug line-clamp-2">
-          {cert.title}
-        </h3>
+        {/* Certificate Miniature Canvas Preview */}
+        <div
+          onClick={() => onOpenPreview(cert)}
+          className="relative w-full aspect-[16/10] rounded-xl border border-[#5A4BFF]/20 bg-gradient-to-br from-[#FAF9FE] via-white to-[#F0EDFF] p-3.5 flex flex-col justify-between overflow-hidden cursor-pointer shadow-[inset_0_1px_4px_rgba(0,0,0,0.03)] group/preview"
+        >
+          {/* Inner hairline frame */}
+          <div className="absolute inset-1.5 rounded-lg border border-[#5A4BFF]/20 pointer-events-none" />
 
-        <p className="mt-1 text-xs text-[var(--muted)]">
-          Issued by {cert.issuer}
-        </p>
+          {/* Guilloche Corner Accents */}
+          <div className="absolute top-2 left-2 w-2.5 h-2.5 border-t border-l border-[#5A4BFF]/60 pointer-events-none" />
+          <div className="absolute top-2 right-2 w-2.5 h-2.5 border-t border-r border-[#5A4BFF]/60 pointer-events-none" />
+          <div className="absolute bottom-2 left-2 w-2.5 h-2.5 border-b border-l border-[#5A4BFF]/60 pointer-events-none" />
+          <div className="absolute bottom-2 right-2 w-2.5 h-2.5 border-b border-r border-[#5A4BFF]/60 pointer-events-none" />
 
-        {cert.credentialId ? (
-          <span className="mt-2 inline-block rounded bg-[#14162B]/5 px-2 py-0.5 font-mono text-[10px] text-[var(--muted)]">
-            ID: {cert.credentialId}
-          </span>
+          {/* Watermark Seal */}
+          <Award className="h-24 w-24 text-[#5A4BFF]/[0.08] absolute -right-3 -bottom-3 pointer-events-none" />
+
+          {/* Canvas Content */}
+          <div className="relative z-10">
+            <div className="flex items-center justify-between gap-1 mb-1">
+              <span className="font-mono text-[8px] font-bold tracking-[0.2em] text-[var(--accent)] uppercase">
+                CERTIFIED CREDENTIAL
+              </span>
+              <span className="font-mono text-[8px] px-1.5 py-0.5 rounded bg-[#5A4BFF]/10 text-[#5A4BFF] font-semibold">
+                {cert.issuer}
+              </span>
+            </div>
+            <span className="font-mono text-[9px] text-[var(--muted)] uppercase tracking-wider block">
+              Awarded to: {profile.fullName}
+            </span>
+          </div>
+
+          <div className="relative z-10 py-1">
+            <h4 className="font-display text-[13px] font-bold text-[#14162B] line-clamp-2 leading-tight">
+              {cert.title}
+            </h4>
+          </div>
+
+          <div className="relative z-10 flex items-center justify-between text-[9px] font-mono text-[var(--muted)] pt-1 border-t border-[#5A4BFF]/15">
+            <span className="font-medium text-[#14162B]/75">Verified Credential</span>
+            {cert.credentialId ? (
+              <span className="font-bold text-[var(--accent)]">
+                ID: {cert.credentialId}
+              </span>
+            ) : (
+              <span className="font-bold text-[#14162B]/60">Official</span>
+            )}
+          </div>
+
+          {/* Hover Overlay Button */}
+          <div className="absolute inset-0 bg-[#14162B]/50 backdrop-blur-[1px] opacity-0 group-hover/preview:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none z-20">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-[#14162B] text-xs font-semibold shadow-md transform translate-y-2 group-hover/preview:translate-y-0 transition-transform duration-200">
+              <Eye className="h-3.5 w-3.5 text-[var(--accent)]" />
+              <span>Lihat Preview</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Skills Pills */}
+        {cert.skills && cert.skills.length > 0 ? (
+          <div className="flex flex-wrap items-center gap-1 pt-1">
+            {cert.skills.slice(0, 3).map((skill) => (
+              <span
+                key={skill}
+                className="px-2 py-0.5 rounded bg-[#14162B]/5 font-mono text-[10px] text-[#14162B]/80 font-medium"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
         ) : null}
       </div>
 
-      <div className="relative z-10 mt-4 pt-3 border-t border-[#14162B]/10 flex items-center justify-between">
+      {/* Card Action Row */}
+      <div className="relative z-10 mt-3 pt-3 border-t border-[#14162B]/10 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => onOpenPreview(cert)}
+          className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-[#14162B] hover:text-[var(--accent)] transition-colors cursor-pointer"
+        >
+          <Eye className="h-3.5 w-3.5 text-[var(--accent)]" />
+          <span>Preview</span>
+        </button>
+
         {cert.url ? (
           <a
             href={cert.url}
@@ -226,7 +276,7 @@ function CredentialCard({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-[var(--accent)] hover:underline cursor-pointer"
           >
-            <span>Verify Credential</span>
+            <span>Verify</span>
             <ArrowUpRight className="h-3 w-3" />
           </a>
         ) : (
@@ -322,6 +372,19 @@ export default function HomePage() {
 
   // /03 Services Accordion State
   const [openServiceId, setOpenServiceId] = useState<string>(services[0]?.id ?? "");
+
+  // /06 Certificate Preview Modal State
+  const [previewCert, setPreviewCert] = useState<(typeof certificates)[0] | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPreviewCert(null);
+    };
+    if (previewCert) {
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [previewCert]);
 
   // /04 Stack Velocity Skew & Parallax Decor
   const stackContainerRef = useRef<HTMLDivElement>(null);
@@ -1245,6 +1308,7 @@ export default function HomePage() {
                   cert={cert}
                   isFine={isFine}
                   prefersReducedMotion={prefersReducedMotion}
+                  onOpenPreview={setPreviewCert}
                 />
               ))}
             </div>
@@ -1510,6 +1574,166 @@ export default function HomePage() {
           </div>
         </section>
       </div>
+
+      {/* Certificate Preview Modal */}
+      <AnimatePresence>
+        {previewCert && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Preview Certificate ${previewCert.title}`}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+          >
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setPreviewCert(null)}
+              className="absolute inset-0 bg-black/75 backdrop-blur-md"
+            />
+
+            {/* Modal Window */}
+            <motion.div
+              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 15 }}
+              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              className="relative z-10 w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-white/20 overflow-hidden flex flex-col max-h-[92vh]"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[#14162B]/10 bg-[#FAF9FE]">
+                <div className="flex items-center gap-2.5">
+                  <span className="h-2 w-2 rounded-full bg-[#5A4BFF] animate-pulse" />
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#14162B]">
+                    Certificate Document Preview
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPreviewCert(null)}
+                  className="rounded-full p-1.5 text-[#6A6E93] hover:text-[#14162B] hover:bg-[#14162B]/5 transition-colors cursor-pointer"
+                  aria-label="Close certificate preview"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Certificate Body (High fidelity document mockup) */}
+              <div className="p-4 sm:p-6 overflow-y-auto">
+                <div className="relative rounded-2xl border-4 border-double border-[#5A4BFF]/30 bg-gradient-to-br from-[#FAF9FE] via-white to-[#F0EEFF] p-6 sm:p-10 shadow-inner overflow-hidden text-center">
+                  {/* Background Watermark */}
+                  <Award className="h-60 w-60 text-[#5A4BFF]/[0.05] absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+
+                  {/* Guilloche Corner Accents */}
+                  <div className="absolute top-2.5 left-2.5 w-4 h-4 border-t-2 border-l-2 border-[#5A4BFF]/50 pointer-events-none" />
+                  <div className="absolute top-2.5 right-2.5 w-4 h-4 border-t-2 border-r-2 border-[#5A4BFF]/50 pointer-events-none" />
+                  <div className="absolute bottom-2.5 left-2.5 w-4 h-4 border-b-2 border-l-2 border-[#5A4BFF]/50 pointer-events-none" />
+                  <div className="absolute bottom-2.5 right-2.5 w-4 h-4 border-b-2 border-r-2 border-[#5A4BFF]/50 pointer-events-none" />
+
+                  {/* Badge */}
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5A4BFF]/10 text-[#5A4BFF] font-mono text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
+                    <BadgeCheck className="h-3.5 w-3.5" />
+                    <span>Verified Industry Credential</span>
+                  </div>
+
+                  <p className="font-mono text-xs text-[#6A6E93] uppercase tracking-widest mb-1">
+                    This is proudly presented to
+                  </p>
+
+                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#14162B] tracking-tight mb-2">
+                    {profile.fullName}
+                  </h3>
+
+                  <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#5A4BFF] to-transparent mx-auto mb-4" />
+
+                  <p className="font-mono text-xs text-[#6A6E93] max-w-md mx-auto mb-3">
+                    for successfully completing the rigorous assessment and demonstrating proficiency in
+                  </p>
+
+                  <h4 className="font-display text-lg sm:text-xl font-bold text-[#5A4BFF] mb-6 px-4">
+                    {previewCert.title}
+                  </h4>
+
+                  {/* Skills breakdown */}
+                  {previewCert.skills && previewCert.skills.length > 0 && (
+                    <div className="mb-6">
+                      <span className="font-mono text-[10px] font-semibold text-[#6A6E93] uppercase tracking-wider block mb-2">
+                        Assessed Competencies
+                      </span>
+                      <div className="flex flex-wrap items-center justify-center gap-1.5">
+                        {previewCert.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="px-2.5 py-1 rounded-md bg-white border border-[#14162B]/10 font-mono text-xs font-medium text-[#14162B]"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Meta Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 border-t border-[#14162B]/10 text-left">
+                    <div>
+                      <span className="font-mono text-[10px] text-[#6A6E93] uppercase block">
+                        Issuing Authority
+                      </span>
+                      <span className="font-mono text-xs font-bold text-[#14162B]">
+                        {previewCert.issuer}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-mono text-[10px] text-[#6A6E93] uppercase block">
+                        Issue Date
+                      </span>
+                      <span className="font-mono text-xs font-bold text-[#14162B]">
+                        {previewCert.date}
+                      </span>
+                    </div>
+                    <div className="col-span-2 sm:col-span-1">
+                      <span className="font-mono text-[10px] text-[#6A6E93] uppercase block">
+                        Credential ID
+                      </span>
+                      <span className="font-mono text-xs font-bold text-[#5A4BFF] break-all">
+                        {previewCert.credentialId || "Verified Authority"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 bg-[#FAF9FE] border-t border-[#14162B]/10 flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => setPreviewCert(null)}
+                  className="px-4 py-2 rounded-xl text-xs font-mono font-semibold text-[#6A6E93] hover:text-[#14162B] transition-colors cursor-pointer"
+                >
+                  Tutup
+                </button>
+
+                {previewCert.url ? (
+                  <a
+                    href={previewCert.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5A4BFF] hover:bg-[#4839E6] text-white font-mono text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
+                  >
+                    <span>Verifikasi di {previewCert.issuer}</span>
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                ) : (
+                  <span className="font-mono text-xs text-[#6A6E93]">
+                    Official National Archive
+                  </span>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
