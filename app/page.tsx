@@ -276,7 +276,7 @@ export default function HomePage() {
         <section
           id="about"
           aria-labelledby="about-heading"
-          className="relative z-10 min-h-[100svh] w-full bg-[#0E0F12] text-white rounded-t-[2.5rem] md:rounded-t-[3.5rem] border-t border-white/10 shadow-[0_-24px_60px_rgba(0,0,0,0.35)] px-6 md:px-16 py-16 md:py-24 flex flex-col justify-between"
+          className="relative z-10 min-h-[100svh] w-full bg-[#0E0F12] text-white border-t border-white/10 shadow-[0_-24px_60px_rgba(0,0,0,0.35)] px-6 md:px-16 pt-24 md:pt-28 pb-16 md:pb-20 flex flex-col justify-between"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-12">
@@ -371,7 +371,7 @@ export default function HomePage() {
         <section
           id="services"
           aria-labelledby="services-heading"
-          className="w-full min-h-[100svh] md:h-[100svh] bg-white dark:bg-[#0A0A0C] text-neutral-900 dark:text-white px-6 md:px-16 py-12 flex flex-col justify-between border-t border-black/5 dark:border-white/5"
+          className="w-full min-h-[100svh] md:h-[100svh] bg-white dark:bg-[#0A0A0C] text-neutral-900 dark:text-white px-6 md:px-16 pt-24 md:pt-28 pb-10 flex flex-col justify-between border-t border-black/5 dark:border-white/5"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-4 mb-6">
@@ -593,7 +593,7 @@ export default function HomePage() {
           className="relative bg-white dark:bg-[#0A0A0C] border-t border-black/5 dark:border-white/5 md:h-[450vh]"
         >
           {/* Desktop Pinned Showcase (md: and above) */}
-          <div className="hidden md:flex sticky top-0 h-[100svh] w-full overflow-hidden flex-col justify-between py-12 px-6 md:px-16">
+          <div className="hidden md:flex sticky top-0 h-[100svh] w-full overflow-hidden flex-col justify-between pt-24 md:pt-28 pb-10 px-6 md:px-16">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-4">
               <div>
@@ -989,7 +989,7 @@ export default function HomePage() {
         <section
           id="contact"
           aria-labelledby="contact-heading"
-          className="min-h-[100svh] w-full bg-[#0A0A0C] text-white flex flex-col justify-between px-6 md:px-16 pt-20 pb-10 border-t border-white/10"
+          className="min-h-[100svh] w-full bg-[#0A0A0C] text-white flex flex-col justify-between px-6 md:px-16 pt-24 md:pt-28 pb-10 border-t border-white/10"
         >
           {/* Top Meta */}
           <div className="flex items-center justify-between border-b border-white/10 pb-6">

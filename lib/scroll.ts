@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useLenis } from "lenis/react";
 
-const SCROLL_OFFSET = -96;
+const SCROLL_OFFSET = 0;
 
 export function useScrollToSection() {
   const lenis = useLenis();
