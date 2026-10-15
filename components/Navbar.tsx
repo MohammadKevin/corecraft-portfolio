@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
@@ -111,31 +112,32 @@ export default function Navbar() {
           }`}
         >
 
-          <a
-            href="#hero"
-            onClick={(e) => goTo(e, "hero")}
-            className="flex min-w-0 items-center gap-2 pl-1 cursor-pointer transition-opacity hover:opacity-85 group"
+          <Link
+            href="/"
+            onClick={(e) => {
+              if (typeof window !== "undefined" && window.location.pathname === "/") {
+                e.preventDefault();
+                goTo(e, "hero");
+              }
+            }}
+            className="flex min-w-0 items-center gap-2.5 pl-1 transition-opacity hover:opacity-85"
           >
             <Image
-              src="/logo-corecraft.png"
+              src="/images/logo-corecraft.png"
               alt="Corecraft"
               width={28}
               height={28}
-              className="h-7 w-7 object-contain grayscale brightness-0 contrast-200"
+              priority
+              className="h-7 w-7 object-contain"
             />
-            <span className="font-display font-bold text-sm tracking-tight text-ink">
+            <span className="font-semibold tracking-tight text-neutral-900 dark:text-white">
               Corecraft
             </span>
-            <span className="hidden sm:inline-block h-3 w-px bg-black/[0.12] mx-0.5" />
-            <span className="hidden sm:inline-flex items-center gap-1.5 font-mono text-[11px] text-muted">
-              <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 ring-1 ring-neutral-400/50 animate-ping" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
-              </span>
-              <span>Available</span>
+            <span className="hidden sm:inline-block h-3.5 w-px bg-black/[0.12] dark:bg-white/[0.12] mx-0.5" />
+            <span className="hidden sm:inline-block font-mono text-[11px] text-muted tracking-tight">
+              Available for New Project
             </span>
-            <span className="sr-only">Corecraft - Available for new projects</span>
-          </a>
+          </Link>
 
           <ul className="hidden items-center gap-0.5 lg:flex">
             {links.map((link) => {

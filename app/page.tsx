@@ -137,15 +137,9 @@ export default function HomePage() {
   const prefersReducedMotion = useReducedMotion();
   const parallaxEnabled = prefersReducedMotion !== true;
 
-  const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-
-  const heroNameY = useTransform(heroScroll, [0, 1], [0, -100]);
-  const heroAvatarScale = useTransform(heroScroll, [0, 0.5], [1, 0.92]);
-  const heroAvatarOpacity = useTransform(heroScroll, [0, 0.5], [1, 0.4]);
-  const heroAvatarY = useTransform(heroScroll, [0, 1], [0, -60]);
+  const { scrollYProgress } = useScroll();
+  const heroStackScale = useTransform(scrollYProgress, [0, 0.25], [1, 0.94]);
+  const heroStackOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0.3]);
 
   const fitName = useCallback(() => {
     const name = nameRef.current;
@@ -244,35 +238,33 @@ export default function HomePage() {
         ref={heroRef}
         id="hero"
         aria-labelledby="hero-name"
-        className="relative min-h-[92vh] overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 border-b border-black/[0.08]"
+        className="min-h-screen h-screen w-full sticky top-0 z-0 flex flex-col justify-between overflow-hidden pt-16 pb-3 sm:pt-20 sm:pb-6 border-b border-black/[0.08]"
       >
-        <div className="page-container">
+        <div className="page-container h-full w-full flex flex-col justify-between">
           <motion.div
             variants={heroContainerVariants}
             initial="hidden"
             animate="visible"
+            style={parallaxEnabled ? { scale: heroStackScale, opacity: heroStackOpacity } : undefined}
+            className="h-full w-full flex flex-col justify-between"
           >
             <motion.div
               variants={heroItemVariants}
-              className="mb-4 flex items-center justify-between"
+              className="flex items-center justify-between shrink-0"
             >
               <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
                 /01 HERO
               </span>
-              <span className="hidden sm:inline-flex items-center gap-2.5 rounded-full border border-black/[0.08] bg-surface px-3.5 py-1 text-xs font-mono font-medium tracking-tight text-ink shadow-sm">
-                <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 ring-1 ring-neutral-400/50 animate-ping" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
-                </span>
+              <span className="hidden sm:inline-flex items-center rounded-full border border-black/[0.08] bg-surface px-3.5 py-1 text-xs font-mono font-medium tracking-tight text-ink shadow-sm">
                 Available for New Project
               </span>
             </motion.div>
 
-            <motion.div variants={heroItemVariants} className="relative my-2 sm:my-4">
+            <motion.div variants={heroItemVariants} className="relative my-auto py-1 sm:py-2 flex items-center justify-center shrink-0">
               <motion.h1
                 id="hero-name"
                 ref={nameRef}
-                style={parallaxEnabled ? { y: heroNameY, fontSize } : { fontSize }}
+                style={{ fontSize }}
                 className="select-none text-center font-display font-extrabold leading-[0.84] tracking-[-0.04em] uppercase"
               >
                 <span className="sr-only">
@@ -293,48 +285,43 @@ export default function HomePage() {
                 </span>
               </motion.h1>
 
-              <motion.div
-                style={
-                  parallaxEnabled
-                    ? { y: heroAvatarY, scale: heroAvatarScale, opacity: heroAvatarOpacity }
-                    : undefined
-                }
+              <div
                 className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
               >
-                <div className="relative z-10 mx-auto -mb-12 mt-6 h-[340px] w-[260px] md:h-[460px] md:w-[360px] [mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]">
+                <div className="relative z-10 mx-auto -mb-6 sm:-mb-8 md:-mb-10 mt-2 sm:mt-4 h-[220px] w-[170px] sm:h-[300px] sm:w-[230px] md:h-[370px] md:w-[290px] lg:h-[410px] lg:w-[320px] [mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]">
                   <Image
                     src="/images/profile-removebg.png"
                     alt="Mohammad Kevin"
                     fill
                     priority
-                    sizes="(max-width: 768px) 260px, 360px"
+                    sizes="(max-width: 768px) 230px, 320px"
                     className="object-contain object-bottom grayscale contrast-105"
                   />
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
 
             <motion.div
               variants={heroItemVariants}
-              className="mt-14 sm:mt-20 pt-8 border-t border-black/[0.08] grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-30"
+              className="pt-3 sm:pt-5 border-t border-black/[0.08] grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-6 items-end relative z-30 shrink-0"
             >
-              <div className="md:col-span-7 flex flex-col gap-5">
-                <div className="flex items-center gap-2 font-mono text-xs text-muted uppercase tracking-wider">
+              <div className="md:col-span-7 flex flex-col gap-2 sm:gap-3">
+                <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs text-muted uppercase tracking-wider">
                   <span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   <span>{profile.role}</span>
                   <span>·</span>
                   <span>{profile.location}</span>
                 </div>
 
-                <p className="text-lg sm:text-xl md:text-2xl font-medium tracking-tight text-ink leading-snug max-w-xl text-balance">
+                <p className="text-base sm:text-lg md:text-xl font-medium tracking-tight text-ink leading-snug max-w-xl text-balance">
                   {profile.manifesto[0]}
                 </p>
 
-                <div className="pt-2 flex flex-wrap items-center gap-3">
+                <div className="pt-1 flex flex-wrap items-center gap-2 sm:gap-3">
                   <MagneticButton
                     href="#contact"
                     variant="solid"
-                    className="px-6 py-3.5 text-sm font-semibold"
+                    className="px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold"
                     onClick={(e) => {
                       e.preventDefault();
                       scrollTo("contact");
@@ -347,7 +334,7 @@ export default function HomePage() {
                   <MagneticButton
                     href="#work"
                     variant="outline"
-                    className="px-6 py-3.5 text-sm font-semibold"
+                    className="px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold"
                     onClick={(e) => {
                       e.preventDefault();
                       scrollTo("work");
@@ -358,11 +345,11 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="md:col-span-5 flex flex-col md:items-end justify-between h-full gap-4">
-                <span className="font-mono text-xs uppercase tracking-widest text-muted">
+              <div className="md:col-span-5 flex flex-col md:items-end justify-between h-full gap-2 sm:gap-3">
+                <span className="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted">
                   CONNECT & INQUIRE
                 </span>
-                <ul className="flex flex-col gap-2 w-full md:w-auto">
+                <ul className="flex flex-col gap-1.5 sm:gap-2 w-full md:w-auto">
                   {socialLinks.map((social) => {
                     const Icon = social.icon;
                     return (
@@ -371,18 +358,18 @@ export default function HomePage() {
                           href={social.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group flex items-center justify-between md:justify-end gap-3 rounded-xl border border-black/[0.08] bg-surface px-4 py-2.5 text-sm font-medium text-ink transition-all duration-200 hover:border-black hover:bg-black hover:text-white"
+                          className="group flex items-center justify-between md:justify-end gap-3 rounded-lg sm:rounded-xl border border-black/[0.08] bg-surface px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-ink transition-all duration-200 hover:border-black hover:bg-black hover:text-white"
                           aria-label={`${social.label}: ${social.handle}`}
                         >
                           <span className="flex items-center gap-2">
-                            <Icon className="h-4 w-4 text-muted transition-colors group-hover:text-white" />
+                            <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted transition-colors group-hover:text-white" />
                             <span className="transition-transform duration-200 group-hover:translate-x-1">
                               {social.label}
                             </span>
                           </span>
-                          <span className="flex items-center gap-1.5 font-mono text-xs text-muted transition-colors group-hover:text-white/80">
+                          <span className="flex items-center gap-1.5 font-mono text-[11px] sm:text-xs text-muted transition-colors group-hover:text-white/80">
                             <span>{social.handle}</span>
-                            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                            <ArrowUpRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                           </span>
                         </a>
                       </li>
@@ -395,11 +382,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section
-        id="about"
-        aria-labelledby="about-heading"
-        className="section-pad border-b border-black/[0.08] bg-bg relative overflow-hidden"
-      >
+      {/* 2. THE STACKING CARD LAYER (ABOUT & SUBSEQUENT SECTIONS) */}
+      <div className="relative z-10 bg-[#F6F7F9] dark:bg-[#0A0A0C]">
+        <section
+          id="about"
+          aria-labelledby="about-heading"
+          className="relative z-10 bg-[#F6F7F9] dark:bg-[#0A0A0C] min-h-screen rounded-t-[2.5rem] md:rounded-t-[3.5rem] shadow-[0_-20px_50px_rgba(0,0,0,0.12)] border-t border-black/[0.06] dark:border-white/[0.08] pt-16 md:pt-24 pb-20"
+        >
         <div className="page-container">
           <motion.div
             variants={containerVariants}
@@ -1294,11 +1283,7 @@ export default function HomePage() {
               variants={itemVariants}
               className="flex flex-col items-start gap-8 py-8"
             >
-              <span className="inline-flex items-center gap-2.5 rounded-full border border-black/[0.08] bg-surface px-4 py-2 text-xs font-mono font-medium tracking-tight text-ink shadow-2xs">
-                <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 ring-1 ring-neutral-400/50 animate-ping" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
-                </span>
+              <span className="inline-flex items-center rounded-full border border-black/[0.08] bg-surface px-4 py-2 text-xs font-mono font-medium tracking-tight text-ink shadow-2xs">
                 Available for New Project
               </span>
 
@@ -1353,6 +1338,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+      </div>
     </>
   );
 }

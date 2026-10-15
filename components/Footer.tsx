@@ -39,11 +39,11 @@ export default function Footer() {
 
         <div className="flex items-center gap-3">
           <Image
-            src="/logo-corecraft.png"
+            src="/images/logo-corecraft.png"
             alt="Corecraft"
             width={32}
             height={32}
-            className="h-8 w-8 object-contain grayscale brightness-0 contrast-200"
+            className="h-8 w-8 object-contain"
           />
           <div className="flex flex-col">
             <span className="font-display font-bold text-sm tracking-tight text-ink">
@@ -56,7 +56,7 @@ export default function Footer() {
         </div>
 
         <div className="flex items-center gap-2 rounded-full border border-black/[0.08] bg-surface px-4 py-1.5 font-mono text-xs text-ink shadow-2xs">
-          <Clock className="h-3.5 w-3.5 text-neutral-500 animate-pulse" />
+          <Clock className="h-3.5 w-3.5 text-neutral-500" />
           <span className="text-muted">Malang, ID (WIB):</span>
           <span className="font-semibold text-ink">{time || "Loading..."}</span>
         </div>
