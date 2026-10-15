@@ -23,6 +23,7 @@ const sectionIds = ["hero", ...links.map((link) => link.id), "contact"];
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const active = useActiveSection(sectionIds);
   const scrollTo = useScrollToSection();
 
@@ -102,8 +103,8 @@ export default function Navbar() {
           aria-label="Primary"
           className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-fit rounded-full border backdrop-blur-2xl transition-all duration-300 pointer-events-auto flex items-center justify-between gap-6 md:gap-8 px-5 py-2.5 ${
             scrolled
-              ? "bg-white/85 dark:bg-[#0A0A0C]/85 border-black/15 dark:border-white/15 shadow-[0_12px_36px_rgba(0,0,0,0.12)]"
-              : "bg-white/70 dark:bg-[#0A0A0C]/70 border-black/10 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
+              ? "bg-white/55 dark:bg-[#0A0A0C]/60 border-white/70 dark:border-white/15 shadow-[0_12px_40px_0_rgba(0,0,0,0.1),inset_0_1px_1px_0_rgba(255,255,255,0.8)]"
+              : "bg-white/40 dark:bg-[#0A0A0C]/40 border-white/60 dark:border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.06),inset_0_1px_1px_0_rgba(255,255,255,0.7)]"
           }`}
         >
           {/* Sisi Kiri: Logo + Wordmark Corecraft */}
@@ -130,28 +131,39 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Bagian Tengah: Tautan Navigasi */}
-          <ul className="hidden items-center gap-6 md:gap-8 lg:flex">
+          {/* Bagian Tengah: Tautan Navigasi dengan Fluid Adaptive Hover Pill */}
+          <ul
+            onMouseLeave={() => setHoveredLink(null)}
+            className="hidden items-center gap-1.5 md:gap-2 lg:flex"
+          >
             {links.map((link) => {
+              const isHovered = hoveredLink === link.id;
               const isActive = active === link.id;
+              const isHighlighted = hoveredLink ? isHovered : isActive;
+
               return (
-                <li key={link.id}>
+                <li key={link.id} className="relative">
                   <a
                     href={`#${link.id}`}
                     onClick={(event) => goTo(event, link.id)}
+                    onMouseEnter={() => setHoveredLink(link.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={`relative py-1 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer ${
-                      isActive
+                    className={`relative block rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer ${
+                      isHighlighted
                         ? "text-black dark:text-white font-semibold"
-                        : "text-neutral-700 dark:text-neutral-200 hover:text-black dark:hover:text-white"
+                        : "text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white"
                     }`}
                   >
-                    {isActive ? (
+                    {isHighlighted ? (
                       <motion.span
-                        layoutId="activePillIndicator"
-                        transition={spring}
+                        layoutId="navLiquidHoverPill"
+                        transition={{
+                          type: "spring",
+                          stiffness: 450,
+                          damping: 32,
+                        }}
                         aria-hidden="true"
-                        className="absolute inset-0 -mx-2.5 rounded-full bg-black/[0.06] dark:bg-white/[0.1]"
+                        className="absolute inset-0 rounded-full bg-black/[0.07] dark:bg-white/[0.12] border border-black/5 dark:border-white/15 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4)]"
                       />
                     ) : null}
                     <span className="relative z-10">{link.label}</span>
