@@ -164,15 +164,15 @@ export default function HomePage() {
       <section
         id="hero"
         aria-labelledby="hero-title"
-        className="sticky top-0 z-0 w-full min-h-[100svh] md:h-[100svh] flex flex-col justify-between py-10 px-6 md:px-14 overflow-hidden bg-[#F6F7F9] dark:bg-[#0A0A0C]"
+        className="sticky top-0 z-0 w-full min-h-[100svh] md:h-[100svh] flex flex-col justify-between py-10 px-6 md:px-14 overflow-hidden bg-[#F6F7F9] dark:bg-[#F6F7F9] text-[#0B0C0E]"
       >
         {/* Meta Top */}
         <div className="flex items-center justify-between shrink-0 pt-2 sm:pt-4">
-          <span className="font-mono text-xs font-semibold tracking-[0.2em] text-neutral-500 dark:text-neutral-400 uppercase">
+          <span className="font-mono text-xs font-semibold tracking-[0.2em] text-neutral-500 uppercase">
             /01 HERO
           </span>
-          <span className="font-mono text-xs font-medium tracking-wider text-neutral-600 dark:text-neutral-300 uppercase">
-            BACKEND & FULLSTACK ARCHITECT — MALANG, ID
+          <span className="font-mono text-xs font-medium tracking-wider text-neutral-600 uppercase">
+            BACKEND &amp; FULLSTACK ARCHITECT — MALANG, ID
           </span>
         </div>
 
@@ -182,27 +182,27 @@ export default function HomePage() {
             id="hero-title"
             className="font-display text-[14vw] md:text-[11.5vw] font-black uppercase tracking-tighter leading-[0.82] text-center"
           >
-            <span className="block [-webkit-text-stroke:2px_#0B0C0E] md:[-webkit-text-stroke:3.5px_#0B0C0E] dark:[-webkit-text-stroke:2px_#FFFFFF] dark:md:[-webkit-text-stroke:3.5px_#FFFFFF] text-transparent hover:text-[#0B0C0E] dark:hover:text-white transition-colors duration-700 cursor-default">
+            <span className="block text-transparent [-webkit-text-stroke:2px_#0B0C0E] md:[-webkit-text-stroke:3.5px_#0B0C0E] font-black uppercase tracking-tighter leading-[0.82] cursor-default">
               MOHAMMAD
             </span>
-            <span className="block text-[#0B0C0E] dark:text-white opacity-100 font-black mt-1 sm:mt-2">
+            <span className="block text-[#0B0C0E] opacity-100 font-black uppercase tracking-tighter leading-[0.82] select-none mt-1 sm:mt-2">
               KEVIN
             </span>
           </h1>
         </div>
 
         {/* Bottom Flank */}
-        <div className="pt-6 border-t border-black/10 dark:border-white/10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 shrink-0 pb-2">
+        <div className="pt-6 border-t border-black/10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 shrink-0 pb-2">
           {/* Bottom Left: Manifesto & CTA Pills */}
           <div className="flex flex-col gap-4 max-w-xl">
-            <p className="text-base sm:text-lg md:text-xl font-medium tracking-tight text-neutral-900 dark:text-neutral-100 leading-snug">
+            <p className="text-base sm:text-lg md:text-xl font-medium tracking-tight text-neutral-900 leading-snug">
               I build the unglamorous parts well — the schema, the query plan, the retry that never fires twice.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href="mailto:kvn4.200581@gmail.com"
-                className="inline-flex items-center gap-1.5 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 px-5 py-2.5 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 hover:opacity-90 active:scale-95 shadow-sm"
+                className="inline-flex items-center gap-1.5 rounded-full bg-[#0B0C0E] text-white hover:bg-neutral-800 px-5 py-2.5 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 active:scale-95 shadow-sm"
               >
                 <span>Let&apos;s collaborate</span>
                 <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -214,7 +214,7 @@ export default function HomePage() {
                   e.preventDefault();
                   scrollTo("work");
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-black/15 dark:border-white/15 bg-white dark:bg-white/[0.04] text-neutral-900 dark:text-white px-5 py-2.5 text-xs sm:text-sm font-medium tracking-tight transition-all duration-200 hover:border-black/40 dark:hover:border-white/40 active:scale-95 shadow-sm"
+                className="inline-flex items-center gap-1.5 rounded-full bg-black/5 text-[#0B0C0E] border border-black/10 hover:bg-black/10 px-5 py-2.5 text-xs sm:text-sm font-medium tracking-tight transition-all duration-200 active:scale-95 shadow-sm"
               >
                 <span>View Selected Work</span>
               </a>
@@ -222,12 +222,12 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Right: Vertical Social Links */}
-          <div className="flex items-center md:items-end gap-6 md:gap-8 font-mono text-xs text-neutral-600 dark:text-neutral-400">
+          <div className="flex items-center md:items-end gap-6 md:gap-8 font-mono text-xs text-neutral-800">
             <a
               href="https://github.com/MohammadKevin"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1"
+              className="hover:text-black transition-colors flex items-center gap-1"
             >
               <span>GitHub</span>
               <span className="text-[10px] opacity-70">MohammadKevin</span>
@@ -237,7 +237,7 @@ export default function HomePage() {
               href="https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1"
+              className="hover:text-black transition-colors flex items-center gap-1"
             >
               <span>LinkedIn</span>
               <span className="text-[10px] opacity-70">mohammad-kevin</span>
@@ -247,7 +247,7 @@ export default function HomePage() {
               href="https://wa.me/6282131588846"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1"
+              className="hover:text-black transition-colors flex items-center gap-1"
             >
               <span>WhatsApp</span>
               <span className="text-[10px] opacity-70">+62 821-3158-8846</span>
