@@ -7,6 +7,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useActiveSection } from "@/lib/hooks";
 import { useScrollToSection } from "@/lib/scroll";
 import { spring } from "@/lib/motion";
+import { profile } from "@/data/profile";
 
 const links = [
   { id: "about", label: "About" },
@@ -128,7 +129,7 @@ export default function Navbar() {
         >
           {/* Sisi Kiri: Wordmark Corecraft (Tanpa logo gambar, font More Sugar) */}
           <Link
-            href="/"
+            href="/#hero"
             onClick={(e) => {
               if (typeof window !== "undefined" && window.location.pathname === "/") {
                 e.preventDefault();
@@ -146,7 +147,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Bagian Tengah: Tautan Navigasi dengan Fluid Adaptive Hover Pill */}
           <ul
             onMouseLeave={() => setHoveredLink(null)}
             className="hidden items-center gap-1.5 md:gap-2 lg:flex"
@@ -197,7 +197,7 @@ export default function Navbar() {
           {/* Sisi Kanan: Tombol CTA & Mobile Toggle */}
           <div className="flex items-center gap-2 shrink-0">
             <a
-              href="mailto:kvn4.200581@gmail.com"
+              href={`mailto:${profile.email}`}
               className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold hover:scale-105 transition-all shrink-0 shadow-sm ${isDarkSection
                 ? "bg-white text-[#0B0C0E] hover:bg-neutral-200"
                 : "bg-[#0B0C0E] text-white hover:bg-neutral-800"
@@ -268,7 +268,7 @@ export default function Navbar() {
 
             <div className="flex flex-col gap-4 border-t border-black/10 dark:border-white/10 pt-6">
               <a
-                href="mailto:kvn4.200581@gmail.com"
+                href={`mailto:${profile.email}`}
                 className="flex items-center justify-center gap-2 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 py-3.5 text-sm font-semibold tracking-tight shadow-md"
               >
                 <span>Let&apos;s Talk</span>
@@ -276,8 +276,8 @@ export default function Navbar() {
               </a>
 
               <div className="flex items-center justify-between text-xs font-mono text-neutral-500 dark:text-neutral-400">
-                <span>Mohammad Kevin</span>
-                <span>Malang, Indonesia</span>
+                <span>{profile.fullName}</span>
+                <span>{profile.location}</span>
               </div>
             </div>
           </motion.div>

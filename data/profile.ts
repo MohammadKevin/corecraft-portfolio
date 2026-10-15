@@ -48,6 +48,12 @@ export const profile: Profile = {
       detail: "Verified by HackerRank, Dicoding and national competition bodies.",
     },
   ],
+  aboutHeadline:
+    "Architecting high-concurrency backend backbones, resilient API contracts, and query-optimized data systems — paired with modern, human-centered interfaces.",
+  aboutText:
+    "Modern software breaks not at the happy path, but at the edges: unindexed relational tables under surge traffic, race conditions in inventory transactions, or unhandled webhook retries. My engineering approach starts at the schema and protocol layer — designing strict TypeScript contracts, transactional isolation, and predictable caching strategies before surfacing clean, intuitive frontend experiences with Next.js and React 19.",
+  specialization: "Specialized in Node.js, Express, NestJS, Prisma & Next.js",
+  architectureNote: "TypeScript Strict Architecture",
 };
 
 /** Short bio reused on the home page and in the project detail "Contact Me" block. */

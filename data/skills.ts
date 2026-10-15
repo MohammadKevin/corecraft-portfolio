@@ -263,3 +263,34 @@ export const skillCategories: SkillCategory[] = [
     ],
   },
 ];
+
+export interface StackTickerItem {
+  name: string;
+  tag: string;
+}
+
+export const stackRow1: StackTickerItem[] = [
+  { name: "Node.js", tag: "Runtime" },
+  { name: "NestJS", tag: "Backend" },
+  { name: "Express.js", tag: "API Framework" },
+  { name: "TypeScript", tag: "Type System" },
+  { name: "PostgreSQL", tag: "Relational DB" },
+  { name: "MySQL", tag: "Relational DB" },
+  { name: "Prisma ORM", tag: "Data Access" },
+  { name: "Supabase", tag: "Backend Suite" },
+  { name: "Redis", tag: "Cache & Broker" },
+  { name: "Laravel / PHP", tag: "Backend" },
+];
+
+export const stackRow2: StackTickerItem[] = [
+  { name: "Next.js 16", tag: "App Framework" },
+  { name: "React 19", tag: "UI Architecture" },
+  { name: "Tailwind CSS v4", tag: "Design Tokens" },
+  { name: "Framer Motion", tag: "Physics Engine" },
+  { name: "Docker", tag: "Containerization" },
+  { name: "Linux (Ubuntu)", tag: "Server Host" },
+  { name: "Playwright", tag: "End-to-End QA" },
+  { name: "Git & GitHub", tag: "Version Control" },
+  { name: "Postman", tag: "API Contracts" },
+  { name: "Vercel", tag: "Edge Infrastructure" },
+];

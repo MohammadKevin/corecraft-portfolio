@@ -120,4 +120,8 @@ export interface Profile {
   timezone: string;
   socials: { label: string; url: string }[];
   stats: ProfileStat[];
+  aboutHeadline?: string;
+  aboutText?: string;
+  specialization?: string;
+  architectureNote?: string;
 }

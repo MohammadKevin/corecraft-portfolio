@@ -39,11 +39,12 @@ import {
   Terminal,
   ArrowUp,
 } from "lucide-react";
-import { profile } from "@/data/profile";
+import { profile, bio } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 import { experiences } from "@/data/experience";
 import { certificates, certificateCount } from "@/data/certificates";
+import { stackRow1, stackRow2 } from "@/data/skills";
 import { useScrollToSection } from "@/lib/scroll";
 import { useFinePointer } from "@/lib/hooks";
 import { spring } from "@/lib/motion";
@@ -56,32 +57,6 @@ const PROJECT_ORDER = [
   "inventory-api",
   "clinic-portal",
   "corecraft",
-];
-
-const STACK_ROW_1 = [
-  { name: "Node.js", tag: "Runtime" },
-  { name: "NestJS", tag: "Backend" },
-  { name: "Express.js", tag: "API Framework" },
-  { name: "TypeScript", tag: "Type System" },
-  { name: "PostgreSQL", tag: "Relational DB" },
-  { name: "MySQL", tag: "Relational DB" },
-  { name: "Prisma ORM", tag: "Data Access" },
-  { name: "Supabase", tag: "Backend Suite" },
-  { name: "Redis", tag: "Cache & Broker" },
-  { name: "Laravel / PHP", tag: "Backend" },
-];
-
-const STACK_ROW_2 = [
-  { name: "Next.js 16", tag: "App Framework" },
-  { name: "React 19", tag: "UI Architecture" },
-  { name: "Tailwind CSS v4", tag: "Design Tokens" },
-  { name: "Framer Motion", tag: "Physics Engine" },
-  { name: "Docker", tag: "Containerization" },
-  { name: "Linux (Ubuntu)", tag: "Server Host" },
-  { name: "Playwright", tag: "End-to-End QA" },
-  { name: "Git & GitHub", tag: "Version Control" },
-  { name: "Postman", tag: "API Contracts" },
-  { name: "Vercel", tag: "Edge Infrastructure" },
 ];
 
 export default function HomePage() {
@@ -179,7 +154,7 @@ export default function HomePage() {
             /01 HERO
           </span>
           <span className="font-mono text-xs font-medium tracking-wider text-neutral-600 uppercase">
-            BACKEND &amp; FULLSTACK ARCHITECT — MALANG, ID
+            {profile.role.toUpperCase()} — {profile.location.toUpperCase()}
           </span>
         </div>
 
@@ -274,10 +249,10 @@ export default function HomePage() {
                 id="about-heading"
                 className="font-display text-white font-medium text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight"
               >
-                Architecting high-concurrency backend backbones, resilient API contracts, and query-optimized data systems — paired with modern, human-centered interfaces.
+                {profile.aboutHeadline || profile.subtitle}
               </h2>
               <p className="text-neutral-300 text-sm md:text-base leading-relaxed mt-6">
-                Modern software breaks not at the happy path, but at the edges: unindexed relational tables under surge traffic, race conditions in inventory transactions, or unhandled webhook retries. My engineering approach starts at the schema and protocol layer — designing strict TypeScript contracts, transactional isolation, and predictable caching strategies before surfacing clean, intuitive frontend experiences with Next.js and React 19.
+                {profile.aboutText || bio}
               </p>
             </div>
 
@@ -323,8 +298,8 @@ export default function HomePage() {
 
           {/* Bottom Colophon */}
           <div className="pt-8 border-t border-white/10 flex items-center justify-between font-mono text-xs text-neutral-400 mt-8">
-            <span>Specialized in Node.js, Express, NestJS, Prisma &amp; Next.js</span>
-            <span className="hidden sm:inline">TypeScript Strict Architecture</span>
+            <span>{profile.specialization || "Specialized in Node.js, Express, NestJS, Prisma & Next.js"}</span>
+            <span className="hidden sm:inline">{profile.architectureNote || "TypeScript Strict Architecture"}</span>
           </div>
         </section>
 
@@ -342,7 +317,7 @@ export default function HomePage() {
               /03 SERVICES &amp; CAPABILITIES
             </span>
             <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 uppercase">
-              06 CORE DELIVERABLES
+              {String(services.length).padStart(2, "0")} CORE DELIVERABLES
             </span>
           </div>
 
@@ -507,7 +482,7 @@ export default function HomePage() {
             {/* Row 1: Moving RIGHT */}
             <div className="group overflow-hidden w-full flex">
               <div className="flex shrink-0 gap-4 group-hover:[animation-play-state:paused] animate-marquee-right">
-                {[...STACK_ROW_1, ...STACK_ROW_1].map((item, idx) => (
+                {[...stackRow1, ...stackRow1].map((item, idx) => (
                   <div
                     key={`row1-${item.name}-${idx}`}
                     className="px-6 py-3.5 rounded-2xl bg-white dark:bg-white/[0.04] border border-black/10 dark:border-white/10 shadow-sm flex items-center gap-3.5 hover:scale-105 hover:border-black/30 dark:hover:border-white/30 transition-all select-none"
@@ -527,7 +502,7 @@ export default function HomePage() {
             {/* Row 2: Moving LEFT */}
             <div className="group overflow-hidden w-full flex">
               <div className="flex shrink-0 gap-4 group-hover:[animation-play-state:paused] animate-marquee-left">
-                {[...STACK_ROW_2, ...STACK_ROW_2].map((item, idx) => (
+                {[...stackRow2, ...stackRow2].map((item, idx) => (
                   <div
                     key={`row2-${item.name}-${idx}`}
                     className="px-6 py-3.5 rounded-2xl bg-white dark:bg-white/[0.04] border border-black/10 dark:border-white/10 shadow-sm flex items-center gap-3.5 hover:scale-105 hover:border-black/30 dark:hover:border-white/30 transition-all select-none"
@@ -773,7 +748,7 @@ export default function HomePage() {
               </span>
               <span className="font-mono text-xs text-neutral-400">·</span>
               <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 uppercase">
-                13 INDUSTRY ACCREDITATIONS
+                {certificateCount || certificates.length} INDUSTRY ACCREDITATIONS
               </span>
             </div>
 
@@ -860,7 +835,7 @@ export default function HomePage() {
                 /07 EXPERIENCE
               </span>
               <span className="font-mono text-xs text-neutral-400 uppercase">
-                3+ YEARS BUILDING RESILIENT SYSTEMS
+                {(profile.stats[0]?.value || "3+").toUpperCase()} YEARS BUILDING RESILIENT SYSTEMS
               </span>
             </div>
 
@@ -959,10 +934,12 @@ export default function HomePage() {
             <span className="font-mono text-xs font-semibold tracking-[0.2em] text-neutral-400 uppercase">
               /08 CONTACT &amp; FOOTER
             </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1 text-xs font-mono text-neutral-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-300" />
-              <span>Available for New Project</span>
-            </span>
+            {profile.availableForProjects ? (
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1 text-xs font-mono text-neutral-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-neutral-300" />
+                <span>Available for New Project</span>
+              </span>
+            ) : null}
           </div>
 
           {/* Center Call to Action */}
@@ -1022,7 +999,7 @@ export default function HomePage() {
                 height={20}
                 className="h-5 w-5 object-contain"
               />
-              <span>© 2026 Mohammad Kevin Arif Rudianto. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} {profile.fullName}. All rights reserved.</span>
             </div>
 
             {/* Center: Live Malang Clock */}
@@ -1033,30 +1010,17 @@ export default function HomePage() {
 
             {/* Right: Socials & Back to Top */}
             <div className="flex items-center gap-6">
-              <a
-                href="https://github.com/MohammadKevin"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-              >
-                GitHub
-              </a>
-              <a
-                href="https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="https://wa.me/6282131588846"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-              >
-                WhatsApp
-              </a>
+              {profile.socials.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  {social.label}
+                </a>
+              ))}
               <button
                 type="button"
                 onClick={() => scrollTo("hero")}
