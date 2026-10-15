@@ -7,16 +7,16 @@ import { useFinePointer } from "@/lib/hooks";
 import { spring } from "@/lib/motion";
 
 type MagneticButtonProps = {
-  /** Destination. Internal paths (`/`, `#`) use next/link, the rest a plain anchor. */
+
   href: string;
   children: React.ReactNode;
-  /** Visual weight. `ghost` is the variant intended for dark surfaces. */
+
   variant?: "solid" | "outline" | "ghost";
   className?: string;
   ariaLabel?: string;
-  /** Opens in a new tab with `rel="noopener noreferrer"`. */
+
   newTab?: boolean;
-  /** Called before navigation, e.g. to smooth-scroll instead of jumping. */
+
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
@@ -32,7 +32,6 @@ const variantClasses: Record<
     "bg-transparent text-white border border-white/[0.08] hover:border-white focus-visible:outline-white",
 };
 
-/** `#anchor` and `/route` stay client-side; mailto:, tel: and http(s) do not. */
 function isInternalHref(href: string): boolean {
   return href.startsWith("#") || href.startsWith("/");
 }

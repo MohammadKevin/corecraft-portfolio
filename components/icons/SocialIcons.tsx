@@ -1,12 +1,5 @@
 import React from "react";
 
-/**
- * Brand icons.
- *
- * `lucide-react` v1 no longer ships brand marks, so these are kept as local
- * SVGs. Every icon is `aria-hidden` — the accessible name always comes from
- * the surrounding link's `aria-label` or visible text.
- */
 type IconProps = { className?: string };
 
 export function GithubIcon({ className = "h-4 w-4" }: IconProps) {

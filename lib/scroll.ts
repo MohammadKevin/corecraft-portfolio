@@ -3,16 +3,8 @@
 import { useCallback } from "react";
 import { useLenis } from "lenis/react";
 
-/** Height of the floating navbar plus its top offset, in px. */
 const SCROLL_OFFSET = -96;
 
-/**
- * Returns a handler that scrolls to an in-page anchor.
- *
- * Uses Lenis when it is mounted and falls back to `window.scrollTo`, so touch
- * and reduced-motion visitors reach the same destination. The fallback jumps
- * instead of animating when reduced-motion is on.
- */
 export function useScrollToSection() {
   const lenis = useLenis();
 

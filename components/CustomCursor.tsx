@@ -75,7 +75,7 @@ export default function CustomCursor() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[9999] print:hidden mix-blend-difference"
     >
-      {/* Center dot - hidden in view mode */}
+
       {!isView ? (
         <motion.div
           style={{ x: dotX, y: dotY }}
@@ -89,7 +89,6 @@ export default function CustomCursor() {
         </motion.div>
       ) : null}
 
-      {/* Kinetic Ring */}
       <motion.div
         style={{ x: ringX, y: ringY }}
         className="fixed left-0 top-0"

@@ -58,7 +58,7 @@ export default async function Image() {
           <span
             style={{
               fontSize: "28px",
-              color: "#10B981",
+              color: "#E5E7EB",
               fontWeight: 600,
             }}
           >

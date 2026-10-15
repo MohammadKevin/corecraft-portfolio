@@ -28,7 +28,7 @@ export default function Atmosphere() {
 
   return (
     <>
-      {/* 1. Film grain noise overlay */}
+
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 z-40 opacity-[0.035] mix-blend-overlay print:hidden"
@@ -37,7 +37,6 @@ export default function Atmosphere() {
         }}
       />
 
-      {/* 2. Ambient subtle cursor radial torch */}
       {enabled ? (
         <motion.div
           aria-hidden="true"

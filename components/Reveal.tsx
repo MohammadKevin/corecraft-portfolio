@@ -4,13 +4,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { fadeUpDelayed, inView } from "@/lib/motion";
 
-/**
- * Client-side entrance wrapper.
- *
- * Lets server components opt into the shared `whileInView` reveal without
- * becoming client components themselves. The delay is baked into the variant
- * (see `fadeUpDelayed`) so it actually applies.
- */
 export default function Reveal({
   children,
   delay = 0,

@@ -9,7 +9,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { profile } from "@/data/profile";
 
-/** Display face — hero name, section headings. */
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
@@ -17,7 +16,6 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
-/** Mono face — the `/SELECTED WORK` style eyebrows and indices. */
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
@@ -25,7 +23,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-/** Body face. */
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",

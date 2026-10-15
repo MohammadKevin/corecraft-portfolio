@@ -3,10 +3,6 @@ import { notFound } from "next/navigation";
 import ProjectDetail from "@/components/ProjectDetail";
 import { getAdjacentProjects, getProject, projects } from "@/data/projects";
 
-/**
- * Statically generate every project page at build time.
- * Unknown slugs fall through to `notFound()` below.
- */
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
 }

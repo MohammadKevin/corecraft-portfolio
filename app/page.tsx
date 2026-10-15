@@ -51,9 +51,6 @@ import { useFinePointer, useMinWidth } from "@/lib/hooks";
 import { useScrollToSection } from "@/lib/scroll";
 import { fadeUp, fadeUpDelayed, inView, spring } from "@/lib/motion";
 
-/* =========================================================================
-   CONSTANTS & HELPERS
-   ========================================================================= */
 const socialLinks = [
   {
     label: "GitHub",
@@ -90,9 +87,7 @@ const PREVIEW_WIDTH = 340;
 const PREVIEW_HEIGHT = 220;
 
 export default function HomePage() {
-  /* -----------------------------------------------------------------------
-     1. HERO PARALLAX & SIZING REFS
-     ----------------------------------------------------------------------- */
+
   const heroRef = useRef<HTMLElement>(null);
   const nameRef = useRef<HTMLHeadingElement>(null);
   const outlineRef = useRef<HTMLSpanElement>(null);

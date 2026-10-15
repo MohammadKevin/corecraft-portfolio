@@ -8,7 +8,7 @@ export default function Preloader() {
   const [complete, setComplete] = useState(false);
 
   useEffect(() => {
-    // Check if already shown in this session
+
     const hasShown = sessionStorage.getItem("preloader_shown");
     if (hasShown) {
       setComplete(true);
@@ -47,13 +47,12 @@ export default function Preloader() {
           }}
           className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#0A0A0C] p-8 sm:p-14 text-white print:hidden pointer-events-none"
         >
-          {/* Header */}
+
           <div className="flex items-center justify-between font-mono text-xs text-white/50 tracking-[0.2em] uppercase">
             <span>CORECRAFT ARCHITECTURE</span>
             <span>SYSTEM INIT</span>
           </div>
 
-          {/* Center Digital Counter */}
           <div className="flex flex-col items-center justify-center">
             <span className="font-display text-7xl sm:text-9xl md:text-[12rem] font-extrabold tracking-tighter text-white tabular-nums">
               {String(count).padStart(2, "0")}
@@ -63,7 +62,6 @@ export default function Preloader() {
             </span>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between font-mono text-xs text-white/40">
             <span>MOHAMMAD KEVIN</span>
             <span>2026 EDITION</span>

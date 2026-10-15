@@ -36,7 +36,6 @@ export default function Navbar() {
     [scrollTo],
   );
 
-  /** Lock scroll, trap focus and wire Escape while the mobile menu is open. */
   useEffect(() => {
     if (!menuOpen) return;
 
@@ -92,7 +91,7 @@ export default function Navbar() {
           aria-label="Primary"
           className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-3 rounded-full border border-black/[0.08] bg-white/80 px-3 shadow-md backdrop-blur-md pointer-events-auto sm:px-4"
         >
-          {/* Availability indicator — pure monochrome/silver pulse */}
+
           <a
             href="#hero"
             onClick={(e) => goTo(e, "hero")}
@@ -108,7 +107,6 @@ export default function Navbar() {
             <span className="sr-only">Available for new projects</span>
           </a>
 
-          {/* Nav links */}
           <ul className="hidden items-center gap-0.5 lg:flex">
             {links.map((link) => {
               const isActive = active === link.id;
@@ -137,7 +135,6 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* CTA & Mobile Menu Toggle */}
           <div className="flex items-center gap-2">
             <MagneticButton
               href="#contact"

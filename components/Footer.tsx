@@ -35,19 +35,17 @@ export default function Footer() {
   return (
     <footer className="border-t border-black/[0.08] bg-bg py-10">
       <div className="page-container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        {/* Left: Copyright & Legal */}
+
         <div className="text-xs sm:text-sm font-mono text-muted">
           © 2026 {profile.fullName}. Built with Next.js 16 & React 19.
         </div>
 
-        {/* Center: Live clock Malang WIB (pure monochrome) */}
         <div className="flex items-center gap-2 rounded-full border border-black/[0.08] bg-surface px-4 py-1.5 font-mono text-xs text-ink shadow-2xs">
           <Clock className="h-3.5 w-3.5 text-neutral-500 animate-pulse" />
           <span className="text-muted">Malang, ID (WIB):</span>
           <span className="font-semibold text-ink">{time || "Loading..."}</span>
         </div>
 
-        {/* Right: Social links + Back to top jump */}
         <div className="flex items-center gap-4">
           <ul className="flex items-center gap-2">
             {profile.socials.map((social) => {

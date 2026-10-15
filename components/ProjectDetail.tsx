@@ -37,13 +37,11 @@ export default function ProjectDetail({
     offset: ["start end", "end start"],
   });
 
-  // Parallax-dampened scroll of 0.7x
   const imageY = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
   const [leadImage, ...restImages] = project.gallery;
   const clientOrStudio = project.client ?? project.studio;
 
-  // Split title into outline first word and solid rest words
   const titleParts = project.title.split(" ");
   const firstWord = titleParts[0];
   const restWords = titleParts.slice(1).join(" ");
@@ -51,7 +49,7 @@ export default function ProjectDetail({
   return (
     <article className="pb-24 pt-24 md:pt-32 bg-bg min-h-screen">
       <div className="page-container">
-        {/* 1. Sticky top bar: "← Back to Overview" (left) + Tag badge (right) */}
+
         <div className="sticky top-20 z-40 mb-10 flex items-center justify-between gap-4 py-2">
           <Link
             href="/#work"
@@ -67,9 +65,6 @@ export default function ProjectDetail({
           </span>
         </div>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* 2. Massive Project Title with Outline-and-Solid treatment       */}
-        {/* ---------------------------------------------------------------- */}
         <header className="max-w-5xl">
           <Reveal>
             <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
@@ -94,7 +89,6 @@ export default function ProjectDetail({
             </p>
           </Reveal>
 
-          {/* 7. CTA Row: Live Demo ↗ and Source Code ↗ (external, no dead links) */}
           <Reveal delay={0.15}>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               {project.liveUrl ? (
@@ -138,13 +132,10 @@ export default function ProjectDetail({
           </Reveal>
         </header>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* 3. Metadata Matrix (4 cells in a 1px hairline grid)              */}
-        {/* ---------------------------------------------------------------- */}
         <Reveal delay={0.15}>
           <div className="mt-14 overflow-hidden rounded-3xl border border-black/[0.08] bg-surface shadow-xs">
             <div className="grid grid-cols-1 divide-y divide-black/[0.08] md:grid-cols-4 md:divide-y-0 md:divide-x md:divide-black/[0.08]">
-              {/* Cell 1: Role */}
+
               <div className="p-6 sm:p-8">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Role
@@ -156,7 +147,6 @@ export default function ProjectDetail({
                 </ul>
               </div>
 
-              {/* Cell 2: Timeline */}
               <div className="p-6 sm:p-8">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Timeline
@@ -172,7 +162,6 @@ export default function ProjectDetail({
                 ) : null}
               </div>
 
-              {/* Cell 3: Deliverables */}
               <div className="p-6 sm:p-8">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Deliverables
@@ -187,7 +176,6 @@ export default function ProjectDetail({
                 </ul>
               </div>
 
-              {/* Cell 4: Stack */}
               <div className="p-6 sm:p-8">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Stack
@@ -207,16 +195,13 @@ export default function ProjectDetail({
           </div>
         </Reveal>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* 4. Full-bleed 16:10 Framed Showcase with Parallax Damping 0.7x    */}
-        {/* ---------------------------------------------------------------- */}
         {leadImage ? (
           <Reveal delay={0.1}>
             <div
               ref={showcaseRef}
               className="mt-16 overflow-hidden rounded-3xl border border-black/[0.08] bg-surface shadow-xl"
             >
-              {/* Minimalist Browser Header Bar */}
+
               <div className="flex h-10 w-full items-center justify-between border-b border-black/[0.06] bg-neutral-100/90 px-4 backdrop-blur-xs">
                 <div className="flex items-center gap-1.5">
                   <span className="h-3 w-3 rounded-full bg-red-400" />
@@ -232,7 +217,6 @@ export default function ProjectDetail({
                 </span>
               </div>
 
-              {/* 16:10 Aspect Ratio with Parallax Dampening */}
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-bg-alt">
                 <motion.div
                   style={parallaxEnabled ? { y: imageY } : undefined}
@@ -258,11 +242,8 @@ export default function ProjectDetail({
           </Reveal>
         ) : null}
 
-        {/* ---------------------------------------------------------------- */}
-        {/* 5. Problem and Solution Breakdown (Two Columns Editorial)        */}
-        {/* ---------------------------------------------------------------- */}
         <section className="mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Left Column: Problem & Friction */}
+
           <div className="lg:col-span-5">
             <Reveal>
               <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
@@ -276,7 +257,6 @@ export default function ProjectDetail({
               </p>
             </Reveal>
 
-            {/* Quantified Metrics */}
             {project.metrics?.length ? (
               <Reveal delay={0.1}>
                 <div className="mt-8 grid grid-cols-2 gap-4 border-t border-black/[0.08] pt-6">
@@ -298,7 +278,6 @@ export default function ProjectDetail({
             ) : null}
           </div>
 
-          {/* Right Column: Solution & Technical Architecture */}
           <div className="lg:col-span-7 flex flex-col gap-10">
             <Reveal delay={0.08}>
               <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
@@ -344,9 +323,6 @@ export default function ProjectDetail({
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* 6. Supporting Frames Showcase (Gallery)                          */}
-        {/* ---------------------------------------------------------------- */}
         {restImages.length ? (
           <section className="mt-24 border-t border-black/[0.08] pt-16">
             <Reveal>
@@ -383,9 +359,6 @@ export default function ProjectDetail({
           </section>
         ) : null}
 
-        {/* ---------------------------------------------------------------- */}
-        {/* 8. Next Project Link (Large Hover Row that cycles through list)  */}
-        {/* ---------------------------------------------------------------- */}
         <nav
           aria-label="More projects"
           className="mt-24 border-t border-black/[0.08] pt-12"
