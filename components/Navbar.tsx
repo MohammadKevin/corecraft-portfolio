@@ -36,7 +36,7 @@ export default function Navbar() {
       setScrolled(window.scrollY > 30);
 
       // Check if navbar (y ~ 50px) is currently floating above a dark-background section
-      const darkSectionIds = ["about", "services", "experience", "contact"];
+      const darkSectionIds = ["about", "stack", "credentials", "contact"];
       const navY = 50;
       let overDark = false;
 
