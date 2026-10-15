@@ -164,10 +164,22 @@ export default function HomePage() {
       <section
         id="hero"
         aria-labelledby="hero-title"
-        className="sticky top-0 z-0 w-full min-h-[100svh] md:h-[100svh] flex flex-col justify-between py-10 px-6 md:px-14 overflow-hidden bg-[#F6F7F9] dark:bg-[#F6F7F9] text-[#0B0C0E]"
+        className="sticky top-0 z-0 w-full min-h-[100svh] md:h-[100svh] flex flex-col justify-between py-10 px-6 md:px-14 overflow-hidden bg-[#F6F7F9] dark:bg-[#F6F7F9] text-[#0B0C0E] relative"
       >
+        {/* Pure CSS Architectural Grid Pattern */}
+        <div 
+          className="absolute inset-0 z-0 pointer-events-none opacity-[0.55] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black_40%,transparent_100%)]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(0, 0, 0, 0.06) 1px, transparent 1px)
+            `,
+            backgroundSize: "64px 64px",
+          }}
+        />
+
         {/* Meta Top */}
-        <div className="flex items-center justify-between shrink-0 pt-2 sm:pt-4">
+        <div className="relative z-10 flex items-center justify-between shrink-0 pt-2 sm:pt-4">
           <span className="font-mono text-xs font-semibold tracking-[0.2em] text-neutral-500 uppercase">
             /01 HERO
           </span>
@@ -177,7 +189,7 @@ export default function HomePage() {
         </div>
 
         {/* Middle: Giant Pure Typography */}
-        <div className="my-auto py-4 sm:py-8 flex flex-col items-center justify-center shrink-0 select-none">
+        <div className="relative z-10 my-auto py-4 sm:py-8 flex flex-col items-center justify-center shrink-0 select-none">
           <h1
             id="hero-title"
             className="font-display text-[14vw] md:text-[11.5vw] font-black uppercase tracking-tighter leading-[0.82] text-center"
@@ -192,7 +204,7 @@ export default function HomePage() {
         </div>
 
         {/* Bottom Flank */}
-        <div className="pt-6 border-t border-black/10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 shrink-0 pb-2">
+        <div className="relative z-10 pt-6 border-t border-black/10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 shrink-0 pb-2">
           {/* Bottom Left: Manifesto & CTA Pills */}
           <div className="flex flex-col gap-4 max-w-xl">
             <p className="text-base sm:text-lg md:text-xl font-medium tracking-tight text-neutral-900 leading-snug">
