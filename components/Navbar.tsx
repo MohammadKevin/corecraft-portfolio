@@ -21,11 +21,21 @@ const sectionIds = ["hero", ...links.map((link) => link.id), "contact"];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const active = useActiveSection(sectionIds);
   const scrollTo = useScrollToSection();
 
   const menuRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const goTo = useCallback(
     (event: React.MouseEvent, id: string) => {
@@ -85,11 +95,19 @@ export default function Navbar() {
   }, [menuOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-4 z-50 print:hidden pointer-events-none">
+    <header
+      className={`fixed inset-x-0 z-50 print:hidden pointer-events-none transition-all duration-300 ${
+        scrolled ? "top-2.5" : "top-4"
+      }`}
+    >
       <div className="page-container">
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-3 rounded-full border border-black/[0.08] bg-white/80 px-3 shadow-md backdrop-blur-md pointer-events-auto sm:px-4"
+          className={`mx-auto flex max-w-4xl items-center justify-between gap-3 rounded-full border transition-all duration-300 pointer-events-auto ${
+            scrolled
+              ? "h-12 border-black/[0.12] bg-white/90 px-3 shadow-lg backdrop-blur-lg sm:px-4"
+              : "h-14 border-black/[0.08] bg-white/80 px-3 shadow-md backdrop-blur-md sm:px-4"
+          }`}
         >
 
           <a
@@ -122,7 +140,7 @@ export default function Navbar() {
                   >
                     {isActive ? (
                       <motion.span
-                        layoutId="nav-active"
+                        layoutId="activePillIndicator"
                         transition={spring}
                         aria-hidden="true"
                         className="absolute inset-0 rounded-full bg-black/[0.06]"
