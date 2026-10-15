@@ -235,7 +235,10 @@ export default function HomePage() {
               >
                 {profile.firstName}
               </span>
-              <span aria-hidden="true" className="block text-[#0B0C0E] dark:text-white mt-1 sm:mt-2">
+              <span
+                aria-hidden="true"
+                className="block text-[#0B0C0E] font-black uppercase tracking-tighter opacity-100 dark:text-white mt-1 sm:mt-2"
+              >
                 {profile.lastName}
               </span>
             </h1>
@@ -870,7 +873,7 @@ export default function HomePage() {
 
                         <div className="relative h-[calc(100%-2rem)] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
                           <Image
-                            src={`/images/work/${project.slug}.png`}
+                            src={project.image || `/images/work/${project.slug}.png`}
                             alt={project.title}
                             fill
                             sizes="700px"
@@ -988,7 +991,7 @@ export default function HomePage() {
                     </div>
                     <div className="relative h-[calc(100%-1.75rem)] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
                       <Image
-                        src={`/images/work/${project.slug}.png`}
+                        src={project.image || `/images/work/${project.slug}.png`}
                         alt={project.title}
                         fill
                         sizes="85vw"

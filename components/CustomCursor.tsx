@@ -100,7 +100,7 @@ export default function CustomCursor() {
             marginLeft: -ringSize / 2,
             marginTop: -ringSize / 2,
             opacity: visible ? 1 : 0,
-            backgroundColor: isView ? "#FFFFFF" : "transparent",
+            backgroundColor: isView ? "#FFFFFF" : "rgba(255, 255, 255, 0)",
             borderColor: isView ? "#FFFFFF" : "#FFFFFF",
           }}
           transition={{ type: "spring", stiffness: 350, damping: 28 }}

@@ -353,8 +353,8 @@ export const projects: Project[] = [
       "Community-facing download flow",
     ],
     tags: ["Next.js", "Tailwind CSS", "Prisma ORM", "MySQL"],
-    thumbnail: "/images/work/clinic.png",
-    image: "/images/work/clinic.png",
+    thumbnail: "/images/work/clinic-portal.png",
+    image: "/images/work/clinic-portal.png",
     summary:
       "Public data archiving and administrative record platform with JWT authentication protection and granular file access security.",
     problem:

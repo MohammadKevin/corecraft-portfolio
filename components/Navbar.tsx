@@ -97,105 +97,94 @@ export default function Navbar() {
   }, [menuOpen]);
 
   return (
-    <header
-      className={`fixed inset-x-0 z-50 print:hidden pointer-events-none transition-all duration-300 ${
-        scrolled ? "top-2.5" : "top-4"
-      }`}
-    >
-      <div className="w-full flex justify-center px-3 sm:px-4">
-        <nav
-          aria-label="Primary"
-          className={`w-[94%] sm:w-auto max-w-4xl flex items-center justify-between gap-2 sm:gap-3 rounded-full border transition-all duration-300 pointer-events-auto ${
-            scrolled
-              ? "h-12 border-black/[0.12] bg-white/90 px-3 shadow-lg backdrop-blur-lg sm:px-4"
-              : "h-14 border-black/[0.08] bg-white/80 px-3 shadow-md backdrop-blur-md sm:px-4"
-          }`}
+    <header className="fixed inset-x-0 top-0 z-50 print:hidden pointer-events-none">
+      <nav
+        aria-label="Primary"
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-5xl px-4 sm:px-5 py-2.5 rounded-full backdrop-blur-2xl bg-white/65 dark:bg-[#0A0A0C]/65 border border-white/50 dark:border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.08),inset_0_1px_1px_0_rgba(255,255,255,0.8)] flex items-center justify-between gap-4 sm:gap-6 pointer-events-auto transition-all duration-300"
+      >
+        <Link
+          href="/"
+          onClick={(e) => {
+            if (typeof window !== "undefined" && window.location.pathname === "/") {
+              e.preventDefault();
+              goTo(e, "hero");
+            }
+          }}
+          className="flex min-w-0 items-center gap-2.5 pl-0.5 transition-opacity hover:opacity-85"
         >
+          <Image
+            src="/images/logo-corecraft.png"
+            alt="Corecraft"
+            width={28}
+            height={28}
+            priority
+            className="h-7 w-7 object-contain"
+          />
+          <span className="font-semibold tracking-tight text-neutral-900 dark:text-white">
+            Corecraft
+          </span>
+          <span className="hidden sm:inline-block h-3.5 w-px bg-black/[0.12] dark:bg-white/[0.12] mx-0.5" />
+          <span className="hidden sm:inline-block font-mono text-[11px] text-muted tracking-tight">
+            Available for New Project
+          </span>
+        </Link>
 
-          <Link
-            href="/"
-            onClick={(e) => {
-              if (typeof window !== "undefined" && window.location.pathname === "/") {
-                e.preventDefault();
-                goTo(e, "hero");
-              }
-            }}
-            className="flex min-w-0 items-center gap-2.5 pl-1 transition-opacity hover:opacity-85"
+        <ul className="hidden items-center gap-0.5 lg:flex">
+          {links.map((link) => {
+            const isActive = active === link.id;
+            return (
+              <li key={link.id}>
+                <a
+                  href={`#${link.id}`}
+                  onClick={(event) => goTo(event, link.id)}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`relative rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${
+                    isActive ? "text-ink font-semibold" : "text-muted hover:text-ink"
+                  }`}
+                >
+                  {isActive ? (
+                    <motion.span
+                      layoutId="activePillIndicator"
+                      transition={spring}
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-full bg-black/[0.06]"
+                    />
+                  ) : null}
+                  <span className="relative z-10">{link.label}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className="flex items-center gap-2">
+          <MagneticButton
+            href="#contact"
+            variant="solid"
+            className="hidden sm:inline-flex px-4 py-1.5 text-xs font-medium"
+            onClick={(event) => goTo(event, "contact")}
           >
-            <Image
-              src="/images/logo-corecraft.png"
-              alt="Corecraft"
-              width={28}
-              height={28}
-              priority
-              className="h-7 w-7 object-contain"
-            />
-            <span className="font-semibold tracking-tight text-neutral-900 dark:text-white">
-              Corecraft
-            </span>
-            <span className="hidden sm:inline-block h-3.5 w-px bg-black/[0.12] dark:bg-white/[0.12] mx-0.5" />
-            <span className="hidden sm:inline-block font-mono text-[11px] text-muted tracking-tight">
-              Available for New Project
-            </span>
-          </Link>
+            Let&apos;s Talk
+            <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+          </MagneticButton>
 
-          <ul className="hidden items-center gap-0.5 lg:flex">
-            {links.map((link) => {
-              const isActive = active === link.id;
-              return (
-                <li key={link.id}>
-                  <a
-                    href={`#${link.id}`}
-                    onClick={(event) => goTo(event, link.id)}
-                    aria-current={isActive ? "true" : undefined}
-                    className={`relative rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${
-                      isActive ? "text-ink font-semibold" : "text-muted hover:text-ink"
-                    }`}
-                  >
-                    {isActive ? (
-                      <motion.span
-                        layoutId="activePillIndicator"
-                        transition={spring}
-                        aria-hidden="true"
-                        className="absolute inset-0 rounded-full bg-black/[0.06]"
-                      />
-                    ) : null}
-                    <span className="relative z-10">{link.label}</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <MagneticButton
-              href="#contact"
-              variant="solid"
-              className="hidden sm:inline-flex px-3.5 py-1.5 text-xs font-medium"
-              onClick={(event) => goTo(event, "contact")}
-            >
-              Let&apos;s Talk
-              <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
-            </MagneticButton>
-
-            <button
-              ref={toggleRef}
-              type="button"
-              onClick={() => setMenuOpen((open) => !open)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              aria-controls="mobile-menu"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.08] text-ink transition-colors duration-200 hover:bg-neutral-100 lg:hidden"
-            >
-              {menuOpen ? (
-                <X className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <Menu className="h-4 w-4" aria-hidden="true" />
-              )}
-            </button>
-          </div>
-        </nav>
-      </div>
+          <button
+            ref={toggleRef}
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] text-ink transition-colors duration-200 hover:bg-neutral-100 lg:hidden"
+          >
+            {menuOpen ? (
+              <X className="h-4 w-4" aria-hidden="true" />
+            ) : (
+              <Menu className="h-4 w-4" aria-hidden="true" />
+            )}
+          </button>
+        </div>
+      </nav>
 
       <AnimatePresence>
         {menuOpen ? (
