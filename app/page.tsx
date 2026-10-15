@@ -44,6 +44,7 @@ import {
   X,
   BadgeCheck,
 } from "lucide-react";
+import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
 import { profile, bio } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
@@ -56,6 +57,12 @@ import { spring } from "@/lib/motion";
 import RevealWords from "@/components/RevealWords";
 import SectionHeader from "@/components/SectionHeader";
 import CountUp from "@/components/CountUp";
+
+const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  GitHub: GithubIcon,
+  LinkedIn: LinkedinIcon,
+  WhatsApp: WhatsappIcon,
+};
 
 const SECTION_THEMES = {
   services: {
@@ -1524,51 +1531,65 @@ export default function HomePage() {
           </div>
 
           {/* Colophon & Bottom Bar */}
-          <div className="pt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 font-mono text-xs text-[#3C4012] relative z-10">
-            {/* Left */}
+          <div className="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 font-mono text-xs text-[#0B0C0E] relative z-10 border-t border-[#0B0C0E]/15">
+            {/* Left: Brand & Colophon */}
             <div className="flex items-center gap-3">
               <Image
                 src="/images/logo-corecraft.png"
                 alt="Corecraft"
-                width={20}
-                height={20}
-                className="h-5 w-5 object-contain"
+                width={32}
+                height={32}
+                className="h-8 w-8 object-contain"
               />
-              <span className="font-medium text-[#0B0C0E]">
-                © {new Date().getFullYear()} {profile.fullName}. All rights reserved.
-              </span>
+              <div className="flex flex-col">
+                <span className="font-display font-bold text-sm tracking-tight text-[#0B0C0E]">
+                  Corecraft
+                </span>
+                <span className="text-xs font-mono text-[#0B0C0E]/70">
+                  © {new Date().getFullYear()} {profile.fullName}. Built with Next.js 16 & React 19.
+                </span>
+              </div>
             </div>
 
             {/* Center: Live Malang Clock with Pulsing Dot */}
-            <div className="flex items-center gap-2 font-medium text-[#0B0C0E]">
+            <div className="flex items-center gap-2 rounded-full border border-[#0B0C0E]/15 bg-[#0B0C0E]/5 px-4 py-1.5 font-mono text-xs text-[#0B0C0E] shadow-2xs">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0B0C0E] opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0B0C0E]" />
               </span>
               <Clock className="h-3.5 w-3.5 text-[#3C4012]" />
-              <span>MALANG, ID: {malangTime || "--:--:--"} WIB</span>
+              <span>Malang, ID (WIB): {malangTime || "--:--:--"}</span>
             </div>
 
             {/* Right: Socials & Back to Top with Upward Translating Arrow */}
-            <div className="flex items-center gap-6">
-              {profile.socials.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[#0B0C0E] transition-colors font-medium"
-                >
-                  {social.label}
-                </a>
-              ))}
+            <div className="flex items-center gap-4">
+              <ul className="flex items-center gap-2">
+                {profile.socials.map((social) => {
+                  const Icon = socialIcons[social.label];
+                  if (!Icon) return null;
+                  return (
+                    <li key={social.label}>
+                      <a
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${social.label} profile`}
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#0B0C0E]/15 bg-[#0B0C0E]/5 text-[#0B0C0E] transition-all duration-200 hover:border-[#0B0C0E] hover:bg-[#0B0C0E] hover:text-[#D4FF00]"
+                      >
+                        <Icon className="h-4 w-4" />
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+
               <button
                 type="button"
                 onClick={() => scrollTo("hero")}
-                className="group inline-flex items-center gap-1.5 text-[#0B0C0E] font-bold hover:opacity-80 transition-opacity cursor-pointer ml-2"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#0B0C0E]/15 bg-[#0B0C0E]/5 px-3.5 py-1.5 font-mono text-xs font-medium text-[#0B0C0E] transition-all duration-200 hover:border-[#0B0C0E] hover:bg-[#0B0C0E] hover:text-[#D4FF00] cursor-pointer"
               >
                 <span>Back to top</span>
-                <ArrowUp className="h-3.5 w-3.5 group-hover:-translate-y-1 transition-transform duration-200" />
+                <ArrowUp className="h-3 w-3" />
               </button>
             </div>
           </div>

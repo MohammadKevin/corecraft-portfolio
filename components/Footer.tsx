@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ArrowUp, Clock } from "lucide-react";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
 import { profile } from "@/data/profile";
@@ -13,6 +14,7 @@ const socialIcons: Record<string, React.ComponentType<{ className?: string }>> =
 };
 
 export default function Footer() {
+  const pathname = usePathname();
   const [time, setTime] = useState<string>("");
 
   useEffect(() => {
@@ -33,6 +35,11 @@ export default function Footer() {
     return () => clearInterval(interval);
   }, []);
 
+  // Avoid duplicate footer on the home page which integrates its own themed Section /08 footer
+  if (pathname === "/") {
+    return null;
+  }
+
   return (
     <footer className="border-t border-black/[0.08] bg-bg py-10">
       <div className="page-container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -47,10 +54,10 @@ export default function Footer() {
           />
           <div className="flex flex-col">
             <span className="font-display font-bold text-sm tracking-tight text-ink">
-              Corecraft Architecture
+              Corecraft
             </span>
             <span className="text-xs font-mono text-muted">
-              © 2026 {profile.fullName}. Built with Next.js 16 & React 19.
+              © {new Date().getFullYear()} {profile.fullName}. Built with Next.js 16 & React 19.
             </span>
           </div>
         </div>
