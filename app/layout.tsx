@@ -4,7 +4,6 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
-import FooterCTA from "@/components/FooterCTA";
 import { profile } from "@/data/profile";
 
 /** Display face — hero name, section headings. */
@@ -114,7 +113,6 @@ export default function RootLayout({
           <CustomCursor />
           <Navbar />
           <main id="main">{children}</main>
-          <FooterCTA />
         </SmoothScroll>
       </body>
     </html>

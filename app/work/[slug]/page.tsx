@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetail from "@/components/ProjectDetail";
+import ContactSection from "@/components/ContactSection";
 import { getAdjacentProjects, getProject, projects } from "@/data/projects";
 
 /**
@@ -47,5 +48,10 @@ export default async function WorkPage({
 
   const { previous, next } = getAdjacentProjects(project.slug);
 
-  return <ProjectDetail project={project} previous={previous} next={next} />;
+  return (
+    <>
+      <ProjectDetail project={project} previous={previous} next={next} />
+      <ContactSection />
+    </>
+  );
 }

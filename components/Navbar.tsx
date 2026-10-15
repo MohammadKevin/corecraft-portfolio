@@ -9,13 +9,15 @@ import { useScrollToSection } from "@/lib/scroll";
 import { spring } from "@/lib/motion";
 
 const links = [
-  { id: "work", label: "Work" },
+  { id: "about", label: "About" },
   { id: "services", label: "Services" },
+  { id: "skills", label: "Stack" },
+  { id: "work", label: "Work" },
+  { id: "credentials", label: "Credentials" },
   { id: "experience", label: "Experience" },
-  { id: "contact", label: "Contact" },
 ];
 
-const sectionIds = links.map((link) => link.id);
+const sectionIds = ["hero", ...links.map((link) => link.id), "contact"];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -79,28 +81,32 @@ export default function Navbar() {
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
-      // Focus returns to the control that opened the menu.
       toggleButton?.focus();
     };
   }, [menuOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-4 z-50 print:hidden">
+    <header className="fixed inset-x-0 top-4 z-50 print:hidden pointer-events-none">
       <div className="page-container">
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3 rounded-full border border-line/80 bg-bg/80 px-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] backdrop-blur-md sm:px-4"
+          className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-3 rounded-full border border-black/[0.08] bg-white/80 px-3 shadow-md backdrop-blur-md pointer-events-auto sm:px-4"
         >
-          {/* Availability indicator — the emerald dot is used here and nowhere else. */}
-          <span className="flex min-w-0 items-center gap-2 pl-1">
+          {/* Availability indicator — green status beacon */}
+          <a
+            href="#hero"
+            onClick={(e) => goTo(e, "hero")}
+            className="flex min-w-0 items-center gap-2 pl-1 cursor-pointer transition-opacity hover:opacity-80"
+          >
             <span className="status-dot shrink-0" aria-hidden="true" />
-            <span className="hidden truncate text-xs font-medium tracking-tight text-muted sm:inline">
+            <span className="hidden truncate font-mono text-xs font-medium tracking-tight text-ink sm:inline">
               Available for New Project
             </span>
             <span className="sr-only">Available for new projects</span>
-          </span>
+          </a>
 
-          <ul className="hidden items-center gap-1 md:flex">
+          {/* Nav links */}
+          <ul className="hidden items-center gap-0.5 lg:flex">
             {links.map((link) => {
               const isActive = active === link.id;
               return (
@@ -109,8 +115,8 @@ export default function Navbar() {
                     href={`#${link.id}`}
                     onClick={(event) => goTo(event, link.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={`relative rounded-full px-3 py-1.5 text-sm transition-colors duration-200 ${
-                      isActive ? "text-ink" : "text-muted hover:text-ink"
+                    className={`relative rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${
+                      isActive ? "text-ink font-semibold" : "text-muted hover:text-ink"
                     }`}
                   >
                     {isActive ? (
@@ -118,7 +124,7 @@ export default function Navbar() {
                         layoutId="nav-active"
                         transition={spring}
                         aria-hidden="true"
-                        className="absolute inset-0 rounded-full bg-bg-alt"
+                        className="absolute inset-0 rounded-full bg-black/[0.06]"
                       />
                     ) : null}
                     <span className="relative z-10">{link.label}</span>
@@ -128,18 +134,17 @@ export default function Navbar() {
             })}
           </ul>
 
+          {/* CTA & Mobile Menu Toggle */}
           <div className="flex items-center gap-2">
-            <div className="hidden sm:block">
-              <MagneticButton
-                href="#contact"
-                variant="solid"
-                className="px-4 py-2 text-xs"
-                onClick={(event) => goTo(event, "contact")}
-              >
-                Let&apos;s Talk
-                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-              </MagneticButton>
-            </div>
+            <MagneticButton
+              href="#contact"
+              variant="solid"
+              className="px-3.5 py-1.5 text-xs font-medium"
+              onClick={(event) => goTo(event, "contact")}
+            >
+              Let&apos;s Talk
+              <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+            </MagneticButton>
 
             <button
               ref={toggleRef}
@@ -148,7 +153,7 @@ export default function Navbar() {
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors duration-200 hover:bg-bg-alt md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.08] text-ink transition-colors duration-200 hover:bg-neutral-100 lg:hidden"
             >
               {menuOpen ? (
                 <X className="h-4 w-4" aria-hidden="true" />
@@ -172,28 +177,44 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 flex flex-col justify-between bg-bg px-6 pb-10 pt-28 md:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-between bg-bg px-6 pb-10 pt-28 pointer-events-auto lg:hidden"
           >
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-3">
               {links.map((link, index) => (
                 <motion.li
                   key={link.id}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...spring, delay: 0.04 * index }}
+                  transition={{ ...spring, delay: 0.03 * index }}
                 >
                   <a
                     href={`#${link.id}`}
                     onClick={(event) => goTo(event, link.id)}
-                    className="block py-2 font-display text-4xl font-extrabold tracking-tight text-ink"
+                    className="block py-2 font-display text-3xl font-extrabold tracking-tight text-ink hover:text-emerald-700"
                   >
                     {link.label}
                   </a>
                 </motion.li>
               ))}
+              <motion.li
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...spring, delay: 0.03 * links.length }}
+              >
+                <a
+                  href="#contact"
+                  onClick={(event) => goTo(event, "contact")}
+                  className="block py-2 font-display text-3xl font-extrabold tracking-tight text-ink hover:text-emerald-700"
+                >
+                  Contact
+                </a>
+              </motion.li>
             </ul>
 
-            <p className="text-sm text-muted">Malang, East Java · WIB (UTC+7)</p>
+            <div className="border-t border-black/[0.08] pt-6 flex flex-col gap-2 font-mono text-xs text-muted">
+              <span>Mohammad Kevin · Software Engineer</span>
+              <span>Malang, East Java · WIB (UTC+7)</span>
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>

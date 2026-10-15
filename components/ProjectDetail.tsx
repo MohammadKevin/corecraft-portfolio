@@ -1,18 +1,23 @@
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  CheckCircle2,
+  ExternalLink,
+  Layers,
+  Lock,
+  Server,
+  Terminal,
+} from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import Reveal from "@/components/Reveal";
 import { GithubIcon } from "@/components/icons/SocialIcons";
 import { profile } from "@/data/profile";
 import type { Project } from "@/lib/types";
 
-/**
- * ProjectDetail: the case-study layout for `/work/[slug]`.
- *
- * Server component — it only composes `Reveal` and `MagneticButton` for the
- * animated parts, so none of the page copy ships as client JS.
- */
 export default function ProjectDetail({
   project,
   previous,
@@ -26,126 +31,178 @@ export default function ProjectDetail({
   const clientOrStudio = project.client ?? project.studio;
 
   return (
-    <article className="pb-24 pt-32 md:pt-40">
+    <article className="pb-24 pt-28 md:pt-36 bg-bg min-h-screen">
       <div className="page-container">
-        <Reveal>
+        {/* Sticky "← Back to Overview" button */}
+        <div className="sticky top-20 z-40 mb-10 flex">
           <Link
             href="/#work"
-            className="inline-flex items-center gap-2 text-sm text-muted transition-colors duration-200 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/90 px-4 py-2 font-mono text-xs font-medium text-ink shadow-sm backdrop-blur-md transition-all duration-200 hover:border-black hover:bg-black hover:text-white"
           >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            Back to selected work
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>← Back to Overview</span>
           </Link>
-        </Reveal>
+        </div>
 
         {/* ---------------------------------------------------------------- */}
         {/* Header                                                            */}
         {/* ---------------------------------------------------------------- */}
-        <header className="mt-10 max-w-4xl">
+        <header className="max-w-5xl">
           <Reveal>
-            <p className="label-eyebrow text-muted">/{project.category}</p>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
+                /CASE STUDY
+              </span>
+              <span className="h-1 w-1 rounded-full bg-black/20" />
+              <span className="font-mono text-xs font-semibold text-emerald-700 uppercase">
+                {project.badge || project.category}
+              </span>
+            </div>
           </Reveal>
 
           <Reveal delay={0.05}>
-            <h1 className="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink md:text-6xl">
+            <h1 className="mt-4 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-ink uppercase leading-[1.05]">
               {project.title}
             </h1>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 text-base leading-relaxed text-muted md:text-lg">
+            <p className="mt-6 text-lg sm:text-xl leading-relaxed text-muted max-w-3xl font-normal">
               {project.summary}
             </p>
           </Reveal>
 
+          {/* Action CTAs: Live Preview + Source Code */}
           <Reveal delay={0.15}>
-            <ul className="mt-8 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-medium tracking-tight text-muted"
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              {project.liveUrl ? (
+                <MagneticButton
+                  href={project.liveUrl}
+                  variant="solid"
+                  newTab
+                  className="px-5 py-3 text-sm font-medium"
+                  ariaLabel={`Open live preview of ${project.title}`}
                 >
-                  {tag}
-                </li>
-              ))}
-            </ul>
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  <span>Live Preview</span>
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                </MagneticButton>
+              ) : null}
+
+              {project.sourceUrl ? (
+                <MagneticButton
+                  href={project.sourceUrl}
+                  variant="outline"
+                  newTab
+                  className="px-5 py-3 text-sm font-medium"
+                  ariaLabel={`Open source code of ${project.title}`}
+                >
+                  <GithubIcon className="h-4 w-4" />
+                  <span>Source Code</span>
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                </MagneticButton>
+              ) : null}
+
+              <MagneticButton
+                href="/#contact"
+                variant={project.liveUrl || project.sourceUrl ? "outline" : "solid"}
+                className="px-5 py-3 text-sm font-medium"
+                ariaLabel={`Contact about ${project.title}`}
+              >
+                <span>Discuss System Architecture</span>
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </MagneticButton>
+            </div>
           </Reveal>
         </header>
 
         {/* ---------------------------------------------------------------- */}
-        {/* Metadata + actions                                                */}
+        {/* Metadata Matrix: Role, Timeline, Deliverables, Stack              */}
         {/* ---------------------------------------------------------------- */}
-        <Reveal delay={0.1}>
-          <div className="mt-14 grid grid-cols-1 gap-10 border-y border-line py-10 md:grid-cols-4">
+        <Reveal delay={0.15}>
+          <div className="mt-14 grid grid-cols-1 gap-8 rounded-3xl border border-black/[0.08] bg-surface p-8 sm:p-10 shadow-xs md:grid-cols-4">
             <div>
-              <h2 className="label-eyebrow text-muted">Year</h2>
-              <p className="mt-2 text-base text-ink">{project.year}</p>
-            </div>
-
-            <div className="md:col-span-2">
-              <h2 className="label-eyebrow text-muted">Role</h2>
-              <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-base text-ink">
-                {project.role.map((role) => (
-                  <li key={role}>{role}</li>
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
+                Role
+              </h2>
+              <ul className="mt-3 space-y-1.5 text-sm font-medium text-ink">
+                {project.role.map((r) => (
+                  <li key={r}>{r}</li>
                 ))}
               </ul>
             </div>
 
-            {clientOrStudio ? (
-              <div>
-                <h2 className="label-eyebrow text-muted">
-                  {project.client ? "Client" : "Studio"}
-                </h2>
-                <p className="mt-2 text-base text-ink">{clientOrStudio}</p>
+            <div>
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
+                Timeline / Year
+              </h2>
+              <p className="mt-3 text-sm font-medium text-ink">{project.year}</p>
+              {clientOrStudio ? (
+                <div className="mt-4">
+                  <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
+                    {project.client ? "Client" : "Studio"}
+                  </h3>
+                  <p className="mt-1 text-sm font-medium text-ink">{clientOrStudio}</p>
+                </div>
+              ) : null}
+            </div>
+
+            <div>
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
+                Deliverables
+              </h2>
+              <ul className="mt-3 space-y-1.5 text-sm font-medium text-ink">
+                {project.deliverables.map((item) => (
+                  <li key={item} className="flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
+                Technology Stack
+              </h2>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-black/[0.08] bg-bg px-2.5 py-1 font-mono text-[11px] text-ink font-medium"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
-            ) : null}
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.12}>
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            {project.liveUrl ? (
-              <MagneticButton
-                href={project.liveUrl}
-                variant="solid"
-                newTab
-                ariaLabel={`Open the live demo of ${project.title} in a new tab`}
-              >
-                <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                Live Demo
-              </MagneticButton>
-            ) : null}
-
-            {project.sourceUrl ? (
-              <MagneticButton
-                href={project.sourceUrl}
-                variant="outline"
-                newTab
-                ariaLabel={`Open the source code of ${project.title} in a new tab`}
-              >
-                <GithubIcon className="h-4 w-4" />
-                Source Code
-              </MagneticButton>
-            ) : null}
-
-            <MagneticButton
-              href="#contact"
-              variant={project.liveUrl || project.sourceUrl ? "outline" : "solid"}
-              ariaLabel={`Contact ${profile.firstName} about a project`}
-            >
-              Contact Me
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-            </MagneticButton>
+            </div>
           </div>
         </Reveal>
 
         {/* ---------------------------------------------------------------- */}
-        {/* Lead image                                                        */}
+        {/* Mock Frame Showcase: 16:10 Frame with Browser Bar                */}
         {/* ---------------------------------------------------------------- */}
         {leadImage ? (
           <Reveal delay={0.1}>
-            <figure className="mt-16">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-line bg-bg-alt">
+            <div className="mt-16 overflow-hidden rounded-3xl border border-black/[0.08] bg-surface shadow-lg">
+              {/* Browser Header Bar */}
+              <div className="flex h-10 w-full items-center justify-between border-b border-black/[0.06] bg-neutral-100/90 px-4 backdrop-blur-xs">
+                <div className="flex items-center gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-red-400" />
+                  <span className="h-3 w-3 rounded-full bg-amber-400" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                </div>
+                <div className="flex items-center gap-2 rounded-md bg-white px-3 py-1 text-xs font-mono text-muted shadow-2xs">
+                  <Lock className="h-3 w-3 text-muted/80" />
+                  <span>corecraft.my.id/work/{project.slug}</span>
+                </div>
+                <span className="font-mono text-[11px] text-muted uppercase">
+                  {project.category}
+                </span>
+              </div>
+
+              {/* 16:10 Aspect Ratio Image */}
+              <div className="relative aspect-[16/10] w-full bg-bg-alt">
                 <Image
                   src={leadImage.src}
                   alt={leadImage.alt}
@@ -155,87 +212,135 @@ export default function ProjectDetail({
                   className="object-cover"
                 />
               </div>
+
               {leadImage.caption ? (
-                <figcaption className="mt-3 text-sm text-muted">
+                <div className="border-t border-black/[0.06] bg-white p-4 text-xs font-mono text-muted">
                   {leadImage.caption}
-                </figcaption>
+                </div>
               ) : null}
-            </figure>
+            </div>
           </Reveal>
         ) : null}
 
         {/* ---------------------------------------------------------------- */}
-        {/* Timeline                                                          */}
+        {/* Problem & Technical Architecture Analysis                        */}
         {/* ---------------------------------------------------------------- */}
-        {project.timeline?.length ? (
-          <section aria-labelledby="timeline-heading" className="mt-24">
+        <section className="mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Problem Statement */}
+          <div className="lg:col-span-5">
             <Reveal>
-              <p className="label-eyebrow text-muted">/Process</p>
-              <h2
-                id="timeline-heading"
-                className="mt-4 text-3xl font-extrabold tracking-tight text-ink md:text-4xl"
-              >
-                How it came together
+              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
+                /01 THE CHALLENGE
+              </span>
+              <h2 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+                Problem & Friction
               </h2>
+              <p className="mt-4 text-base md:text-lg leading-relaxed text-muted">
+                {project.problem}
+              </p>
             </Reveal>
 
-            <ol className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3">
-              {project.timeline.map((step, index) => (
-                <Reveal key={step.phase} delay={Math.min(index, 3) * 0.06}>
-                  <li className="border-t border-line pt-6">
-                    <p className="label-eyebrow text-muted">{step.period}</p>
-                    <h3 className="mt-3 text-lg font-semibold tracking-tight text-ink">
-                      {step.phase}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">
-                      {step.detail}
-                    </p>
+            {/* Key Metrics */}
+            {project.metrics?.length ? (
+              <Reveal delay={0.1}>
+                <div className="mt-8 grid grid-cols-2 gap-4 border-t border-black/[0.08] pt-6">
+                  {project.metrics.map((metric) => (
+                    <div
+                      key={metric.label}
+                      className="rounded-2xl border border-black/[0.06] bg-surface p-4"
+                    >
+                      <span className="font-display text-2xl font-bold text-ink block">
+                        {metric.value}
+                      </span>
+                      <span className="font-mono text-xs text-muted block mt-1">
+                        {metric.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+            ) : null}
+          </div>
+
+          {/* Technical Architecture & Solution */}
+          <div className="lg:col-span-7 flex flex-col gap-10">
+            <Reveal delay={0.08}>
+              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
+                /02 TECHNICAL ARCHITECTURE
+              </span>
+              <h2 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+                System Design & Components
+              </h2>
+              <ul className="mt-4 space-y-3">
+                {project.architecture.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 rounded-xl border border-black/[0.06] bg-surface p-4 text-sm md:text-base text-ink"
+                  >
+                    <Server className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{item}</span>
                   </li>
-                </Reveal>
-              ))}
-            </ol>
-          </section>
-        ) : null}
+                ))}
+              </ul>
+            </Reveal>
+
+            {project.solution?.length ? (
+              <Reveal delay={0.12}>
+                <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
+                  /03 IMPLEMENTED OUTCOMES
+                </span>
+                <h2 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+                  Resilience & Solution
+                </h2>
+                <ul className="mt-4 space-y-3">
+                  {project.solution.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 rounded-xl border border-black/[0.06] bg-surface p-4 text-sm md:text-base text-ink"
+                    >
+                      <CheckCircle2 className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            ) : null}
+          </div>
+        </section>
 
         {/* ---------------------------------------------------------------- */}
-        {/* Gallery — remaining images in alternating two columns            */}
+        {/* Additional Screens Gallery                                       */}
         {/* ---------------------------------------------------------------- */}
         {restImages.length ? (
-          <section aria-labelledby="gallery-heading" className="mt-24">
+          <section className="mt-24 border-t border-black/[0.08] pt-16">
             <Reveal>
-              <p className="label-eyebrow text-muted">/Gallery</p>
-              <h2
-                id="gallery-heading"
-                className="mt-4 text-3xl font-extrabold tracking-tight text-ink md:text-4xl"
-              >
-                Selected screens
+              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
+                /SCREENS & ARCHITECTURE
+              </span>
+              <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-ink">
+                Deep Dive Showcase
               </h2>
             </Reveal>
 
-            <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
               {restImages.map((image, index) => (
-                <Reveal
-                  key={image.src}
-                  delay={Math.min(index, 3) * 0.06}
-                  className={index % 3 === 0 ? "md:col-span-2" : undefined}
-                >
-                  <figure>
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-line bg-bg-alt">
+                <Reveal key={image.src} delay={index * 0.08}>
+                  <div className="overflow-hidden rounded-2xl border border-black/[0.08] bg-surface shadow-sm">
+                    <div className="relative aspect-[16/10] w-full bg-bg-alt">
                       <Image
                         src={image.src}
                         alt={image.alt}
                         fill
-                        loading="lazy"
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover"
                       />
                     </div>
                     {image.caption ? (
-                      <figcaption className="mt-3 text-sm text-muted">
+                      <div className="p-4 text-xs font-mono text-muted border-t border-black/[0.06]">
                         {image.caption}
-                      </figcaption>
+                      </div>
                     ) : null}
-                  </figure>
+                  </div>
                 </Reveal>
               ))}
             </div>
@@ -243,34 +348,34 @@ export default function ProjectDetail({
         ) : null}
 
         {/* ---------------------------------------------------------------- */}
-        {/* Previous / next navigation                                        */}
+        {/* Previous / Next Project Navigation                               */}
         {/* ---------------------------------------------------------------- */}
         <nav
           aria-label="More projects"
-          className="mt-24 grid grid-cols-1 gap-4 border-t border-line pt-10 md:grid-cols-2"
+          className="mt-24 grid grid-cols-1 gap-4 border-t border-black/[0.08] pt-12 md:grid-cols-2"
         >
           <Link
             href={`/work/${previous.slug}`}
-            className="group flex flex-col gap-2 rounded-2xl border border-line p-6 transition-colors duration-200 hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="group flex flex-col gap-2 rounded-2xl border border-black/[0.08] bg-surface p-6 transition-all duration-200 hover:border-black hover:shadow-md"
           >
-            <span className="inline-flex items-center gap-2 text-xs text-muted">
-              <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-              Previous
+            <span className="inline-flex items-center gap-2 font-mono text-xs text-muted">
+              <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
+              Previous Case Study
             </span>
-            <span className="text-lg font-semibold tracking-tight text-ink">
+            <span className="font-display text-xl font-bold text-ink">
               {previous.title}
             </span>
           </Link>
 
           <Link
             href={`/work/${next.slug}`}
-            className="group flex flex-col items-end gap-2 rounded-2xl border border-line p-6 text-right transition-colors duration-200 hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="group flex flex-col items-end gap-2 rounded-2xl border border-black/[0.08] bg-surface p-6 text-right transition-all duration-200 hover:border-black hover:shadow-md"
           >
-            <span className="inline-flex items-center gap-2 text-xs text-muted">
-              Next
-              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="inline-flex items-center gap-2 font-mono text-xs text-muted">
+              Next Case Study
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </span>
-            <span className="text-lg font-semibold tracking-tight text-ink">
+            <span className="font-display text-xl font-bold text-ink">
               {next.title}
             </span>
           </Link>

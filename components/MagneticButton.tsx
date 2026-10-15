@@ -62,8 +62,8 @@ export default function MagneticButton({
 
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
-  const x = useSpring(rawX, { stiffness: 260, damping: 22, mass: 0.5 });
-  const y = useSpring(rawY, { stiffness: 260, damping: 22, mass: 0.5 });
+  const x = useSpring(rawX, { stiffness: 350, damping: 28, mass: 0.8 });
+  const y = useSpring(rawY, { stiffness: 350, damping: 28, mass: 0.8 });
 
   function handlePointerMove(event: React.PointerEvent<HTMLAnchorElement>) {
     if (!magneticEnabled) return;
@@ -71,15 +71,14 @@ export default function MagneticButton({
     if (!node) return;
 
     const rect = node.getBoundingClientRect();
-    const relativeX = event.clientX - (rect.left + rect.width / 2);
-    const relativeY = event.clientY - (rect.top + rect.height / 2);
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
-    // Normalise to [-1, 1], then clamp the pull to the 8px budget.
-    const normX = Math.max(-1, Math.min(1, relativeX / (rect.width / 2 || 1)));
-    const normY = Math.max(-1, Math.min(1, relativeY / (rect.height / 2 || 1)));
+    const pullX = (event.clientX - centerX) * 0.25;
+    const pullY = (event.clientY - centerY) * 0.25;
 
-    rawX.set(normX * MAGNETIC_STRENGTH);
-    rawY.set(normY * MAGNETIC_STRENGTH);
+    rawX.set(pullX);
+    rawY.set(pullY);
   }
 
   function handlePointerLeave() {

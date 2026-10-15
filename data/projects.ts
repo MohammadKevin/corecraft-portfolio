@@ -27,9 +27,11 @@ export const projects: Project[] = [
   {
     slug: "worknest",
     title: "WorkNest — Smart Space Booking & Management",
+    shortTitle: "WorkNest",
     category: "Fullstack",
     studio: "Independent",
     year: 2026,
+    badge: "SaaS",
     role: ["Fullstack Development", "API Architecture", "Database Design"],
     deliverables: [
       "Express REST API",
@@ -110,9 +112,11 @@ export const projects: Project[] = [
   {
     slug: "invdocs",
     title: "InvDocs — Digital Archive & Document Workflow",
+    shortTitle: "InvDocs",
     category: "Fullstack",
     studio: "Independent",
     year: 2025,
+    badge: "Real Project",
     role: ["Fullstack Development", "RBAC", "Metadata Indexing"],
     deliverables: [
       "Structured archive with metadata search",
@@ -183,9 +187,11 @@ export const projects: Project[] = [
   {
     slug: "corepos",
     title: "CorePOS — Multi-Outlet Cashier & Stock Engine",
+    shortTitle: "CorePOS",
     category: "Fullstack",
     studio: "Independent",
     year: 2025,
+    badge: "SaaS",
     role: ["Fullstack Development", "Inventory Logic", "Receipt Printing"],
     deliverables: [
       "Cashier & transaction screen",
@@ -255,9 +261,11 @@ export const projects: Project[] = [
   {
     slug: "inventory-api",
     title: "Inventory Management High-Throughput API",
+    shortTitle: "Inventory API",
     category: "Backend",
     studio: "Independent",
     year: 2025,
+    badge: "API",
     role: ["Backend Engineering", "Query Optimization", "API Design"],
     deliverables: [
       "Documented REST endpoints",
@@ -328,9 +336,11 @@ export const projects: Project[] = [
   {
     slug: "clinic-portal",
     title: "Clinic & Pharmacy Portal — Public Archive & JWT Auth",
+    shortTitle: "Madyopuro Clinic",
     category: "Fullstack",
     studio: "Independent",
     year: 2025,
+    badge: "Real Project",
     role: ["Fullstack Development", "JWT Authentication", "Public Archiving"],
     deliverables: [
       "Public document archive",
@@ -400,9 +410,11 @@ export const projects: Project[] = [
   {
     slug: "corecraft",
     title: "CoreCraft Personal Engineering Portfolio",
+    shortTitle: "CoreCraft Portfolio",
     category: "Fullstack",
     studio: "CoreCraft",
     year: 2026,
+    badge: "Portfolio",
     role: ["Design", "Frontend Development", "SEO"],
     deliverables: [
       "Editorial home page",
@@ -455,9 +467,11 @@ export const projects: Project[] = [
   {
     slug: "outerco",
     title: "Outer.Co — Boutique Florist E-Commerce",
+    shortTitle: "Outer.Co",
     category: "E-Commerce",
     client: "Outer.Co",
     year: 2025,
+    badge: "E-Commerce",
     role: ["Frontend Development", "Catalog Architecture", "Admin Panel"],
     deliverables: [
       "Product catalogue with multi-image galleries",

@@ -12,13 +12,13 @@ export interface Project {
   slug: string;
   title: string;
   /** Short name used on the work card and in the case-study breadcrumb. */
-  shortTitle: string;
+  shortTitle?: string;
   category: ProjectCategory;
   client?: string;
   studio?: string;
   year: number;
   /** Status pill shown on the work card, e.g. "Real Project" or "SaaS". */
-  badge: string;
+  badge?: string;
   role: string[];
   /** Concrete outputs, listed in the case-study meta grid. */
   deliverables: string[];

@@ -10,6 +10,7 @@ export const spring: Transition = {
   type: "spring",
   stiffness: 350,
   damping: 28,
+  mass: 0.8,
 };
 
 /** Entrances travel this far, in px, before settling. */
