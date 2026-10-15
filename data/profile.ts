@@ -27,13 +27,13 @@ export const profile: Profile = {
     { label: "GitHub", url: "https://github.com/MohammadKevin" },
     {
       label: "LinkedIn",
-      url: "https://www.linkedin.com/in/mohammad-kevin-arif-rudianto-945733347/",
+      url: "https://www.linkedin.com/in/mohammad-kevin16",
     },
     { label: "WhatsApp", url: "https://wa.me/6282131588846" },
   ],
   stats: [
     {
-      value: "3+",
+      value: "2+",
       label: "Years of Engineering",
       detail: "Shipping production systems since 2024, from schema to interface.",
     },
@@ -46,11 +46,6 @@ export const profile: Profile = {
       value: "13",
       label: "Industry Certifications",
       detail: "Verified by HackerRank, Dicoding and national competition bodies.",
-    },
-    {
-      value: "99.9%",
-      label: "Architecture Uptime Focus",
-      detail: "Explicit state machines, indexed queries and no single points of failure.",
     },
   ],
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
@@ -107,7 +106,7 @@ export default function Navbar() {
               : "bg-white/40 dark:bg-[#0A0A0C]/40 border-white/60 dark:border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.06),inset_0_1px_1px_0_rgba(255,255,255,0.7)]"
           }`}
         >
-          {/* Sisi Kiri: Logo + Wordmark Corecraft */}
+          {/* Sisi Kiri: Wordmark Corecraft (Tanpa logo gambar, font More Sugar) */}
           <Link
             href="/"
             onClick={(e) => {
@@ -116,17 +115,12 @@ export default function Navbar() {
                 goTo(e, "hero");
               }
             }}
-            className="flex min-w-0 items-center gap-2.5 transition-opacity hover:opacity-80 shrink-0"
+            className="flex min-w-0 items-center transition-opacity hover:opacity-80 shrink-0"
           >
-            <Image
-              src="/images/logo-corecraft.png"
-              alt="Corecraft"
-              width={26}
-              height={26}
-              priority
-              className="h-6.5 w-6.5 object-contain"
-            />
-            <span className="font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+            <span
+              style={{ fontFamily: "'More Sugar', cursive, sans-serif" }}
+              className="text-base sm:text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100"
+            >
               Corecraft
             </span>
           </Link>
