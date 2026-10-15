@@ -26,7 +26,7 @@ export async function generateMetadata({
       title: project.title,
       description: project.summary,
       url: `/work/${project.slug}`,
-      images: [{ url: project.thumbnail, alt: project.title }],
+      images: [{ url: project.image || project.thumbnail, alt: project.title }],
     },
   };
 }

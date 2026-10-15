@@ -24,6 +24,7 @@ export interface Project {
 
   tags: string[];
   thumbnail: string;
+  image?: string;
   summary: string;
 
   problem: string;

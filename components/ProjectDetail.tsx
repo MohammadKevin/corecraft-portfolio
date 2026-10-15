@@ -223,7 +223,7 @@ export default function ProjectDetail({
                   className="relative h-[110%] w-full -top-[5%]"
                 >
                   <Image
-                    src={leadImage.src}
+                    src={project.image || leadImage.src || project.thumbnail}
                     alt={leadImage.alt || `${project.title} framed showcase`}
                     fill
                     priority

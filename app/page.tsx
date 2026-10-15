@@ -299,16 +299,16 @@ export default function HomePage() {
                     ? { y: heroAvatarY, scale: heroAvatarScale, opacity: heroAvatarOpacity }
                     : undefined
                 }
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex justify-center"
+                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
               >
                 <div className="relative h-64 w-64 sm:h-80 sm:w-80 md:h-[390px] md:w-[390px] lg:h-[430px] lg:w-[430px]">
                   <Image
-                    src={profile.avatar}
+                    src={profile.avatar || "/images/profile-photo.webp"}
                     alt={profile.fullName}
                     fill
                     priority
                     sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, 430px"
-                    className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.22)]"
+                    className="object-contain grayscale contrast-110 drop-shadow-[0_20px_40px_rgba(0,0,0,0.22)] [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)]"
                   />
                 </div>
               </motion.div>
@@ -918,13 +918,14 @@ export default function HomePage() {
                               </span>
                             </div>
 
-                            <div className="relative h-[calc(100%-2.25rem)] w-full overflow-hidden">
+                            <div className="relative h-[calc(100%-2.25rem)] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
                               <Image
-                                src={project.thumbnail}
-                                alt={`${project.title} preview`}
+                                src={project.image || project.thumbnail || `/images/work/${project.slug}.png`}
+                                alt={project.title}
                                 fill
-                                sizes="(max-width: 1024px) 100vw, 55vw"
-                                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                priority={index < 2}
+                                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                               />
                             </div>
                           </div>

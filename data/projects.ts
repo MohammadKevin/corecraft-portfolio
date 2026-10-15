@@ -48,7 +48,8 @@ export const projects: Project[] = [
       "Tailwind CSS",
       "JWT Auth",
     ],
-    thumbnail: "/images/work/worknest-cover.svg",
+    thumbnail: "/images/work/worknest.png",
+    image: "/images/work/worknest.png",
     summary:
       "Comprehensive coworking space reservation and management SaaS platform featuring real-time space search, QR Code check-in terminal, and multi-role access control.",
     problem:
@@ -125,7 +126,8 @@ export const projects: Project[] = [
       "Audit trail",
     ],
     tags: ["Next.js", "Express.js", "PostgreSQL", "Prisma ORM", "Tailwind CSS"],
-    thumbnail: "/images/work/invdocs-cover.svg",
+    thumbnail: "/images/work/invdocs.png",
+    image: "/images/work/invdocs.png",
     summary:
       "Structured digital document archiving and management system for organizations with file encryption and role-based access control (RBAC).",
     problem:
@@ -200,7 +202,8 @@ export const projects: Project[] = [
       "Daily inventory reconciliation",
     ],
     tags: ["React.js", "Express.js", "MySQL", "Prisma ORM", "Tailwind CSS"],
-    thumbnail: "/images/work/corepos-cover.svg",
+    thumbnail: "/images/work/corepos.png",
+    image: "/images/work/corepos.png",
     summary:
       "POS system for shops & SMEs with real-time transaction logging, barcode scanner, invoice receipt printing, and daily inventory reconciliation.",
     problem:
@@ -274,7 +277,8 @@ export const projects: Project[] = [
       "Critical stock notifications",
     ],
     tags: ["NestJS", "Node.js", "PostgreSQL", "Prisma ORM", "Redis"],
-    thumbnail: "/images/work/inventory-api-cover.svg",
+    thumbnail: "/images/work/inventory-api.png",
+    image: "/images/work/inventory-api.png",
     summary:
       "High-throughput RESTful API for warehouse inventory tracking, multi-warehouse batch logging, and critical stock notifications.",
     problem:
@@ -349,7 +353,8 @@ export const projects: Project[] = [
       "Community-facing download flow",
     ],
     tags: ["Next.js", "Tailwind CSS", "Prisma ORM", "MySQL"],
-    thumbnail: "/images/work/clinic-portal-cover.svg",
+    thumbnail: "/images/work/clinic.png",
+    image: "/images/work/clinic.png",
     summary:
       "Public data archiving and administrative record platform with JWT authentication protection and granular file access security.",
     problem:
@@ -423,7 +428,8 @@ export const projects: Project[] = [
       "SEO, sitemap and robots",
     ],
     tags: ["Next.js 16", "TypeScript", "Tailwind CSS"],
-    thumbnail: "/images/work/corecraft-cover.svg",
+    thumbnail: "/images/work/corecraft.png",
+    image: "/images/work/corecraft.png",
     summary:
       "Personal engineering portfolio with an editorial aesthetic, a single shared motion system, and a 100% Lighthouse performance score.",
     problem:
@@ -486,7 +492,8 @@ export const projects: Project[] = [
       "Cloudinary",
       "Google Sheets API",
     ],
-    thumbnail: "/images/work/outerco-cover.svg",
+    thumbnail: "/images/work/outerco.png",
+    image: "/images/work/outerco.png",
     summary:
       "Boutique florist e-commerce platform with rich product catalog, multi-image galleries, WhatsApp checkout, multi-branch support (Surabaya, Kediri, Denpasar), and a full admin CRUD panel.",
     problem:

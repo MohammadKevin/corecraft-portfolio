@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { ArrowUp, Clock } from "lucide-react";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
 import { profile } from "@/data/profile";
@@ -36,8 +37,22 @@ export default function Footer() {
     <footer className="border-t border-black/[0.08] bg-bg py-10">
       <div className="page-container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
 
-        <div className="text-xs sm:text-sm font-mono text-muted">
-          © 2026 {profile.fullName}. Built with Next.js 16 & React 19.
+        <div className="flex items-center gap-3">
+          <Image
+            src="/logo-corecraft.png"
+            alt="Corecraft"
+            width={32}
+            height={32}
+            className="h-8 w-8 object-contain grayscale brightness-0 contrast-200"
+          />
+          <div className="flex flex-col">
+            <span className="font-display font-bold text-sm tracking-tight text-ink">
+              Corecraft Architecture
+            </span>
+            <span className="text-xs font-mono text-muted">
+              © 2026 {profile.fullName}. Built with Next.js 16 & React 19.
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 rounded-full border border-black/[0.08] bg-surface px-4 py-1.5 font-mono text-xs text-ink shadow-2xs">

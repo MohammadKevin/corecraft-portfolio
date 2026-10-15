@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
@@ -113,16 +114,27 @@ export default function Navbar() {
           <a
             href="#hero"
             onClick={(e) => goTo(e, "hero")}
-            className="flex min-w-0 items-center gap-2.5 pl-1 cursor-pointer transition-opacity hover:opacity-80"
+            className="flex min-w-0 items-center gap-2 pl-1 cursor-pointer transition-opacity hover:opacity-85 group"
           >
-            <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 ring-1 ring-neutral-400/50 animate-ping" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
+            <Image
+              src="/logo-corecraft.png"
+              alt="Corecraft"
+              width={28}
+              height={28}
+              className="h-7 w-7 object-contain grayscale brightness-0 contrast-200"
+            />
+            <span className="font-display font-bold text-sm tracking-tight text-ink">
+              Corecraft
             </span>
-            <span className="hidden truncate font-mono text-xs font-medium tracking-tight text-ink sm:inline">
-              Available for New Project
+            <span className="hidden sm:inline-block h-3 w-px bg-black/[0.12] mx-0.5" />
+            <span className="hidden sm:inline-flex items-center gap-1.5 font-mono text-[11px] text-muted">
+              <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-neutral-400/50 ring-1 ring-neutral-400/50 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
+              </span>
+              <span>Available</span>
             </span>
-            <span className="sr-only">Available for new projects</span>
+            <span className="sr-only">Corecraft - Available for new projects</span>
           </a>
 
           <ul className="hidden items-center gap-0.5 lg:flex">
