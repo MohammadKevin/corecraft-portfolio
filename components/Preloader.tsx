@@ -8,10 +8,10 @@ export default function Preloader() {
   const [phase, setPhase] = useState<"drawing" | "filled" | "exiting">("drawing");
 
   useEffect(() => {
-    const hasShown = sessionStorage.getItem("preloader_shown");
+    const hasShown = typeof window !== "undefined" && sessionStorage.getItem("preloader_shown");
     if (hasShown) {
-      setComplete(true);
-      return;
+      const skipTimer = setTimeout(() => setComplete(true), 0);
+      return () => clearTimeout(skipTimer);
     }
 
     const fillTimer = setTimeout(() => {

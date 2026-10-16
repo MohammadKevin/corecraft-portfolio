@@ -1,10 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-/**
- * Not-found page for unknown routes and unknown project slugs.
- * Deliberately minimal: one message, one way back.
- */
 export default function NotFound() {
   return (
     <section className="section-pad flex min-h-[70vh] items-center pt-40">

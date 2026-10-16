@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUp, Clock } from "lucide-react";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
-import { profile } from "@/data/profile";
+import { profile, site, ui } from "@/data";
 
 const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   GitHub: GithubIcon,
@@ -21,7 +21,7 @@ export default function Footer() {
     function updateClock() {
       const now = new Date();
       const formatted = new Intl.DateTimeFormat("en-GB", {
-        timeZone: "Asia/Jakarta",
+        timeZone: ui.clock.timeZone,
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -35,7 +35,6 @@ export default function Footer() {
     return () => clearInterval(interval);
   }, []);
 
-  // Avoid duplicate footer on the home page which integrates its own themed Section /08 footer
   if (pathname === "/") {
     return null;
   }
@@ -43,29 +42,28 @@ export default function Footer() {
   return (
     <footer className="border-t border-black/[0.08] bg-bg py-10">
       <div className="page-container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-
         <div className="flex items-center gap-3">
           <Image
-            src="/images/logo-corecraft.png"
-            alt="Corecraft"
+            src={site.logo}
+            alt={site.footer.brandName}
             width={32}
             height={32}
             className="h-8 w-8 object-contain"
           />
           <div className="flex flex-col">
             <span className="font-display font-bold text-sm tracking-tight text-ink">
-              Corecraft
+              {site.footer.brandName}
             </span>
             <span className="text-xs font-mono text-muted">
-              © {new Date().getFullYear()} {profile.fullName}. Built with Next.js 16 & React 19.
+              © {site.footer.copyrightYear} {profile.fullName}. {site.footer.builtWith}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-2 rounded-full border border-black/[0.08] bg-surface px-4 py-1.5 font-mono text-xs text-ink shadow-2xs">
           <Clock className="h-3.5 w-3.5 text-neutral-500" />
-          <span className="text-muted">Malang, ID (WIB):</span>
-          <span className="font-semibold text-ink">{time || "Loading..."}</span>
+          <span className="text-muted">{ui.clock.label}</span>
+          <span className="font-semibold text-ink">{time || ui.clock.loading}</span>
         </div>
 
         <div className="flex items-center gap-4">
@@ -98,7 +96,7 @@ export default function Footer() {
             }}
             className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-surface px-3 py-1.5 font-mono text-xs font-medium text-ink transition-all duration-200 hover:border-black hover:bg-black hover:text-white cursor-pointer"
           >
-            <span>Back to top</span>
+            <span>{ui.buttons.backToTop}</span>
             <ArrowUp className="h-3 w-3" />
           </button>
         </div>

@@ -24,14 +24,9 @@ export default function CountUp({
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setCount(to);
-      return;
-    }
+    if (prefersReducedMotion || !isInView) return;
 
-    if (!isInView) return;
-
-    let start = 0;
+    const start = 0;
     const end = to;
     const startTime = performance.now();
     const durationMs = duration * 1000;
@@ -41,7 +36,7 @@ export default function CountUp({
     const tick = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / durationMs, 1);
-      // easeOutExpo / easeOutQuad
+
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(eased * (end - start) + start);
 
@@ -59,10 +54,12 @@ export default function CountUp({
     return () => cancelAnimationFrame(animationFrameId);
   }, [isInView, to, duration, prefersReducedMotion]);
 
+  const displayCount = prefersReducedMotion ? to : count;
+
   return (
     <span ref={ref} className={className}>
       {prefix}
-      {count}
+      {displayCount}
       {suffix}
     </span>
   );

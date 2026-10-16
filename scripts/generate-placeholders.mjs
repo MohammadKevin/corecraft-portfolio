@@ -1,13 +1,4 @@
-/**
- * Generates lightweight SVG placeholders for project covers, galleries,
- * service previews and experience thumbnails.
- *
- * These exist so the redesign renders correctly before real screenshots are
- * available. Replace the files in `public/images/**` with real captures and
- * delete this script (see TODO in the final report).
- *
- * Usage: node scripts/generate-placeholders.mjs
- */
+
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

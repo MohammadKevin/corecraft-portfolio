@@ -1,7 +1,8 @@
 import type { Project } from "@/lib/types";
-export const projects: Project[] = [
+export const projects = [
   {
     slug: "worknest",
+    order: 1,
     title: "WorkNest — Smart Space Booking & Management",
     shortTitle: "WorkNest",
     category: "Fullstack",
@@ -88,6 +89,7 @@ export const projects: Project[] = [
   },
   {
     slug: "invdocs",
+    order: 3,
     title: "InvDocs — Digital Archive & Document Workflow",
     shortTitle: "InvDocs",
     category: "Fullstack",
@@ -164,6 +166,7 @@ export const projects: Project[] = [
   },
   {
     slug: "corepos",
+    order: 4,
     title: "CorePOS — Multi-Outlet Cashier & Stock Engine",
     shortTitle: "CorePOS",
     category: "Fullstack",
@@ -239,6 +242,7 @@ export const projects: Project[] = [
   },
   {
     slug: "inventory-api",
+    order: 5,
     title: "Inventory Management High-Throughput API",
     shortTitle: "Inventory API",
     category: "Backend",
@@ -315,6 +319,7 @@ export const projects: Project[] = [
   },
   {
     slug: "clinic-portal",
+    order: 6,
     title: "Clinic & Pharmacy Portal — Public Archive & JWT Auth",
     shortTitle: "Madyopuro Clinic",
     category: "Fullstack",
@@ -390,6 +395,7 @@ export const projects: Project[] = [
   },
   {
     slug: "corecraft",
+    order: 7,
     title: "CoreCraft Personal Engineering Portfolio",
     shortTitle: "CoreCraft Portfolio",
     category: "Fullstack",
@@ -448,6 +454,7 @@ export const projects: Project[] = [
   },
   {
     slug: "outerco",
+    order: 2,
     title: "Outer.Co — Boutique Florist E-Commerce",
     shortTitle: "Outer.Co",
     category: "E-Commerce",
@@ -529,7 +536,7 @@ export const projects: Project[] = [
       },
     ],
   },
-];
+] satisfies Project[];
 
 export const projectCategories = [
   "All",

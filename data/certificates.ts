@@ -1,12 +1,5 @@
 import type { Certificate } from "@/lib/types";
 
-/**
- * Source: data/certificates.ts on the previous (main) version of the site.
- *
- * English-only. Credential IDs are extracted from the public verification
- * URLs so they can be shown as text next to each badge; certificates issued
- * without a public URL (the national competitions) carry no ID.
- */
 export const certificates: Certificate[] = [
   {
     id: "cert-hr-rest-api",
@@ -134,7 +127,6 @@ export const certificates: Certificate[] = [
     url: "https://www.dicoding.com/certificates/N9ZO2170RPG5",
     skills: ["Financial Planning", "Business Budgeting"],
   },
-];
+] satisfies Certificate[];
 
-/** Number of verified credentials, used by the Statement metrics grid. */
 export const certificateCount = certificates.length;

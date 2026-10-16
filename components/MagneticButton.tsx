@@ -7,7 +7,6 @@ import { useFinePointer } from "@/lib/hooks";
 import { spring } from "@/lib/motion";
 
 type MagneticButtonProps = {
-
   href: string;
   children: React.ReactNode;
 

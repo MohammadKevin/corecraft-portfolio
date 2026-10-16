@@ -12,20 +12,19 @@ import {
   ExternalLink,
   Lock,
   Server,
-  Sparkles,
 } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import Reveal from "@/components/Reveal";
 import { GithubIcon } from "@/components/icons/SocialIcons";
+import { ui } from "@/data";
 import type { Project } from "@/lib/types";
 
 export default function ProjectDetail({
   project,
-  previous,
   next,
 }: {
   project: Project;
-  previous: Project;
+  previous?: Project;
   next: Project;
 }) {
   const showcaseRef = useRef<HTMLDivElement>(null);
@@ -49,14 +48,13 @@ export default function ProjectDetail({
   return (
     <article className="pb-24 pt-24 md:pt-32 bg-bg min-h-screen">
       <div className="page-container">
-
         <div className="sticky top-20 z-40 mb-10 flex items-center justify-between gap-4 py-2">
           <Link
             href="/#work"
             className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/90 px-4 py-2 font-mono text-xs font-medium text-ink shadow-sm backdrop-blur-md transition-all duration-200 hover:border-black hover:bg-black hover:text-white cursor-pointer"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>← Back to Overview</span>
+            <span>{ui.buttons.backToOverview}</span>
           </Link>
 
           <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/90 px-3.5 py-1.5 font-mono text-xs font-semibold text-ink shadow-sm backdrop-blur-md uppercase tracking-wider">
@@ -135,7 +133,6 @@ export default function ProjectDetail({
         <Reveal delay={0.15}>
           <div className="mt-14 overflow-hidden rounded-3xl border border-black/[0.08] bg-surface shadow-xs">
             <div className="grid grid-cols-2 divide-y divide-black/[0.08] sm:divide-y-0 lg:grid-cols-4 lg:divide-x lg:divide-black/[0.08]">
-
               <div className="p-5 sm:p-8 border-r border-black/[0.08] lg:border-r-0">
                 <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
                   Role
@@ -243,7 +240,6 @@ export default function ProjectDetail({
         ) : null}
 
         <section className="mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-
           <div className="lg:col-span-5">
             <Reveal>
               <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
@@ -370,7 +366,7 @@ export default function ProjectDetail({
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <span className="font-mono text-xs font-semibold text-muted uppercase tracking-widest block mb-2">
-                  Next Project Case Study →
+                  {ui.buttons.nextProjectCaseStudy}
                 </span>
                 <span className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink transition-colors group-hover:text-black uppercase">
                   {next.title}

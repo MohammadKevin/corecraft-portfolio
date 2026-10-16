@@ -1,11 +1,6 @@
 import type { Profile } from "@/lib/types";
 
-/**
- * Source: data/whoami.ts on the previous (main) version of the site.
- * Only the fields the redesign needs are kept, plus the headline metrics the
- * Statement section renders.
- */
-export const profile: Profile = {
+export const profile = {
   firstName: "Mohammad",
   lastName: "Kevin",
   fullName: "Mohammad Kevin Arif Rudianto",
@@ -54,8 +49,7 @@ export const profile: Profile = {
     "Modern software breaks not at the happy path, but at the edges: unindexed relational tables under surge traffic, race conditions in inventory transactions, or unhandled webhook retries. My engineering approach starts at the schema and protocol layer — designing strict TypeScript contracts, transactional isolation, and predictable caching strategies before surfacing clean, intuitive frontend experiences with Next.js and React 19.",
   specialization: "Specialized in Node.js, Express, NestJS, Prisma & Next.js",
   architectureNote: "TypeScript Strict Architecture",
-};
+} satisfies Profile;
 
-/** Short bio reused on the home page and in the project detail "Contact Me" block. */
 export const bio =
   "I am a Fullstack & Backend Developer specializing in the Next.js, NestJS, Express and Prisma ORM ecosystem, along with PostgreSQL & MySQL relational database management. I focus on solving API architecture integration issues, optimizing SQL query performance, and building reliable POS & Digital Archive systems.";

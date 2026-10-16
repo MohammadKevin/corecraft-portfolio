@@ -1,12 +1,6 @@
 import type { Service } from "@/lib/types";
 
-/**
- * Remapped from the previous `components/AllServicesModal.tsx` (6 services)
- * plus `data/skills.ts`. Descriptions were tightened to two sentences max,
- * as required by the spec. `deliverables` list what the client actually
- * receives for each engagement.
- */
-export const services: Service[] = [
+export const services = [
   {
     id: "backend-api",
     title: "Backend & RESTful API Architecture",
@@ -91,4 +85,4 @@ export const services: Service[] = [
     stack: ["Midtrans", "Xendit", "Cloudinary", "Webhooks"],
     preview: "/images/services/integrations.svg",
   },
-];
+] satisfies Service[];

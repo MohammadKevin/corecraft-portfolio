@@ -1,12 +1,5 @@
 import type { SkillCategory } from "@/lib/types";
 
-/**
- * Source: data/skills.ts on the previous (main) version of the site.
- *
- * English-only and reshaped into the three columns the Tech Matrix renders.
- * Proficiency levels, level tags and highlights are carried over unchanged
- * from the previous data — no new claims were introduced.
- */
 export const skillCategories: SkillCategory[] = [
   {
     id: "backend",
@@ -267,30 +260,31 @@ export const skillCategories: SkillCategory[] = [
 export interface StackTickerItem {
   name: string;
   tag: string;
+  icon: string;
 }
 
-export const stackRow1: StackTickerItem[] = [
-  { name: "Node.js", tag: "Runtime" },
-  { name: "NestJS", tag: "Backend" },
-  { name: "Express.js", tag: "API Framework" },
-  { name: "TypeScript", tag: "Type System" },
-  { name: "PostgreSQL", tag: "Relational DB" },
-  { name: "MySQL", tag: "Relational DB" },
-  { name: "Prisma ORM", tag: "Data Access" },
-  { name: "Supabase", tag: "Backend Suite" },
-  { name: "Redis", tag: "Cache & Broker" },
-  { name: "Laravel / PHP", tag: "Backend" },
-];
+export const stackRow1 = [
+  { name: "Node.js", tag: "Runtime", icon: "Terminal" },
+  { name: "NestJS", tag: "Backend", icon: "Server" },
+  { name: "Express.js", tag: "API Framework", icon: "Code" },
+  { name: "TypeScript", tag: "Type System", icon: "FileCode" },
+  { name: "PostgreSQL", tag: "Relational DB", icon: "Database" },
+  { name: "MySQL", tag: "Relational DB", icon: "Database" },
+  { name: "Prisma ORM", tag: "Data Access", icon: "Workflow" },
+  { name: "Supabase", tag: "Backend Suite", icon: "Cloud" },
+  { name: "Redis", tag: "Cache & Broker", icon: "Cpu" },
+  { name: "Laravel / PHP", tag: "Backend", icon: "Server" },
+] satisfies StackTickerItem[];
 
-export const stackRow2: StackTickerItem[] = [
-  { name: "Next.js 16", tag: "App Framework" },
-  { name: "React 19", tag: "UI Architecture" },
-  { name: "Tailwind CSS v4", tag: "Design Tokens" },
-  { name: "Framer Motion", tag: "Physics Engine" },
-  { name: "Docker", tag: "Containerization" },
-  { name: "Linux (Ubuntu)", tag: "Server Host" },
-  { name: "Playwright", tag: "End-to-End QA" },
-  { name: "Git & GitHub", tag: "Version Control" },
-  { name: "Postman", tag: "API Contracts" },
-  { name: "Vercel", tag: "Edge Infrastructure" },
-];
+export const stackRow2 = [
+  { name: "Next.js 16", tag: "App Framework", icon: "Globe" },
+  { name: "React 19", tag: "UI Architecture", icon: "Layers" },
+  { name: "Tailwind CSS v4", tag: "Design Tokens", icon: "Layout" },
+  { name: "Framer Motion", tag: "Physics Engine", icon: "Boxes" },
+  { name: "Docker", tag: "Containerization", icon: "Boxes" },
+  { name: "Linux (Ubuntu)", tag: "Server Host", icon: "Terminal" },
+  { name: "Playwright", tag: "End-to-End QA", icon: "ShieldCheck" },
+  { name: "Git & GitHub", tag: "Version Control", icon: "GitBranch" },
+  { name: "Postman", tag: "API Contracts", icon: "Workflow" },
+  { name: "Vercel", tag: "Edge Infrastructure", icon: "Cloud" },
+] satisfies StackTickerItem[];

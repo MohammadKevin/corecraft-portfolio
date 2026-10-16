@@ -3,17 +3,15 @@
 import { useCallback } from "react";
 import { useLenis } from "lenis/react";
 
-const SCROLL_OFFSET = 0;
-
 export function useScrollToSection() {
   const lenis = useLenis();
 
   return useCallback(
     (target: string | HTMLElement) => {
       const id = typeof target === "string" ? target.replace(/^#/, "") : "";
-      if (id === "hero") {
+      if (id === "hero" || !id) {
         if (lenis) {
-          lenis.scrollTo(0, { duration: 1.2 });
+          lenis.scrollTo(0, { duration: 1.0 });
           return;
         }
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -27,17 +25,20 @@ export function useScrollToSection() {
 
       if (!element) return;
 
+      const wrapper = element.closest("[data-spy-wrapper]") ?? element;
+      const rect = wrapper.getBoundingClientRect();
+      const top = Math.round(rect.top + window.scrollY);
+
       if (lenis) {
-        lenis.scrollTo(element, { offset: SCROLL_OFFSET, duration: 1.2 });
+        lenis.scrollTo(top, { offset: 0, duration: 1.0 });
         return;
       }
 
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const top =
-        element.getBoundingClientRect().top + window.scrollY + SCROLL_OFFSET;
-
       window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
     },
     [lenis],
   );
 }
+
+export default useScrollToSection;

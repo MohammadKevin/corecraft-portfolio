@@ -1,7 +1,6 @@
 export type ProjectCategory = "Fullstack" | "Backend" | "E-Commerce";
 
 export interface ProjectMetric {
-
   value: string;
 
   label: string;
@@ -9,6 +8,7 @@ export interface ProjectMetric {
 
 export interface Project {
   slug: string;
+  order: number;
   title: string;
 
   shortTitle?: string;
@@ -79,19 +79,21 @@ export interface Certificate {
   credentialId?: string;
 
   url?: string;
+  image?: string;
   skills: string[];
 }
 
 export interface Experience {
+  order: number;
   company: string;
   role: string;
-
   period: string;
   location: string;
   summary: string;
-  achievements: string[];
+  achievements?: string[];
+  highlights?: string[];
   tech: string[];
-  thumbnail: string;
+  thumbnail?: string;
 }
 
 export interface ProfileStat {
