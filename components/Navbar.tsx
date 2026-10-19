@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useActiveSection } from "@/lib/useActiveSection";
@@ -14,6 +15,9 @@ const links = site.navigation;
 const NAV_IDS = site.navIds;
 
 export default function Navbar() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [clickedId, setClickedId] = useState<string | null>(null);
@@ -27,8 +31,6 @@ export default function Navbar() {
 
   const effectiveActive = clickedId ?? active;
 
-  const darkSectionIds = site.darkSectionIds;
-  const isDarkSection = darkSectionIds.includes(effectiveActive);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -131,19 +133,55 @@ export default function Navbar() {
     };
   }, [menuOpen]);
 
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const navContainerRef = useRef<HTMLElement>(null);
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
+    if (!navContainerRef.current) return;
+    const rect = navContainerRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 print:hidden pointer-events-none">
-      <div className="w-full flex justify-center px-4">
-        <nav
-          aria-label="Primary"
-          className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-fit rounded-full border backdrop-blur-2xl transition-all duration-300 pointer-events-auto flex items-center justify-between gap-6 md:gap-8 px-5 py-2.5 ${
-            isDarkSection
-              ? "bg-[#383C46]/90 border-white/25 text-white shadow-[0_16px_40px_rgba(0,0,0,0.45),inset_0_1px_1px_rgba(255,255,255,0.3)]"
-              : scrolled
-                ? "bg-white/85 border-black/15 text-neutral-900 shadow-[0_12px_40px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,0.85)]"
-                : "bg-white/75 border-black/10 text-neutral-900 shadow-[0_8px_32px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.8)]"
-          }`}
-        >
+    <header className="fixed inset-x-0 top-7 z-50 flex justify-center px-4 pointer-events-none print:hidden">
+      <motion.nav
+        ref={navContainerRef}
+        aria-label="Primary"
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        onPointerEnter={() => setIsHovered(true)}
+        onPointerLeave={() => setIsHovered(false)}
+        onPointerMove={handlePointerMove}
+        className={`pointer-events-auto w-fit max-w-[94vw] rounded-full border border-white/20 transition-all duration-300 flex items-center justify-between gap-5 md:gap-7 px-4 sm:px-5 py-2 text-[#f3f1ed] relative overflow-hidden ${
+          scrolled
+            ? "bg-[#141413]/85 backdrop-blur-3xl shadow-[0_16px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.35)]"
+            : "bg-[#141413]/50 backdrop-blur-2xl shadow-[0_12px_36px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.25)]"
+        }`}
+      >
+          {/* Specular Highlight Layer */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-full overflow-hidden transition-opacity duration-300"
+            style={{ opacity: isHovered ? 1 : 0 }}
+          >
+            <div
+              className="absolute -inset-full transition-transform duration-75"
+              style={{
+                background: `radial-gradient(140px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.22), transparent 70%)`,
+              }}
+            />
+            <div
+              className="absolute inset-0 opacity-25 mix-blend-overlay"
+              style={{
+                background: `linear-gradient(115deg, transparent calc(${mousePos.x}px - 50px), rgba(255,255,255,0.6) ${mousePos.x}px, transparent calc(${mousePos.x}px + 50px))`,
+              }}
+            />
+          </div>
 
           <Link
             href="/#hero"
@@ -153,27 +191,25 @@ export default function Navbar() {
               }
             }}
             aria-current={effectiveActive === "hero" ? "true" : undefined}
-            className="flex min-w-0 items-center gap-2.5 transition-opacity hover:opacity-80 shrink-0 cursor-pointer"
+            className="flex min-w-0 items-center gap-2.5 transition-opacity hover:opacity-80 shrink-0 cursor-pointer relative z-10"
             aria-label="Corecraft - Navigasi ke #hero"
           >
             <Image
               src={site.logo}
               alt={site.footer.brandName}
-              width={28}
-              height={28}
-              className="h-7 w-7 object-contain"
+              width={26}
+              height={26}
+              className="h-6.5 w-6.5 object-contain"
             />
             <span
               style={{ fontFamily: "'More Sugar', cursive, sans-serif" }}
-              className={`text-base sm:text-lg font-bold tracking-tight transition-colors duration-200 ${
-                isDarkSection ? "text-white" : "text-[#0B0C0E]"
-              }`}
+              className="text-base sm:text-lg font-bold tracking-tight text-white"
             >
               Corecraft
             </span>
           </Link>
 
-          <ul className="hidden items-center gap-1.5 md:gap-2 lg:flex">
+          <ul className="hidden items-center gap-1 md:gap-1.5 lg:flex relative z-10">
             {links.map((link) => {
               const isActive = effectiveActive === link.id;
 
@@ -185,12 +221,8 @@ export default function Navbar() {
                     aria-current={isActive ? "true" : undefined}
                     className={`relative block rounded-full px-3.5 py-1.5 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer ${
                       isActive
-                        ? isDarkSection
-                          ? "text-white font-semibold"
-                          : "text-black font-semibold"
-                        : isDarkSection
-                          ? "text-neutral-300 hover:text-white"
-                          : "text-neutral-700 hover:text-black"
+                        ? "text-white font-semibold"
+                        : "text-neutral-300 hover:text-white"
                     }`}
                   >
                     {isActive ? (
@@ -202,11 +234,7 @@ export default function Navbar() {
                           damping: 30,
                         }}
                         aria-hidden="true"
-                        className={`absolute inset-0 rounded-full border transition-colors duration-200 ${
-                          isDarkSection
-                            ? "bg-white/15 border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)]"
-                            : "bg-black/[0.08] border-black/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]"
-                        }`}
+                        className="absolute inset-0 rounded-full border border-white/25 bg-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-md"
                       />
                     ) : null}
                     <span className="relative z-10">{link.label}</span>
@@ -216,17 +244,13 @@ export default function Navbar() {
             })}
           </ul>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 relative z-10">
             <a
               href={`mailto:${profile.email}`}
-              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold hover:scale-105 transition-all shrink-0 shadow-sm ${
-                isDarkSection
-                  ? "bg-white text-[#0B0C0E] hover:bg-neutral-200"
-                  : "bg-[#0B0C0E] text-white hover:bg-neutral-800"
-              }`}
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#f3f1ed] text-[#141413] hover:bg-white hover:scale-105 active:scale-95 transition-all shrink-0 px-4 py-1.5 text-xs font-mono font-bold tracking-tight shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
             >
               <span>{ui.buttons.letsTalk}</span>
-              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+              <ArrowUpRight className="h-3.5 w-3.5 text-[#141413]" aria-hidden="true" />
             </a>
 
             <button
@@ -236,11 +260,7 @@ export default function Navbar() {
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              className={`flex h-8 w-8 items-center justify-center rounded-full border transition-colors duration-200 lg:hidden ${
-                isDarkSection
-                  ? "border-white/20 text-white hover:bg-white/10"
-                  : "border-black/10 text-neutral-900 hover:bg-black/5"
-              }`}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors duration-200 lg:hidden"
             >
               {menuOpen ? (
                 <X className="h-4 w-4" aria-hidden="true" />
@@ -249,8 +269,7 @@ export default function Navbar() {
               )}
             </button>
           </div>
-        </nav>
-      </div>
+        </motion.nav>
 
       <AnimatePresence>
         {menuOpen ? (
@@ -264,7 +283,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 flex flex-col justify-between bg-[#F6F7F9] dark:bg-[#0A0A0C] text-neutral-900 dark:text-white px-6 pb-10 pt-28 pointer-events-auto lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-between bg-[#121211]/92 backdrop-blur-3xl border-b border-white/10 text-white px-6 pb-10 pt-28 pointer-events-auto lg:hidden"
           >
             <ul className="flex flex-col gap-3">
               {links.map((link, index) => {
@@ -282,11 +301,11 @@ export default function Navbar() {
                       onClick={(event) => goTo(event, link.id)}
                       aria-current={isActive ? "true" : undefined}
                       className={`flex items-center justify-between py-2 font-display text-2xl font-bold tracking-tight transition-opacity hover:opacity-70 ${
-                        isActive ? "text-[#2F5BFF] dark:text-[#C6FF3D]" : "text-neutral-900 dark:text-white"
+                        isActive ? "text-[#e85d2f]" : "text-white"
                       }`}
                     >
                       <span>{link.label}</span>
-                      <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
+                      <span className="font-mono text-xs text-neutral-400">
                         /{String(index + 2).padStart(2, "0")}
                       </span>
                     </a>
@@ -295,10 +314,10 @@ export default function Navbar() {
               })}
             </ul>
 
-            <div className="flex flex-col gap-4 border-t border-black/10 dark:border-white/10 pt-6">
+            <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
               <a
                 href={`mailto:${profile.email}`}
-                className="flex items-center justify-center gap-2 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 py-3.5 text-sm font-semibold tracking-tight shadow-md"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-[#f3f1ed] text-[#141413] py-3.5 text-sm font-semibold tracking-tight shadow-md hover:bg-white transition-colors"
               >
                 <span>{ui.buttons.letsTalk}</span>
                 <ArrowUpRight className="h-4 w-4" aria-hidden="true" />

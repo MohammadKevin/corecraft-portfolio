@@ -1,1595 +1,1201 @@
 "use client";
 
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import {
-  ArrowUpRight,
-  Clock,
-  ExternalLink,
-  FileText,
-  Mail,
-  ArrowUp,
-  Award,
-  Eye,
-  X,
-  BadgeCheck,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
-import {
-  profile,
-  projects,
-  services,
-  experiences,
-  certificates,
-  stackRow1,
-  stackRow2,
-  site,
-  ui,
-} from "@/data";
-import { useScrollToSection } from "@/lib/scroll";
-import { getIcon } from "@/lib/icons";
-import CountUp from "@/components/CountUp";
-import StackSection from "@/components/StackSection";
-import { SECTION_SPRING } from "@/lib/motion";
-import { useMinWidth } from "@/lib/hooks";
+import { profile } from "@/data/profile";
 
-const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  GitHub: GithubIcon,
-  LinkedIn: LinkedinIcon,
-  WhatsApp: WhatsappIcon,
-};
+/* ---------- Data Definitions (Corecraft — Redesign v3 Blueprint) ---------- */
+const SERVICES = [
+  {
+    title: "Backend & RESTful API Architecture",
+    desc: "Modular APIs with NestJS & Express, DTO validation, JWT/OAuth2 authentication and OpenAPI/Swagger documentation. Every endpoint is designed to stay predictable as the product grows.",
+    tags: ["NestJS", "Express.js", "Node.js", "OpenAPI", "Postman"],
+  },
+  {
+    title: "Database Engineering & Query Tuning",
+    desc: "Relational schema design, indexing and query optimization built for surge traffic.",
+    tags: ["PostgreSQL", "MySQL", "Prisma ORM"],
+  },
+  {
+    title: "Fullstack Web Applications",
+    desc: "Clean, intuitive interfaces on top of strict API contracts.",
+    tags: ["Next.js", "React", "TypeScript"],
+  },
+  {
+    title: "POS & Inventory Management Systems",
+    desc: "Transaction-safe stock and sales flows with barcode scanning and invoicing.",
+    tags: ["Express.js", "MySQL"],
+  },
+  {
+    title: "Digital Document & Archive Systems",
+    desc: "Structured archiving with file encryption and role-based access control.",
+    tags: ["PostgreSQL", "RBAC"],
+  },
+  {
+    title: "Payment Gateway & Third-Party Integrations",
+    desc: "Webhook-safe payments and external integrations with retry handling.",
+    tags: ["Webhooks", "REST"],
+  },
+];
 
-const EXISTING_WORK_IMAGES: Record<string, string> = {
-  "clinic-portal": "/images/work/clinic-portal.png",
-  corecraft: "/images/work/corecraft.png",
-  outerco: "/images/work/outerco.png",
-};
+const PROCESS_STEPS = [
+  {
+    title: "Schema",
+    desc: "Start at the data model: relational design, indexes and constraints that hold under load.",
+  },
+  {
+    title: "Contract",
+    desc: "Strict TypeScript, DTO validation and OpenAPI docs before any interface is drawn.",
+  },
+  {
+    title: "Build",
+    desc: "Transactional isolation, predictable caching and automated API tests with Postman and Playwright.",
+  },
+  {
+    title: "Ship",
+    desc: "Deploy, monitor and iterate with uptime as the first requirement.",
+  },
+];
 
-const SECTION_THEMES = {
-  hero: {
-    "--bg": "#F3F1EC",
-    "--fg": "#111111",
-    "--muted": "#6E6B63",
-    "--accent": "#E4572E",
-    "--line": "rgba(17, 17, 17, 0.12)",
-  } as React.CSSProperties,
-  about: {
-    "--bg": "#111111",
-    "--fg": "#F3F1EC",
-    "--muted": "#9A968C",
-    "--accent": "#E4572E",
-    "--line": "rgba(243, 241, 236, 0.1)",
-  } as React.CSSProperties,
-  services: {
-    "--bg": "#E8E2D3",
-    "--fg": "#111111",
-    "--muted": "#5E5A50",
-    "--accent": "#E4572E",
-    "--line": "rgba(17, 17, 17, 0.14)",
-  } as React.CSSProperties,
-  stack: {
-    "--bg": "#0F1714",
-    "--fg": "#F3F1EC",
-    "--muted": "#8A9A92",
-    "--accent": "#E4572E",
-    "--line": "rgba(243, 241, 236, 0.1)",
-  } as React.CSSProperties,
-  work: {
-    "--bg": "#111111",
-    "--fg": "#F3F1EC",
-    "--muted": "#8F8B82",
-    "--accent": "#E4572E",
-    "--line": "rgba(243, 241, 236, 0.1)",
-  } as React.CSSProperties,
-  credentials: {
-    "--bg": "#D9D2C1",
-    "--fg": "#111111",
-    "--muted": "#5E5A50",
-    "--accent": "#111111",
-    "--line": "rgba(17, 17, 17, 0.14)",
-  } as React.CSSProperties,
-  experience: {
-    "--bg": "#111111",
-    "--fg": "#F3F1EC",
-    "--muted": "#9A968C",
-    "--accent": "#E4572E",
-    "--line": "rgba(243, 241, 236, 0.1)",
-  } as React.CSSProperties,
-  contact: {
-    "--bg": "#E4572E",
-    "--fg": "#111111",
-    "--muted": "#3A1A10",
-    "--accent": "#111111",
-    "--line": "rgba(17, 17, 17, 0.16)",
-  } as React.CSSProperties,
-};
+const PROJECTS = [
+  {
+    title: "Smart Space Booking & Management",
+    slug: "worknest",
+    category: "Fullstack",
+    year: 2026,
+    bg: "#cfd6bf",
+    fg: "#121110",
+    big: "Smart Space <em class='sf'>Booking</em>",
+    tags: ["Express.js", "MySQL", "Prisma ORM"],
+    liveUrl: "https://booking.corecraft.my.id",
+  },
+  {
+    title: "Outer.Co — Boutique Florist",
+    slug: "outerco",
+    category: "E-Commerce",
+    year: 2025,
+    bg: "#ece7dc",
+    fg: "#121110",
+    big: "We sell <em class='sf'>happiness</em>",
+    tags: ["Next.js 16", "TypeScript", "Cloudinary"],
+    liveUrl: "https://outerco.vercel.app",
+  },
+  {
+    title: "InvDocs — Digital Archive",
+    slug: "invdocs",
+    category: "Fullstack",
+    year: 2025,
+    bg: "#ff5a1f",
+    fg: "#121110",
+    big: "InvDocs",
+    tags: ["Next.js", "Express.js", "PostgreSQL"],
+    liveUrl: "https://github.com/MohammadKevin/InvDocs-Archive",
+  },
+  {
+    title: "CorePOS — Engine",
+    slug: "corepos",
+    category: "Fullstack",
+    year: 2025,
+    bg: "#ece7dc",
+    fg: "#121110",
+    big: "Core<em class='sf'>POS</em>",
+    tags: ["React.js", "Express.js"],
+    liveUrl: "https://github.com/MohammadKevin",
+  },
+];
 
-function WorkKraftPlaceholder({
-  title,
-  category,
-}: {
-  title: string;
-  category?: string;
-}) {
-  return (
-    <div className="relative aspect-[16/10] w-full rounded-2xl bg-[#E8E2D3] text-[#111111] p-6 flex flex-col justify-between border border-[#111111]/15 overflow-hidden select-none">
-      <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-[#5E5A50] font-semibold">
-          {category ?? ui.placeholders.kraftWorkLabel}
-        </span>
-        <span className="h-2 w-2 rounded-full bg-[#E4572E]" />
-      </div>
-      <div className="space-y-1">
-        <span className="font-mono text-xs uppercase tracking-wider text-[#5E5A50] block">
-          {ui.placeholders.blueprintSpec}
-        </span>
-        <h4 className="font-display text-lg sm:text-xl font-black tracking-tight text-[#111111] leading-snug line-clamp-2">
-          {title}
-        </h4>
-      </div>
-      <div className="flex items-center justify-between pt-3 border-t border-[#111111]/15 font-mono text-[10px] text-[#5E5A50]">
-        <span>{ui.placeholders.blueprintVerified}</span>
-        <span>{category}</span>
-      </div>
-    </div>
-  );
-}
+const CREDENTIALS_PAGE1 = [
+  {
+    date: "Aug 2026",
+    category: "Technical Skill",
+    title: "REST API (Intermediate)",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/36F1F05CB5E0",
+  },
+  {
+    date: "Aug 2026",
+    category: "Backend Engineering",
+    title: "Node.js (Intermediate)",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/48FE20D3BAC6",
+  },
+  {
+    date: "Jul 2026",
+    category: "Role Certification",
+    title: "Software Engineer",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/1FA31AF247F3",
+  },
+  {
+    date: "Aug 2026",
+    category: "Role Certification",
+    title: "Software Engineer Intern",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/FDBE98DD2143",
+  },
+  {
+    date: "Aug 2026",
+    category: "Role Certification",
+    title: "Frontend Developer (React)",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/88CEC9A68415",
+  },
+  {
+    date: "Aug 2026",
+    category: "Programming Language",
+    title: "JavaScript (Intermediate)",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/C29079B0DD25",
+  },
+  {
+    date: "Aug 2026",
+    category: "Programming Language",
+    title: "Go (Basic)",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/97910B5C3DFE",
+  },
+  {
+    date: "Dec 2024",
+    category: "National Hackathon",
+    title: "CodeCollab",
+    issuer: "HMSE Telkom University",
+    url: "https://github.com/MohammadKevin",
+  },
+];
+
+const CREDENTIALS_PAGE2 = [
+  {
+    date: "Aug 2026",
+    category: "Frontend UI",
+    title: "CSS (Basic)",
+    issuer: "HackerRank",
+    url: "https://www.hackerrank.com/certificates/33C5CD52D222",
+  },
+  {
+    date: "Feb 2026",
+    category: "National Competition",
+    title: "Top 10 Business Model Canvas",
+    issuer: "Forum Bisnis Cendekia",
+    url: "https://github.com/MohammadKevin",
+  },
+  {
+    date: "Oct 2025",
+    category: "Cloud & DevOps",
+    title: "Belajar Dasar Cloud dan AWS",
+    issuer: "Dicoding Indonesia",
+    url: "https://www.dicoding.com/certificates/NVP742E8VPR0",
+  },
+  {
+    date: "May 2025",
+    category: "Web Development",
+    title: "Belajar Dasar Pemrograman Web",
+    issuer: "Dicoding Indonesia",
+    url: "https://www.dicoding.com/certificates/1OP86E1VRPQK",
+  },
+  {
+    date: "May 2025",
+    category: "Programming Language",
+    title: "Belajar Dasar Pemrograman JavaScript",
+    issuer: "Dicoding Indonesia",
+    url: "https://www.dicoding.com/certificates/MRZMGNE9NZY1",
+  },
+];
+
+const EXPERIENCES = [
+  {
+    year: "2026—",
+    company: "SIDIGS",
+    role: "Quality Assurance",
+    summary:
+      "Executing rigorous test plans, automated API contract validations, and defect lifecycle tracking across client delivery pipelines.",
+    tech: ["Manual Testing", "Postman", "Bug Tracking", "API Testing"],
+    location: "Malang, Indonesia · current",
+  },
+  {
+    year: "2025—",
+    company: "CoreCraft",
+    role: "Freelance & Backend Developer",
+    summary:
+      "Building resilient web platforms, transactional backends, and custom management systems for businesses under the CoreCraft studio.",
+    tech: ["Next.js", "NestJS", "PostgreSQL", "Prisma ORM", "TypeScript"],
+    location: "Remote",
+  },
+  {
+    year: "2024—",
+    company: "SMK Telkom Malang",
+    role: "Software Engineering Student",
+    summary:
+      "Studying core computer science principles, database modeling, object-oriented design, and enterprise application architectures.",
+    tech: [],
+    location: "Malang, Indonesia",
+  },
+];
+
+const STACK_ROW_A = [
+  "NestJS",
+  "PostgreSQL",
+  "Prisma ORM",
+  "Redis",
+  "Supabase",
+  "TypeScript",
+];
+const STACK_ROW_B = [
+  "Next.js 16",
+  "React 19",
+  "Express.js",
+  "Linux",
+  "MySQL",
+  "Vercel",
+];
+
+const ABOUT_WORDS = [
+  "Architecting",
+  "high-concurrency",
+  "backend",
+  "backbones,",
+  "resilient",
+  "API",
+  "contracts,",
+  "and",
+  "query-optimized",
+  "data",
+  "systems",
+  "—",
+  "paired",
+  "with",
+  "modern,",
+  "human-centered",
+  "interfaces.",
+];
 
 export default function HomePage() {
-  const scrollTo = useScrollToSection();
-  const prefersReducedMotion = useReducedMotion();
+  /* Preloader percent & ready state */
+  const [preloaderPercent, setPreloaderPercent] = useState(0);
+  const [isReady, setIsReady] = useState(false);
 
-  const [openServiceId, setOpenServiceId] = useState<string>(services[0]?.id ?? "");
-  const [previewCert, setPreviewCert] = useState<(typeof certificates)[0] | null>(null);
-  const isLg = useMinWidth(1024);
-  const pageSize = isLg ? 12 : 9;
-  const totalCredPages = Math.max(1, Math.ceil(certificates.length / pageSize));
-  const [rawCredPage, setCredPage] = useState<number>(0);
-  const credPage = Math.min(rawCredPage, totalCredPages - 1);
+  /* Interactive States */
+  const [expandedService, setExpandedService] = useState<number | null>(0);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(1);
+  const [credPage, setCredPage] = useState<1 | 2>(1);
+  const [clockString, setClockString] = useState("--:--:-- WIB · Malang");
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPreviewCert(null);
-    };
-    if (previewCert) {
-      window.addEventListener("keydown", handleKeyDown);
+  /* Refs */
+  const barRef = useRef<HTMLElement>(null);
+  const aboutHeadlineRef = useRef<HTMLHeadingElement>(null);
+  const pvRef = useRef<HTMLDivElement>(null);
+  const marqueeAnimsRef = useRef<Animation[]>([]);
+  const lyRef = useRef(0);
+  const rtRef = useRef<NodeJS.Timeout | null>(null);
+
+  /* ---------- Magnetic Button Helper ---------- */
+  const handleMagneticMove = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.25;
+    const y = (e.clientY - r.top - r.height / 2) * 0.35;
+    el.style.transform = `translate(${x}px, ${y}px)`;
+  };
+
+  const handleMagneticLeave = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.transform = "";
+  };
+
+  /* ---------- Select Project (Work) ---------- */
+  const selectProject = (i: number) => {
+    setActiveProjectIndex(i);
+    const p = PROJECTS[i];
+    const v = pvRef.current;
+    if (v) {
+      v.classList.remove("sw");
+      void v.offsetWidth;
+      v.classList.add("sw");
+      v.style.setProperty("--pb", p.bg);
+      v.style.setProperty("--pf", p.fg);
     }
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [previewCert]);
-
-  const orderedProjects = useMemo(() => {
-    return [...projects].sort((a, b) => a.order - b.order);
-  }, []);
-
-  const orderedExperiences = useMemo(() => {
-    return [...experiences].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  }, []);
-
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const heroSpring = useSpring(heroScroll, SECTION_SPRING);
-  const heroScale = useTransform(heroSpring, [0, 1], [1, 0.94]);
-  const heroY = useTransform(heroSpring, [0, 1], ["0vh", "-4vh"]);
-  const heroOpacity = useTransform(heroSpring, [0, 1], [1, 0.85]);
-
-  const servicesContainerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: servicesScroll } = useScroll({
-    target: servicesContainerRef,
-    offset: ["start end", "start start"],
-  });
-  const servicesSpring = useSpring(servicesScroll, SECTION_SPRING);
-  const servicesLeftColX = useTransform(servicesSpring, [0, 1], ["40px", "0px"]);
-
-  const stackContainerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: stackScroll } = useScroll({
-    target: stackContainerRef,
-    offset: ["start end", "end start"],
-  });
-  const stackSpring = useSpring(stackScroll, SECTION_SPRING);
-  const band1ShiftX = useTransform(stackSpring, [0, 1], ["-12vw", "12vw"]);
-  const band2ShiftX = useTransform(stackSpring, [0, 1], ["12vw", "-12vw"]);
-
-  const workContainerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: workScroll } = useScroll({
-    target: workContainerRef,
-    offset: ["start start", "end end"],
-  });
-
-  const [maxScrollX, setMaxScrollX] = useState<number>(0);
-  useEffect(() => {
-    const calcMaxScroll = () => {
-      const cardWidth = 560;
-      const gap = 32;
-      const totalWidth = orderedProjects.length * (cardWidth + gap);
-      const viewportW = window.innerWidth;
-      setMaxScrollX(Math.max(0, totalWidth - viewportW + 160));
-    };
-
-    calcMaxScroll();
-    window.addEventListener("resize", calcMaxScroll);
-    return () => window.removeEventListener("resize", calcMaxScroll);
-  }, [orderedProjects.length]);
-
-  const workX = useTransform(workScroll, [0, 1], [0, -maxScrollX]);
-
-  const [activeWorkIndex, setActiveWorkIndex] = useState<number>(1);
-  useEffect(() => {
-    const unsubscribe = workScroll.on("change", (latest) => {
-      const idx = Math.min(
-        orderedProjects.length,
-        Math.floor(latest * orderedProjects.length) + 1,
-      );
-      setActiveWorkIndex(idx);
-    });
-    return () => unsubscribe();
-  }, [workScroll, orderedProjects.length]);
-
-  const credContainerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: credScroll } = useScroll({
-    target: credContainerRef,
-    offset: ["start start", "end end"],
-  });
-  useEffect(() => {
-    const unsubscribe = credScroll.on("change", (latest) => {
-      const pageIdx = Math.min(
-        totalCredPages - 1,
-        Math.floor(latest * totalCredPages),
-      );
-      setCredPage(pageIdx);
-    });
-    return () => unsubscribe();
-  }, [credScroll, totalCredPages]);
-
-  const handlePrevCredPage = () => {
-    setCredPage((prev) => Math.max(0, prev - 1));
   };
 
-  const handleNextCredPage = () => {
-    setCredPage((prev) => Math.min(totalCredPages - 1, prev + 1));
-  };
-
-  const currentCertificates = useMemo(() => {
-    return certificates.slice(credPage * pageSize, (credPage + 1) * pageSize);
-  }, [credPage, pageSize]);
-
-  const expContainerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: expScroll } = useScroll({
-    target: expContainerRef,
-    offset: ["start end", "end end"],
-  });
-  const expSpring = useSpring(expScroll, SECTION_SPRING);
-  const expTimelineScale = useTransform(expSpring, [0.1, 0.9], [0, 1]);
-
-  const [malangTime, setMalangTime] = useState<string>("");
+  /* ---------- Initial Setup & Preloader Boot ---------- */
   useEffect(() => {
-    const updateTime = () => {
-      const formatted = new Intl.DateTimeFormat("en-US", {
-        timeZone: ui.clock.timeZone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      }).format(new Date());
-      setMalangTime(formatted);
+    let currentPercent = 0;
+    const interval = setInterval(() => {
+      currentPercent = Math.min(100, currentPercent + Math.ceil(Math.random() * 9));
+      setPreloaderPercent(currentPercent);
+      if (currentPercent >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          document.body.classList.add("rd");
+          setIsReady(true);
+        }, 350);
+      }
+    }, 70);
+
+    return () => {
+      clearInterval(interval);
+      document.body.classList.remove("rd");
+    };
+  }, []);
+
+  /* ---------- Live Clock ---------- */
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      const time = now.toLocaleTimeString("en-GB", { timeZone: "Asia/Jakarta" });
+      setClockString(`${time} WIB · Malang`);
+    };
+    updateClock();
+    const timer = setInterval(updateClock, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  /* ---------- Marquee Animation & Scroll Accelerate ---------- */
+  useEffect(() => {
+    const m1 = document.getElementById("m1");
+    const m2 = document.getElementById("m2");
+    if (!m1 || !m2) return;
+
+    const anims = [
+      m1.animate(
+        [{ transform: "translateX(0)" }, { transform: "translateX(-50%)" }],
+        { duration: 45000, iterations: Infinity }
+      ),
+      m2.animate(
+        [{ transform: "translateX(-50%)" }, { transform: "translateX(0)" }],
+        { duration: 45000, iterations: Infinity }
+      ),
+    ];
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      anims.forEach((a) => a.pause());
+    }
+
+    marqueeAnimsRef.current = anims;
+
+    return () => {
+      anims.forEach((a) => a.cancel());
+    };
+  }, []);
+
+  /* ---------- IntersectionObserver for In-View & Counters ---------- */
+  useEffect(() => {
+    if (!isReady) return;
+
+    function count(el: HTMLElement) {
+      const to = Number(el.dataset.n);
+      if (isNaN(to)) return;
+      const p = el.dataset.p || "";
+      const z = Number(el.dataset.z) || 0;
+      const t0 = performance.now();
+      function g(t: number) {
+        const k = Math.min(1, (t - t0) / 1300);
+        el.textContent =
+          String(Math.round(to * (1 - Math.pow(1 - k, 3)))).padStart(z, "0") + p;
+        if (k < 1) requestAnimationFrame(g);
+      }
+      requestAnimationFrame(g);
+    }
+
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section"));
+    const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".nv a"));
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const target = entry.target as HTMLElement;
+          target.classList.toggle("in", entry.isIntersecting);
+          if (entry.isIntersecting) {
+            target.querySelectorAll<HTMLElement>("[data-n]").forEach(count);
+            navLinks.forEach((a) => {
+              a.classList.toggle("on", a.getAttribute("href") === "#" + target.id);
+            });
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    sections.forEach((s) => io.observe(s));
+
+    return () => {
+      io.disconnect();
+    };
+  }, [isReady]);
+
+  /* ---------- Scroll Handler (Progress, Words, Parallax, Marquee Speed) ---------- */
+  useEffect(() => {
+    const bar = barRef.current;
+    let scheduled = false;
+
+    const onScroll = () => {
+      if (scheduled) return;
+      scheduled = true;
+
+      requestAnimationFrame(() => {
+        scheduled = false;
+        const y = window.scrollY;
+        const scrollH = document.documentElement.scrollHeight - window.innerHeight;
+
+        // Top progress bar
+        if (bar) {
+          bar.style.transform = `scaleX(${scrollH ? y / scrollH : 0})`;
+        }
+
+        // Marquee speedup on scroll velocity
+        const v = Math.min(Math.abs(y - lyRef.current), 80);
+        lyRef.current = y;
+        marqueeAnimsRef.current.forEach((a) => {
+          if (a) a.playbackRate = 1 + v / 5;
+        });
+        if (rtRef.current) clearTimeout(rtRef.current);
+        rtRef.current = setTimeout(() => {
+          marqueeAnimsRef.current.forEach((a) => {
+            if (a) a.playbackRate = 1;
+          });
+        }, 150);
+
+        // Section card parallax scaling (--x)
+        const allSections = document.querySelectorAll<HTMLElement>("section");
+        allSections.forEach((s) => {
+          const r = s.getBoundingClientRect();
+          s.style.setProperty(
+            "--x",
+            String(Math.min(1, Math.max(0, -r.top / (r.height * 0.85))))
+          );
+        });
+
+        // About words opacity highlight
+        const aboutEl = document.getElementById("about");
+        if (aboutEl && aboutHeadlineRef.current) {
+          const r = aboutEl.getBoundingClientRect();
+          const p = Math.min(
+            1,
+            Math.max(0, (window.innerHeight * 0.8 - r.top) / (window.innerHeight * 0.7))
+          );
+          const words = aboutHeadlineRef.current.querySelectorAll(".w");
+          words.forEach((w, i) => {
+            w.classList.toggle("on", i < p * words.length);
+          });
+        }
+      });
     };
 
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rtRef.current) clearTimeout(rtRef.current);
+    };
   }, []);
+
+  /* Initialize Preview Card on Mount */
+  useEffect(() => {
+    selectProject(1);
+  }, []);
+
+  const name1 = "Mohammad Kevin";
+  const name2 = "Arif Rudianto";
+  const activeP = PROJECTS[activeProjectIndex];
 
   return (
     <>
-      <motion.section
-        ref={heroRef}
-        id="hero"
-        data-spy-wrapper=""
-        aria-labelledby="hero-title"
-        style={
-          !prefersReducedMotion
-            ? {
-                scale: heroScale,
-                y: heroY,
-                opacity: heroOpacity,
-                ...SECTION_THEMES.hero,
-              }
-            : SECTION_THEMES.hero
-        }
-        className="sticky top-0 z-0 w-full min-h-[100svh] md:h-[100svh] flex flex-col justify-between py-10 px-6 md:px-14 overflow-hidden bg-[var(--bg)] text-[var(--fg)] relative"
-      >
-        <div
-          className="absolute inset-0 z-0 pointer-events-none opacity-[0.04]"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(17, 17, 17, 1) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(17, 17, 17, 1) 1px, transparent 1px)
-            `,
-            backgroundSize: "48px 48px",
-          }}
-        />
-
-        <div className="relative z-10 flex items-center justify-between shrink-0 pt-2 sm:pt-4">
-          <span className="font-mono text-xs font-semibold tracking-[0.2em] text-[var(--muted)] uppercase">
-            {site.sections.hero.number} {site.sections.hero.label}
-          </span>
-          <div className="flex items-center gap-2">
-            <span className="status-dot" />
-            <span className="font-mono text-xs text-[var(--muted)]">
-              {profile.availableForProjects
-                ? site.sections.contact.availability
-                : profile.location}
-            </span>
-          </div>
+      {/* ---------- Preloader Screen ---------- */}
+      <div id="pre">
+        <span className="mo">Booting Corecraft…</span>
+        <div className="n">
+          <span id="pc">{preloaderPercent}</span>%
         </div>
+      </div>
 
-        <div className="relative z-10 my-auto py-6 sm:py-8">
-          <div className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-black/[0.04] px-3.5 py-1 text-xs font-mono text-[var(--fg)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-            <span>{profile.role}</span>
-          </div>
+      {/* ---------- Scroll Progress Bar ---------- */}
+      <i id="bar" ref={barRef}></i>
 
-          <h1
-            id="hero-title"
-            className="font-display font-black tracking-tighter text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] text-[var(--fg)] max-w-5xl"
-          >
-            {profile.fullName.toUpperCase()}
-          </h1>
+      {/* ---------- Floating Pill Navigation ---------- */}
+      <header className="nv">
+        <nav>
+          <b>Corecraft.</b>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#stack">Stack</a>
+          <a href="#work">Work</a>
+          <a href="#credentials">Credentials</a>
+          <a href="#experience">Experience</a>
+          <a className="cta" href="#contact">
+            Let’s Talk ↗
+          </a>
+        </nav>
+      </header>
 
-          <p className="mt-6 font-mono text-sm sm:text-base md:text-lg text-[var(--muted)] max-w-2xl leading-relaxed">
-            {profile.subtitle}
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] text-white px-6 py-3 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 hover:opacity-90 active:scale-95 shadow-sm"
-            >
-              <span>{ui.buttons.collaborate}</span>
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-
-            <a
-              href="#work"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo("work");
-              }}
-              className="inline-flex items-center gap-2 rounded-full bg-black/[0.05] text-[var(--fg)] border border-[var(--line)] hover:bg-black/[0.08] px-6 py-3 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 active:scale-95 shadow-sm cursor-pointer"
-            >
-              <span>{ui.buttons.viewWork}</span>
-            </a>
-          </div>
-        </div>
-
-        <div className="relative z-10 flex items-center justify-between shrink-0 pt-4 border-t border-[var(--line)] font-mono text-xs text-[var(--muted)]">
-          <span>{profile.location}</span>
-          <div className="flex items-center gap-6">
-            {profile.socials.map((social) => (
-              <a
-                key={social.label}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--fg)] transition-colors"
-              >
-                {social.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
-      <div className="relative z-10 overflow-x-clip">
-        <StackSection
-          id="about"
-          dataNavTheme="dark"
-          theme={SECTION_THEMES.about}
-          zIndex={20}
-          enter="none"
-        >
-          <div
-            aria-labelledby="about-heading"
-            className="w-full h-full min-h-[100svh] text-[var(--fg)] px-6 md:px-14 pt-16 md:pt-20 pb-8 md:pb-12 flex flex-col justify-between"
-          >
-            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6 md:mb-8">
-              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-[var(--muted)] uppercase">
-                {site.sections.about.number} {site.sections.about.label}
-              </span>
-              <span className="font-mono text-xs text-[var(--muted)] uppercase">
-                {site.sections.about.meta}
-              </span>
+      <main>
+        {/* ============================================================
+            SECTION 01: HERO (--t-k)
+           ============================================================ */}
+        <section id="hero" className="t-k">
+          <div className="c">
+            <div className="lb mo">
+              <span>(01) — Hero</span>
+              <span>Malang, East Java · 2026</span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start my-auto">
-              <div className="flex flex-col">
-                <h2
-                  id="about-heading"
-                  className="font-display text-white font-medium text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight"
-                >
-                  {profile.aboutHeadline}
-                </h2>
-                <p className="text-[var(--muted)] text-sm md:text-base leading-relaxed mt-4 md:mt-6">
-                  {profile.aboutText}
-                </p>
-              </div>
-
-              <div className="flex flex-col">
-                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] min-h-[280px] md:min-h-[340px] mb-6 flex items-end justify-center">
-                  <Image
-                    src={profile.avatar}
-                    alt={profile.fullName}
-                    fill
-                    priority
-                    unoptimized
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-contain object-bottom grayscale contrast-110 [mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {profile.stats.map((stat) => (
-                    <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <span className="font-display text-3xl sm:text-4xl font-black text-white block">
-                        {stat.value}
-                      </span>
-                      <span className="mt-1 font-mono text-xs text-[var(--muted)] block">
-                        {stat.label}
-                      </span>
-                    </div>
-                  ))}
-
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col justify-center">
-                    <span className="font-display text-lg sm:text-xl font-bold text-white block leading-snug">
-                      {site.sections.about.focusTitle}
-                    </span>
-                    <span className="mt-1 font-mono text-xs text-[var(--muted)] block">
-                      {site.sections.about.focusSubtitle}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-xs text-[var(--muted)]">
-              <span>{profile.fullName}</span>
-              <span>{profile.architectureNote}</span>
-            </div>
-          </div>
-        </StackSection>
-
-        <StackSection
-          id="services"
-          dataNavTheme="light"
-          theme={SECTION_THEMES.services}
-          zIndex={30}
-          enter="slideFromRight"
-          forwardedRef={servicesContainerRef}
-        >
-          <div
-            aria-labelledby="services-heading"
-            className="w-full h-full min-h-[100svh] md:h-[100svh] text-[var(--fg)] px-6 md:px-14 pt-16 md:pt-20 pb-8 flex flex-col justify-between overflow-hidden relative"
-          >
-            <div
-              className="absolute inset-0 pointer-events-none opacity-[0.04]"
-              style={{
-                backgroundImage: `
-                  linear-gradient(to right, rgba(17, 17, 17, 1) 1px, transparent 1px),
-                  linear-gradient(to bottom, rgba(17, 17, 17, 1) 1px, transparent 1px)
-                `,
-                backgroundSize: "44px 44px",
-              }}
-            />
-
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 xl:gap-14 my-auto pt-1 pb-2">
-              <motion.div
-                style={{ x: prefersReducedMotion ? 0 : servicesLeftColX }}
-                className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
-              >
-                <div className="flex items-center gap-2 mb-2 font-mono text-xs uppercase tracking-wider select-none">
-                  <span className="font-bold text-[var(--accent)] tracking-[0.2em]">
-                    {site.sections.services.number}
-                  </span>
-                  <span className="font-semibold tracking-[0.2em] text-[var(--fg)] opacity-90">
-                    {site.sections.services.label}
-                  </span>
-                </div>
-
-                <h2
-                  id="services-heading"
-                  className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold tracking-tight text-[var(--fg)] leading-[1.08] mb-3"
-                >
-                  {site.sections.services.heading}
-                </h2>
-
-                <p className="text-xs sm:text-sm text-[var(--muted)] leading-relaxed max-w-md mb-4 sm:mb-6">
-                  {site.sections.services.description}
-                </p>
-
-                <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--line)] bg-white/50 text-[var(--fg)] font-mono text-xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                  <span>{services.length} {ui.labels.disciplinesAvailable}</span>
-                </div>
-              </motion.div>
-
-              <div className="lg:col-span-7 flex flex-col divide-y divide-[var(--line)]">
-                {services.map((service, index) => {
-                  const isOpen = openServiceId === service.id;
-
-                  return (
-                    <div
-                      key={service.id}
-                      onClick={() => setOpenServiceId(service.id)}
-                      className="border-b border-[var(--line)] py-2.5 sm:py-3 group cursor-pointer transition-colors"
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                          <span
-                            className={`font-mono text-xs sm:text-sm font-bold shrink-0 transition-colors duration-300 ${
-                              isOpen ? "text-[var(--accent)]" : "text-[var(--muted)] group-hover:text-[var(--fg)]"
-                            }`}
-                          >
-                            /{ui.formatNumber(index + 1)}
-                          </span>
-
-                          <h3
-                            className={`font-display text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight transition-all duration-300 ease-out truncate ${
-                              isOpen
-                                ? "translate-x-2 text-[var(--fg)]"
-                                : "text-[var(--fg)]/80 group-hover:translate-x-2 group-hover:text-[var(--fg)]"
-                            }`}
-                          >
-                            {service.title}
-                          </h3>
-                        </div>
-
-                        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 font-mono text-xs text-[var(--muted)]">
-                          <span className="hidden sm:inline">
-                            {service.deliverables.length} {ui.labels.deliverables}
-                          </span>
-                          <span
-                            className={`inline-block font-mono text-base sm:text-lg leading-none select-none transition-transform duration-200 ${
-                              isOpen ? "rotate-45 text-[var(--accent)]" : "text-[var(--muted)] group-hover:text-[var(--fg)]"
-                            }`}
-                          >
-                            +
-                          </span>
-                        </div>
-                      </div>
-
-                      <AnimatePresence initial={false}>
-                        {isOpen && (
-                          <motion.div
-                            key="panel"
-                            initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pt-2 pb-4 pl-4 sm:pl-6 pr-4 sm:pr-6 my-1.5 rounded-xl bg-white/70 border border-[var(--line)] shadow-xs">
-                              <p className="text-xs sm:text-sm text-[var(--muted)] leading-relaxed mb-3 max-w-2xl">
-                                {service.description}
-                              </p>
-
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-3">
-                                {service.deliverables.map((item) => (
-                                  <div
-                                    key={item}
-                                    className="flex items-center gap-1.5 text-xs font-mono text-[var(--fg)]"
-                                  >
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] shrink-0" />
-                                    <span>{item}</span>
-                                  </div>
-                                ))}
-                              </div>
-
-                              <div className="flex flex-wrap gap-1 pt-1.5 border-t border-[var(--line)]">
-                                {service.stack.map((tech) => (
-                                  <span
-                                    key={tech}
-                                    className="rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/[0.08] px-2 py-0.5 font-mono text-[10px] text-[var(--fg)] font-medium"
-                                  >
-                                    {tech}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="relative z-10 pt-4 border-t border-[var(--line)] flex items-center justify-between font-mono text-xs text-[var(--muted)]">
-              <span>{site.sections.services.footerLeft}</span>
-              <span>{site.sections.services.footerRight}</span>
-            </div>
-          </div>
-        </StackSection>
-
-        <StackSection
-          id="stack"
-          dataNavTheme="dark"
-          theme={SECTION_THEMES.stack}
-          zIndex={40}
-          enter="fromBottomStack"
-          forwardedRef={stackContainerRef}
-        >
-          <div
-            aria-labelledby="stack-heading"
-            className="w-full h-full min-h-[100svh] text-[var(--fg)] flex flex-col justify-between py-16 md:py-20 px-6 md:px-14 overflow-hidden relative"
-          >
-            <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto">
-              <div className="flex items-center gap-3 mb-2 font-mono text-xs uppercase tracking-wider select-none">
-                <span className="font-bold text-[var(--accent)] tracking-[0.2em]">
-                  {site.sections.stack.number}
-                </span>
-                <span className="font-semibold tracking-[0.2em] text-[var(--fg)]">
-                  {site.sections.stack.title}
-                </span>
-                <span className="text-[var(--muted)]">·</span>
-                <span className="text-[var(--muted)]">
-                  {site.sections.stack.meta}
-                </span>
-              </div>
-
-              <h2
-                id="stack-heading"
-                className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--fg)] leading-tight"
-              >
-                {site.sections.stack.heading}
-              </h2>
-            </div>
-
-            <div className="hidden md:flex flex-col justify-center items-center my-auto w-full relative z-10 py-12">
-              <motion.div
-                style={{
-                  rotate: prefersReducedMotion ? 0 : -10,
-                  x: prefersReducedMotion ? 0 : band1ShiftX,
-                }}
-                className="w-[140vw] -mx-[20vw] py-3 will-change-transform"
-              >
-                <div className="overflow-hidden w-full flex select-none">
-                  <div className="flex shrink-0 gap-4 animate-marquee-right">
-                    {[...stackRow1, ...stackRow1, ...stackRow1].map((item, idx) => {
-                      const IconComponent = getIcon(item.icon);
-                      return (
-                        <div
-                          key={`band1-${item.name}-${idx}`}
-                          className="px-6 py-3.5 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center gap-3.5 group hover:-translate-y-1 hover:border-[var(--accent)] transition-all duration-200 select-none cursor-default"
-                        >
-                          <IconComponent className="h-4 w-4 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors" />
-                          <span className="font-display text-sm font-bold text-[var(--fg)]">
-                            {item.name}
-                          </span>
-                          <span className="font-mono text-[10px] text-[var(--muted)] bg-white/10 px-2 py-0.5 rounded-full group-hover:bg-[var(--accent)] group-hover:text-white transition-colors duration-200 font-medium">
-                            {item.tag}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                style={{
-                  rotate: prefersReducedMotion ? 0 : 10,
-                  x: prefersReducedMotion ? 0 : band2ShiftX,
-                }}
-                className="w-[140vw] -mx-[20vw] py-3 -mt-6 will-change-transform"
-              >
-                <div className="overflow-hidden w-full flex select-none">
-                  <div className="flex shrink-0 gap-4 animate-marquee-left">
-                    {[...stackRow2, ...stackRow2, ...stackRow2].map((item, idx) => {
-                      const IconComponent = getIcon(item.icon);
-                      return (
-                        <div
-                          key={`band2-${item.name}-${idx}`}
-                          className="px-6 py-3.5 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center gap-3.5 group hover:-translate-y-1 hover:border-[var(--accent)] transition-all duration-200 select-none cursor-default"
-                        >
-                          <IconComponent className="h-4 w-4 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors" />
-                          <span className="font-display text-sm font-bold text-[var(--fg)]">
-                            {item.name}
-                          </span>
-                          <span className="font-mono text-[10px] text-[var(--muted)] bg-white/10 px-2 py-0.5 rounded-full group-hover:bg-[var(--accent)] group-hover:text-white transition-colors duration-200 font-medium">
-                            {item.tag}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            <div className="flex md:hidden flex-col gap-4 w-full relative z-10 my-auto">
-              <div className="overflow-hidden w-full flex">
-                <div className="flex shrink-0 gap-3 animate-marquee-right">
-                  {[...stackRow1, ...stackRow1].map((item, idx) => {
-                    const IconComponent = getIcon(item.icon);
-                    return (
-                      <div
-                        key={`m-row1-${item.name}-${idx}`}
-                        className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 flex items-center gap-2.5 select-none"
-                      >
-                        <IconComponent className="h-3.5 w-3.5 text-[var(--accent)]" />
-                        <span className="font-display text-xs font-bold text-[var(--fg)]">
-                          {item.name}
-                        </span>
-                        <span className="font-mono text-[9px] text-[var(--muted)] bg-white/10 px-1.5 py-0.5 rounded-full">
-                          {item.tag}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="overflow-hidden w-full flex">
-                <div className="flex shrink-0 gap-3 animate-marquee-left">
-                  {[...stackRow2, ...stackRow2].map((item, idx) => {
-                    const IconComponent = getIcon(item.icon);
-                    return (
-                      <div
-                        key={`m-row2-${item.name}-${idx}`}
-                        className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 flex items-center gap-2.5 select-none"
-                      >
-                        <IconComponent className="h-3.5 w-3.5 text-[var(--accent)]" />
-                        <span className="font-display text-xs font-bold text-[var(--fg)]">
-                          {item.name}
-                        </span>
-                        <span className="font-mono text-[9px] text-[var(--muted)] bg-white/10 px-1.5 py-0.5 rounded-full">
-                          {item.tag}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-xs text-[var(--muted)]">
-              <span>{stackRow1.length + stackRow2.length} Production Technologies</span>
-              <span>Verified Reliability</span>
-            </div>
-          </div>
-        </StackSection>
-
-        <StackSection
-          id="work"
-          dataNavTheme="dark"
-          theme={SECTION_THEMES.work}
-          zIndex={50}
-          enter="none"
-          wrapperClassName="h-auto md:h-[450vh]"
-          forwardedRef={workContainerRef}
-        >
-          <div className="hidden md:flex h-full w-full overflow-hidden flex-col justify-between pt-16 md:pt-20 pb-8 px-6 md:px-14">
-            <div className="relative border-b border-white/10 pb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold tracking-[0.2em] text-[var(--accent)] uppercase">
-                      {site.sections.work.number}
-                    </span>
-                    <span className="font-mono text-xs font-semibold tracking-[0.2em] text-[var(--fg)] uppercase">
-                      {site.sections.work.label}
-                    </span>
-                  </div>
-                  <h2
-                    id="work-heading"
-                    className="font-display text-2xl lg:text-3xl font-extrabold tracking-tight text-[var(--fg)] mt-1"
+            <h1 className="nm">
+              <span className="ln" data-split>
+                {name1.split("").map((c, i) => (
+                  <span
+                    key={i}
+                    className="ch"
+                    style={{ "--i": i } as React.CSSProperties}
                   >
-                    {site.sections.work.heading}
-                  </h2>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 font-mono text-xs tracking-wider text-[var(--muted)] border border-white/10 bg-white/5 px-3 py-1.5 rounded-full">
-                    <span className="text-[var(--accent)] font-bold">
-                      {ui.formatNumber(activeWorkIndex)}
-                    </span>
-                    <span>/</span>
-                    <span>{ui.formatNumber(orderedProjects.length)}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative my-auto py-6 overflow-hidden">
-              <motion.div
-                style={{ x: prefersReducedMotion ? 0 : workX }}
-                className="flex items-stretch gap-8 will-change-transform"
-              >
-                {orderedProjects.map((project, index) => {
-                  const hasImage = Boolean(EXISTING_WORK_IMAGES[project.slug]);
-
-                  return (
-                    <article
-                      key={project.slug}
-                      className="group relative flex-none w-[560px] rounded-3xl border border-white/10 bg-[#161616] overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-white/20"
-                    >
-                      <div className="p-8 pb-4">
-                        <div className="flex items-center justify-between gap-4 mb-4">
-                          <span className="font-mono text-xs font-bold text-[var(--accent)] uppercase tracking-wider">
-                            /{ui.formatNumber(index + 1)} · {project.category}
-                          </span>
-                          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-[var(--muted)]">
-                            {project.year}
-                          </span>
-                        </div>
-
-                        <h3 className="font-display text-2xl font-bold tracking-tight text-[var(--fg)] mb-3 leading-snug">
-                          {project.title}
-                        </h3>
-
-                        <p className="text-sm text-[var(--muted)] leading-relaxed mb-6 line-clamp-2">
-                          {project.summary}
-                        </p>
-
-                        <div className="relative w-full rounded-2xl overflow-hidden mb-6 border border-white/10">
-                          {hasImage ? (
-                            <div className="relative aspect-[16/10] w-full bg-[#111111]">
-                              <Image
-                                src={EXISTING_WORK_IMAGES[project.slug]}
-                                alt={project.title}
-                                fill
-                                sizes="560px"
-                                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                              />
-                            </div>
-                          ) : (
-                            <WorkKraftPlaceholder
-                              title={project.title}
-                              category={project.category}
-                            />
-                          )}
-                        </div>
-
-                        <div className="flex flex-wrap gap-1.5 mb-2">
-                          {project.tags.slice(0, 4).map((tag) => (
-                            <span
-                              key={tag}
-                              className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-[10px] text-[var(--muted)]"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="p-8 pt-4 border-t border-white/10 flex items-center justify-between">
-                        <Link
-                          href={`/work/${project.slug}`}
-                          className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[var(--fg)] hover:text-[var(--accent)] transition-colors"
-                        >
-                          <span>{ui.buttons.caseStudy}</span>
-                          <ArrowUpRight className="h-3.5 w-3.5" />
-                        </Link>
-
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--muted)] hover:text-[var(--fg)] transition-colors"
-                          >
-                            <span>{ui.buttons.liveDemo}</span>
-                            <ExternalLink className="h-3.5 w-3.5" />
-                          </a>
-                        )}
-                      </div>
-                    </article>
-                  );
-                })}
-              </motion.div>
-            </div>
-
-            <div className="relative z-10 px-16 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-xs text-[var(--muted)]">
-              <span>
-                {ui.formatNumber(orderedProjects.length)} {ui.labels.productionSystemsDelivered}
+                    {c === " " ? "\u00A0" : c}
+                  </span>
+                ))}
               </span>
-              <span>{ui.labels.architectureIntegrity}</span>
-            </div>
-          </div>
-
-          <div className="flex md:hidden flex-col gap-6 p-6 pt-16">
-            <div className="border-b border-white/10 pb-4">
-              <span className="font-mono text-xs font-bold text-[var(--accent)] uppercase tracking-wider block">
-                {site.sections.work.number} {site.sections.work.label}
-              </span>
-              <h2 className="font-display text-2xl font-bold text-[var(--fg)] mt-1">
-                {site.sections.work.heading}
-              </h2>
-            </div>
-
-            <div className="flex flex-col gap-6">
-              {orderedProjects.map((project) => {
-                const hasImage = Boolean(EXISTING_WORK_IMAGES[project.slug]);
-
-                return (
-                  <article
-                    key={`m-${project.slug}`}
-                    className="rounded-2xl border border-white/10 bg-[#161616] p-5 flex flex-col"
+              <span className="ln sf" data-split>
+                {name2.split("").map((c, i) => (
+                  <span
+                    key={i}
+                    className="ch"
+                    style={{ "--i": i + name1.length } as React.CSSProperties}
                   >
-                    <div className="relative w-full rounded-xl overflow-hidden mb-4 border border-white/10">
-                      {hasImage ? (
-                        <div className="relative aspect-[16/10] w-full bg-[#111111]">
-                          <Image
-                            src={EXISTING_WORK_IMAGES[project.slug]}
-                            alt={project.title}
-                            fill
-                            sizes="100vw"
-                            className="object-cover object-top"
-                          />
-                        </div>
-                      ) : (
-                        <WorkKraftPlaceholder
-                          title={project.title}
-                          category={project.category}
-                        />
-                      )}
-                    </div>
+                    {c === " " ? "\u00A0" : c}
+                  </span>
+                ))}
+              </span>
+            </h1>
 
-                    <h3 className="font-display text-lg font-bold text-[var(--fg)] mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-xs text-[var(--muted)] mb-4 line-clamp-2">
-                      {project.summary}
-                    </p>
-
-                    <Link
-                      href={`/work/${project.slug}`}
-                      className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[var(--accent)]"
-                    >
-                      <span>{ui.buttons.caseStudy}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </StackSection>
-
-        <StackSection
-          id="credentials"
-          dataNavTheme="light"
-          theme={SECTION_THEMES.credentials}
-          zIndex={60}
-          enter="fromBottom"
-          forwardedRef={credContainerRef}
-        >
-          <div
-            aria-labelledby="credentials-heading"
-            className="w-full h-full min-h-[100svh] text-[var(--fg)] flex flex-col justify-between items-center px-4 md:px-8 lg:px-14 py-6 sm:py-8 lg:py-10 overflow-hidden relative"
-          >
-            <div className="w-full max-w-7xl mx-auto flex items-center justify-between pb-2 border-b border-[var(--line)] shrink-0 z-10">
-              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <span className="font-mono text-xs font-bold tracking-[0.2em] text-[var(--accent)] uppercase">
-                  {site.sections.credentials.number}
-                </span>
-                <span className="font-mono text-xs font-semibold tracking-[0.2em] text-[var(--fg)] uppercase">
-                  {site.sections.credentials.label}
-                </span>
-                <span className="font-mono text-xs text-[var(--muted)]">·</span>
-                <span className="font-mono text-xs text-[var(--muted)] uppercase hidden sm:inline">
-                  {site.sections.credentials.heading}
-                </span>
-              </div>
-              <div className="flex items-center gap-1 font-mono text-xs text-[var(--muted)] uppercase">
-                <CountUp
-                  to={certificates.length}
-                  duration={1.2}
-                  className="font-bold text-[var(--accent)]"
-                />
-                <span>{ui.labels.industryAccreditations}</span>
-              </div>
-            </div>
-
-            <div className="hidden md:flex flex-1 min-h-0 w-full max-w-7xl mx-auto py-2 overflow-hidden flex-col justify-center z-10">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={credPage}
-                  initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={prefersReducedMotion ? undefined : { opacity: 0, y: -12 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  className="grid grid-cols-3 lg:grid-cols-4 grid-rows-3 gap-2 sm:gap-2.5 lg:gap-3 h-full max-h-[74svh]"
-                >
-                  {currentCertificates.map((cert) => (
-                    <div
-                      key={cert.id}
-                      className="rounded-xl border border-[var(--line)] bg-white p-2.5 sm:p-3 flex flex-col justify-between shadow-2xs hover:shadow-md transition-shadow select-none overflow-hidden"
-                    >
-                      <div className="flex items-center justify-between gap-1.5 text-[9px] font-mono leading-none mb-1">
-                        <span className="rounded bg-black/[0.06] px-1.5 py-0.5 font-bold uppercase tracking-wider text-[var(--fg)] truncate">
-                          {cert.category}
-                        </span>
-                        <span className="text-[var(--muted)] shrink-0">
-                          {cert.date}
-                        </span>
-                      </div>
-
-                      <div className="relative aspect-[4/3] w-full max-h-[13svh] rounded-lg overflow-hidden bg-[#E8E2D3]/40 border border-[var(--line)] flex items-center justify-center my-auto">
-                        {cert.image ? (
-                          <Image
-                            src={cert.image}
-                            alt={cert.title}
-                            fill
-                            sizes="280px"
-                            className="object-contain"
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center gap-1 p-2 text-center">
-                            <Award className="h-6 w-6 text-[var(--muted)] opacity-60" />
-                            <span className="font-mono text-[9px] text-[var(--muted)]">
-                              {ui.placeholders.certificatePhoto}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="mt-1">
-                        <h3 className="font-display text-xs sm:text-[13px] font-bold tracking-tight text-[var(--fg)] leading-tight line-clamp-2">
-                          {cert.title}
-                        </h3>
-                        <p className="font-mono text-[10px] text-[var(--muted)] truncate mt-0.5">
-                          {cert.issuer}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-1.5 mt-1 border-t border-[var(--line)] text-[10px] font-mono">
-                        <button
-                          type="button"
-                          onClick={() => setPreviewCert(cert)}
-                          className="inline-flex items-center gap-1 text-[var(--fg)] hover:text-[var(--accent)] font-semibold transition-colors cursor-pointer"
-                        >
-                          <Eye className="h-3 w-3" />
-                          <span>{ui.buttons.preview}</span>
-                        </button>
-
-                        {cert.url ? (
-                          <a
-                            href={cert.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 rounded bg-[var(--accent)] px-2 py-0.5 font-bold text-white shadow-2xs hover:opacity-90 transition-opacity"
-                          >
-                            <span>{ui.buttons.verify}</span>
-                            <ExternalLink className="h-2.5 w-2.5" />
-                          </a>
-                        ) : (
-                          <span className="text-[var(--muted)]">{ui.placeholders.official}</span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <div className="flex md:hidden flex-col gap-3 w-full py-4 overflow-y-auto z-10">
-              {certificates.map((cert) => (
+            <div className="g2 hb">
+              <div>
+                <p className="lead" data-r style={{ "--i": 6 } as React.CSSProperties}>
+                  Backend &amp; Fullstack Developer building reliable APIs, POS systems
+                  and digital archives.
+                </p>
                 <div
-                  key={`m-${cert.id}`}
-                  className="rounded-xl border border-[var(--line)] bg-white p-3 flex flex-col justify-between shadow-xs select-none"
+                  className="bs"
+                  data-r
+                  style={{ "--i": 7 } as React.CSSProperties}
                 >
-                  <div className="flex items-center justify-between gap-1.5 text-[9px] font-mono leading-none mb-1.5">
-                    <span className="rounded bg-black/[0.06] px-1.5 py-0.5 font-bold uppercase tracking-wider text-[var(--fg)]">
-                      {cert.category}
-                    </span>
-                    <span className="text-[var(--muted)]">{cert.date}</span>
-                  </div>
-
-                  <h3 className="font-display text-xs font-bold tracking-tight text-[var(--fg)] leading-tight mb-1">
-                    {cert.title}
-                  </h3>
-                  <p className="font-mono text-[10px] text-[var(--muted)] truncate mb-2">
-                    {cert.issuer}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-1.5 border-t border-[var(--line)] text-[10px] font-mono">
-                    <button
-                      type="button"
-                      onClick={() => setPreviewCert(cert)}
-                      className="inline-flex items-center gap-1 text-[var(--fg)] font-semibold cursor-pointer"
-                    >
-                      <Eye className="h-3 w-3" />
-                      <span>{ui.buttons.preview}</span>
-                    </button>
-
-                    {cert.url ? (
-                      <a
-                        href={cert.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded bg-[var(--accent)] px-2 py-0.5 font-bold text-white"
-                      >
-                        <span>{ui.buttons.verify}</span>
-                        <ExternalLink className="h-2.5 w-2.5" />
-                      </a>
-                    ) : (
-                      <span className="text-[var(--muted)]">{ui.placeholders.official}</span>
-                    )}
-                  </div>
+                  <a className="bt p" href="#work">
+                    Let’s collaborate ↗
+                  </a>
+                  <a className="bt" href="#work">
+                    View Selected Work
+                  </a>
                 </div>
-              ))}
-            </div>
-
-            <div className="w-full max-w-7xl mx-auto hidden md:flex items-center justify-between pt-2 border-t border-[var(--line)] shrink-0 z-10">
-              <button
-                type="button"
-                onClick={handlePrevCredPage}
-                disabled={credPage === 0}
-                aria-label={ui.buttons.prev}
-                className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full border border-[var(--line)] bg-white text-[var(--fg)] text-xs font-mono font-medium hover:bg-black/5 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-2xs"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span>{ui.buttons.prev}</span>
-              </button>
-
-              <div className="font-mono text-xs font-bold tracking-widest text-[var(--fg)]">
-                {ui.formatCounter(credPage + 1, totalCredPages)}
               </div>
 
-              <button
-                type="button"
-                onClick={handleNextCredPage}
-                disabled={credPage === totalCredPages - 1}
-                aria-label={ui.buttons.next}
-                className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full border border-[var(--line)] bg-white text-[var(--fg)] text-xs font-mono font-medium hover:bg-black/5 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-2xs"
+              <div
+                className="tm mo"
+                data-r="s"
+                style={{ "--i": 5 } as React.CSSProperties}
               >
-                <span>{ui.buttons.next}</span>
-                <ChevronRight className="h-4 w-4" />
-              </button>
+                <div className="th">
+                  <span>
+                    <b style={{ color: "var(--ac)" }}>POST</b> /v1/hello
+                  </span>
+                  <span style={{ color: "#5bd18b" }}>201 Created</span>
+                </div>
+                <div data-r style={{ "--i": 7, color: "var(--mu)" } as React.CSSProperties}>
+                  &#123; &quot;engineer&quot;: &quot;Kevin Arif Rudianto&quot;,
+                </div>
+                <div data-r style={{ "--i": 8, color: "var(--mu)" } as React.CSSProperties}>
+                  &nbsp; &quot;builds&quot;: [&quot;APIs&quot;, &quot;POS&quot;, &quot;Digital Archives&quot;],
+                </div>
+                <div data-r style={{ "--i": 9, color: "var(--mu)" } as React.CSSProperties}>
+                  &nbsp; &quot;stack&quot;: [&quot;NestJS&quot;, &quot;PostgreSQL&quot;, &quot;Next.js&quot;],
+                </div>
+                <div data-r style={{ "--i": 10, color: "var(--mu)" } as React.CSSProperties}>
+                  &nbsp; &quot;status&quot;: &quot;available&quot; &#125;
+                </div>
+              </div>
             </div>
           </div>
-        </StackSection>
 
-        <StackSection
-          id="experience"
-          dataNavTheme="dark"
-          theme={SECTION_THEMES.experience}
-          zIndex={70}
-          enter="fromBottom"
-          forwardedRef={expContainerRef}
-        >
-          <div
-            aria-labelledby="experience-heading"
-            className="w-full h-full min-h-[100svh] text-[var(--fg)] flex flex-col justify-between py-16 md:py-20 px-6 md:px-14 overflow-hidden relative"
-          >
-            <div className="relative z-10 max-w-3xl mb-8">
-              <div className="flex items-center gap-2 mb-2 font-mono text-xs uppercase tracking-wider select-none">
-                <span className="font-bold text-[var(--accent)] tracking-[0.2em]">
-                  {site.sections.experience.number}
-                </span>
-                <span className="font-semibold tracking-[0.2em] text-[var(--fg)]">
-                  {site.sections.experience.label}
-                </span>
-                <span className="text-[var(--muted)]">·</span>
-                <span className="text-[var(--muted)]">
-                  {site.sections.experience.meta}
-                </span>
-              </div>
-
-              <h2
-                id="experience-heading"
-                className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--fg)] leading-tight"
+          {/* Rotating Available Badge */}
+          <div className="bd" aria-hidden="true">
+            <svg viewBox="0 0 160 160">
+              <defs>
+                <path
+                  id="cp"
+                  d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"
+                />
+              </defs>
+              <text
+                className="mo"
+                fontSize="11"
+                fontWeight="700"
+                letterSpacing="1.8"
+                fill="#121110"
               >
-                {site.sections.experience.heading}
-              </h2>
+                <textPath href="#cp">
+                  AVAILABLE FOR NEW PROJECTS ✱ OPEN TO WORK ✱{" "}
+                </textPath>
+              </text>
+            </svg>
+            ↗
+          </div>
+        </section>
+
+        {/* ============================================================
+            SECTION 02: ABOUT (--t-b)
+           ============================================================ */}
+        <section id="about" className="t-b">
+          <div className="c">
+            <div className="lb mo">
+              <span>(02) — About</span>
+              <span>Engineering philosophy &amp; metrics</span>
             </div>
 
-            <div className="relative w-full max-w-5xl mx-auto my-auto py-6 z-10">
-              <div className="absolute top-0 bottom-0 left-4 lg:left-1/2 w-[1px] bg-white/10 -translate-x-1/2">
-                <motion.div
-                  style={{ scaleY: prefersReducedMotion ? 1 : expTimelineScale }}
-                  className="w-full h-full bg-[var(--accent)] origin-top will-change-transform"
-                />
+            <div className="g2">
+              <div>
+                <h2 className="st" id="st" ref={aboutHeadlineRef}>
+                  {ABOUT_WORDS.map((w, idx) => (
+                    <React.Fragment key={idx}>
+                      <span className={`w ${w.startsWith("human") ? "sf" : ""}`}>
+                        {w}
+                      </span>
+                      {idx < ABOUT_WORDS.length - 1 ? " " : ""}
+                    </React.Fragment>
+                  ))}
+                </h2>
+                <p className="pp" data-r>
+                  Modern software breaks not at the happy path, but at the edges:
+                  unindexed relational tables under surge traffic, race conditions in
+                  inventory transactions, or unhandled webhook retries. My engineering
+                  approach starts at the schema and protocol layer — designing strict
+                  TypeScript contracts, transactional isolation, and predictable caching
+                  strategies before surfacing clean, intuitive frontend experiences with
+                  Next.js and React 19.
+                </p>
               </div>
 
-              <div className="flex flex-col gap-10 sm:gap-12 relative">
-                {orderedExperiences.map((exp, idx) => {
-                  const isEven = idx % 2 === 0;
+              <div className="pt">
+                <div className="ph mo" data-r="c">
+                  {profile.avatar ? (
+                    <Image
+                      src={profile.avatar}
+                      alt={profile.fullName}
+                      fill
+                      priority
+                      className="object-cover object-top select-none"
+                    />
+                  ) : (
+                    "[ FOTO PORTRAIT ]"
+                  )}
+                </div>
+              </div>
+            </div>
 
+            {/* Stats Row */}
+            <div className="sts">
+              <div data-r>
+                <b className="num" data-n="2" data-p="+">
+                  0
+                </b>
+                <span className="mo">Years of Engineering</span>
+              </div>
+              <div data-r style={{ "--i": 1 } as React.CSSProperties}>
+                <b className="num" data-n="7" data-z="2">
+                  00
+                </b>
+                <span className="mo">Production Platforms Built</span>
+              </div>
+              <div data-r style={{ "--i": 2 } as React.CSSProperties}>
+                <b className="num" data-n="13">
+                  0
+                </b>
+                <span className="mo">Industry Certifications</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================
+            SECTION 03: SERVICES (--t-o)
+           ============================================================ */}
+        <section id="services" className="t-o">
+          <div className="c">
+            <div className="lb mo">
+              <span>(03) — Services</span>
+              <span>Production capabilities, end-to-end</span>
+            </div>
+
+            <div className="g3">
+              <div>
+                <h2 className="h2">
+                  <span className="ln">
+                    <i>What I</i>
+                  </span>
+                  <span className="ln">
+                    <i>
+                      <em className="sf">ship.</em>
+                    </i>
+                  </span>
+                </h2>
+                <p className="pp" data-r>
+                  Specialized engineering capabilities architected for high concurrency,
+                  robust fault-tolerance, and resilient scale across complex
+                  full-lifecycle deployments.
+                </p>
+                <span
+                  className="tg mo"
+                  data-r
+                  style={{ marginTop: "20px" }}
+                >
+                  6 core disciplines available
+                </span>
+              </div>
+
+              <div id="sv">
+                {SERVICES.map((s, idx) => {
+                  const isOpen = expandedService === idx;
                   return (
-                    <motion.div
-                      key={exp.company}
-                      initial={prefersReducedMotion ? false : { opacity: 0.3, y: 24 }}
-                      whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-60px" }}
-                      transition={{ duration: 0.45, ease: "easeOut" }}
-                      className="relative flex flex-col lg:flex-row items-start gap-4 lg:gap-8"
-                    >
-                      <div className="absolute left-4 lg:left-1/2 -translate-x-1/2 top-1.5 h-3.5 w-3.5 rounded-full bg-[var(--accent)] ring-4 ring-[#111111] z-20" />
-
-                      <div
-                        className={`w-full lg:w-1/2 pl-10 lg:pl-0 ${
-                          isEven ? "lg:pr-12 lg:text-right" : "lg:order-2 lg:pl-12 lg:text-left"
-                        }`}
+                    <React.Fragment key={idx}>
+                      <button
+                        className="rw"
+                        aria-expanded={isOpen}
+                        data-r
+                        style={{ "--i": idx } as React.CSSProperties}
+                        onClick={() =>
+                          setExpandedService(isOpen ? null : idx)
+                        }
                       >
-                        <span className="font-mono text-xs font-bold text-[var(--accent)] tracking-wider uppercase block">
-                          {exp.period}
-                        </span>
-                        <span className="font-mono text-xs text-[var(--muted)] block mt-0.5">
-                          {exp.location}
-                        </span>
-                      </div>
-
-                      <div
-                        className={`w-full lg:w-1/2 pl-10 lg:pl-0 ${
-                          isEven ? "lg:order-2 lg:pl-12" : "lg:pr-12"
-                        }`}
-                      >
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6 shadow-sm">
-                          <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <h3 className="font-display text-lg sm:text-xl font-bold text-[var(--fg)]">
-                              {exp.company}
-                            </h3>
-                            <span className="font-mono text-xs font-semibold text-[var(--accent)]">
-                              #{exp.order}
-                            </span>
-                          </div>
-
-                          <div className="font-mono text-xs text-[var(--fg)] opacity-90 mb-3 font-medium">
-                            {exp.role}
-                          </div>
-
-                          <p className="text-xs sm:text-sm text-[var(--muted)] leading-relaxed mb-4">
-                            {exp.summary}
-                          </p>
-
-                          <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
-                            {exp.tech.map((t) => (
-                              <span
-                                key={t}
-                                className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-[10px] text-[var(--muted)]"
-                              >
+                        <span className="mo">0{idx + 1}</span>
+                        <b>{s.title}</b>
+                        <i>+</i>
+                      </button>
+                      <div className="pn">
+                        <div>
+                          <p>{s.desc}</p>
+                          <div className="tags mo">
+                            {s.tags.map((t) => (
+                              <span key={t} className="tg">
                                 {t}
                               </span>
                             ))}
                           </div>
                         </div>
                       </div>
-                    </motion.div>
+                    </React.Fragment>
                   );
                 })}
               </div>
             </div>
-
-            <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-xs text-[var(--muted)]">
-              <span>{site.experienceLabel}</span>
-              <span>{profile.fullName}</span>
-            </div>
           </div>
-        </StackSection>
+        </section>
 
-        <StackSection
-          id="contact"
-          dataNavTheme="light"
-          theme={SECTION_THEMES.contact}
-          zIndex={80}
-          enter="fromBottomContact"
-          last={true}
-        >
-          <div
-            aria-labelledby="contact-heading"
-            className="w-full h-full min-h-[100svh] text-[var(--fg)] flex flex-col justify-between py-12 md:py-16 px-6 md:px-14 overflow-hidden relative"
-          >
-            <div className="relative z-10 flex items-center justify-between border-b border-[var(--line)] pb-4">
-              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-[var(--fg)] uppercase">
-                {site.sections.contact.number} {site.sections.contact.label}
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="status-dot" />
-                <span className="font-mono text-xs text-[var(--muted)]">
-                  {site.sections.contact.availability}
-                </span>
-              </div>
+        {/* ============================================================
+            SECTION 04: PROCESS (--t-k dots)
+           ============================================================ */}
+        <section id="process" className="t-k dots">
+          <div className="c">
+            <div className="lb mo">
+              <span>(04) — Process</span>
+              <span>New section · How a build goes</span>
             </div>
 
-            <div className="relative z-10 max-w-4xl my-auto py-6">
-              <motion.h2
-                id="contact-heading"
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
-                whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter leading-[0.95] text-[var(--fg)] mb-4"
-              >
-                {site.sections.contact.heading}
-              </motion.h2>
-
-              <motion.p
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
-                whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-                className="font-mono text-sm sm:text-base md:text-lg text-[var(--muted)] max-w-2xl leading-relaxed mb-8"
-              >
-                {site.sections.contact.subheading}
-              </motion.p>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#111111] text-white px-6 py-3 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 hover:bg-neutral-800 active:scale-95 shadow-sm"
-                >
-                  <Mail className="h-4 w-4" />
-                  <span>{profile.email}</span>
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
-
-                <a
-                  href={profile.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/40 hover:bg-white/60 text-[var(--fg)] px-5 py-3 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 active:scale-95 shadow-xs"
-                >
-                  <WhatsappIcon className="h-4 w-4" />
-                  <span>{ui.buttons.whatsapp}</span>
-                </a>
-
-                <a
-                  href={profile.cvUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/40 hover:bg-white/60 text-[var(--fg)] px-5 py-3 text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 active:scale-95 shadow-xs"
-                >
-                  <FileText className="h-4 w-4" />
-                  <span>{ui.buttons.resume}</span>
-                </a>
-              </div>
-            </div>
-
-            <div className="relative z-10 w-full select-none pointer-events-none overflow-hidden my-auto py-2">
-              <div className="font-display text-[15vw] font-black uppercase text-center leading-[0.8] tracking-tighter text-transparent [-webkit-text-stroke:1.5px_rgba(17,17,17,0.3)]">
-                {site.footer.wordmark}
-              </div>
-            </div>
-
-            <div className="relative z-10 pt-6 border-t border-[var(--line)] flex flex-col gap-6">
-              <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-[var(--muted)]">
-                <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-                  {site.navigation.map((nav) => (
-                    <a
-                      key={nav.id}
-                      href={`#${nav.id}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        scrollTo(nav.id);
-                      }}
-                      className="text-[var(--fg)] hover:underline cursor-pointer"
-                    >
-                      {nav.label}
-                    </a>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/40 px-3.5 py-1.5 font-mono text-xs text-[var(--fg)]">
-                  <Clock className="h-3.5 w-3.5 text-[var(--muted)]" />
-                  <span>{ui.clock.label}</span>
-                  <span className="font-semibold">{malangTime || ui.clock.loading}</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs text-[var(--muted)]">
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={site.logo}
-                    alt={site.footer.brandName}
-                    width={28}
-                    height={28}
-                    className="h-7 w-7 object-contain"
-                  />
-                  <span>
-                    © {site.footer.copyrightYear} {profile.fullName}. {site.footer.builtWith}
+            <div className="g3">
+              <div>
+                <h2 className="h2">
+                  <span className="ln">
+                    <i>How a</i>
                   </span>
-                </div>
+                  <span className="ln">
+                    <i>build</i>
+                  </span>
+                  <span className="ln">
+                    <i>
+                      <em className="sf">goes.</em>
+                    </i>
+                  </span>
+                </h2>
+              </div>
 
-                <div className="flex items-center gap-4">
-                  <ul className="flex items-center gap-2">
-                    {profile.socials.map((social) => {
-                      const Icon = socialIcons[social.label];
-                      if (!Icon) return null;
-                      return (
-                        <li key={social.label}>
-                          <a
-                            href={social.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`${social.label} profile`}
-                            className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--line)] bg-white/40 text-[var(--fg)] transition-all duration-200 hover:bg-[#111111] hover:text-white"
-                          >
-                            <Icon className="h-3.5 w-3.5" />
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-
-                  <button
-                    type="button"
-                    onClick={() => scrollTo("hero")}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-white/40 px-3.5 py-1.5 font-mono text-xs font-medium text-[var(--fg)] transition-all duration-200 hover:bg-[#111111] hover:text-white cursor-pointer"
+              <div className="stp" id="pr">
+                <u className="rl"></u>
+                {PROCESS_STEPS.map((p, idx) => (
+                  <div
+                    key={idx}
+                    className="sp"
+                    data-r
+                    style={{ "--i": idx * 3 } as React.CSSProperties}
                   >
-                    <span>{ui.buttons.backToTop}</span>
-                    <ArrowUp className="h-3 w-3" />
+                    <span className="mo">0{idx + 1}</span>
+                    <h3>{p.title}</h3>
+                    <p>{p.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================
+            SECTION 05: STACK (--t-b)
+           ============================================================ */}
+        <section id="stack" className="t-b">
+          <div className="c">
+            <div className="lb mo">
+              <span>(05) — Stack</span>
+              <span>20 production technologies</span>
+            </div>
+            <p
+              className="h2 sm"
+              data-r
+              style={{
+                maxWidth: "12em",
+                fontSize: "clamp(26px, 3.4vw, 52px)",
+                letterSpacing: "-.035em",
+              }}
+            >
+              A battle-tested stack built for reliability and scale.
+            </p>
+          </div>
+
+          <div className="stamp">
+            <b data-n="20">0</b>
+            <span className="mo">TECHNOLOGIES</span>
+          </div>
+
+          <div className="mqw">
+            <div className="mq" id="m1">
+              {[...STACK_ROW_A, ...STACK_ROW_A].map((item, i) => (
+                <React.Fragment key={i}>
+                  <span>{item}</span>
+                  <em>✱</em>
+                </React.Fragment>
+              ))}
+            </div>
+            <div className="mq o2" id="m2">
+              {[...STACK_ROW_B, ...STACK_ROW_B].map((item, i) => (
+                <React.Fragment key={i}>
+                  <span>{item}</span>
+                  <em>✱</em>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
+          <div className="c">
+            <div className="chips mo" data-r>
+              <span className="tg">Playwright</span>
+              <span className="tg">Postman</span>
+              <span className="tg">Supabase</span>
+              <span className="tg">Git &amp; GitHub</span>
+              <span className="tg">Cloudinary</span>
+              <span className="tg">Tailwind CSS 4</span>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================
+            SECTION 06: WORK (--t-k)
+           ============================================================ */}
+        <section id="work" className="t-k">
+          <div className="c">
+            <div className="lb mo">
+              <span>(06) — Selected work</span>
+              <span id="cn">0{activeProjectIndex + 1} / 07</span>
+            </div>
+
+            <h2
+              className="h2 sm"
+              style={{ marginBottom: "clamp(28px, 5vh, 56px)" }}
+            >
+              <span className="ln">
+                <i>Production systems</i>
+              </span>
+              <span className="ln">
+                <i>
+                  in <em className="sf">live deployment.</em>
+                </i>
+              </span>
+            </h2>
+
+            <div className="g2">
+              <div id="pl">
+                {PROJECTS.map((p, idx) => (
+                  <button
+                    key={p.slug}
+                    className={`pj ${idx === activeProjectIndex ? "on" : ""}`}
+                    data-i={idx}
+                    data-r
+                    style={{ "--i": idx } as React.CSSProperties}
+                    onMouseEnter={() => selectProject(idx)}
+                    onFocus={() => selectProject(idx)}
+                    onClick={() => selectProject(idx)}
+                  >
+                    <span className="mo">0{idx + 1}</span>
+                    <b>{p.title}</b>
+                    <span className="mo">
+                      {p.category} · {p.year}
+                    </span>
                   </button>
+                ))}
+                <div
+                  className="mo pjm"
+                  data-r
+                  style={{ "--i": 4 } as React.CSSProperties}
+                >
+                  + 3 more production systems ↗
+                </div>
+              </div>
+
+              {/* Dynamic Preview Card */}
+              <div className="pv" id="pv" ref={pvRef} data-r="s">
+                <div className="pm mo">
+                  <span id="pm1">{activeP.title.toLowerCase()}</span>
+                  <span>case file</span>
+                </div>
+                <div
+                  className="pb"
+                  id="pb"
+                  dangerouslySetInnerHTML={{ __html: activeP.big }}
+                />
+                <div className="pf mo">
+                  <span id="pt">{activeP.tags.join(" · ")}</span>
+                  <span>
+                    <Link href={`/work/${activeP.slug}`}>Case Study ↗</Link>
+                    {" · "}
+                    <a
+                      href={activeP.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Live Demo ↗
+                    </a>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        </StackSection>
-      </div>
+        </section>
 
-      <AnimatePresence>
-        {previewCert && (
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={`${ui.buttons.preview} ${previewCert.title}`}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
-          >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setPreviewCert(null)}
-              className="absolute inset-0 bg-black/75 backdrop-blur-md"
-            />
+        {/* ============================================================
+            SECTION 07: CREDENTIALS (--t-s)
+           ============================================================ */}
+        <section id="credentials" className="t-s">
+          <div className="c">
+            <div className="lb mo">
+              <span>(07) — Credentials</span>
+              <span>Industry accreditations</span>
+            </div>
 
-            <motion.div
-              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 15 }}
-              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: "spring", stiffness: 350, damping: 28 }}
-              className="relative z-10 w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-white/20 overflow-hidden flex flex-col max-h-[92vh]"
+            <h2
+              className="h2"
+              style={{ marginBottom: "clamp(28px, 5vh, 56px)" }}
             >
-              <div className="flex items-center justify-between px-6 py-4 border-b border-[#111111]/10 bg-[#F3F1EC]">
-                <div className="flex items-center gap-2.5">
-                  <span className="h-2 w-2 rounded-full bg-[#E4572E]" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
-                    {ui.placeholders.certificateDocumentPreview}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setPreviewCert(null)}
-                  className="rounded-full p-1.5 text-neutral-500 hover:text-black hover:bg-black/5 transition-colors cursor-pointer"
-                  aria-label={ui.buttons.closePreviewAria}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
+              <span className="num" style={{ display: "inline" }} data-n="13">
+                0
+              </span>{" "}
+              <em className="sf">credentials.</em>
+            </h2>
 
-              <div className="p-4 sm:p-6 overflow-y-auto">
-                <div className="relative rounded-2xl border-4 border-double border-[#111111]/20 bg-[#FAF9F5] p-6 sm:p-10 text-center overflow-hidden">
-                  <Award className="h-60 w-60 text-[#111111]/[0.04] absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-[#111111] font-mono text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
-                    <BadgeCheck className="h-3.5 w-3.5 text-[#E4572E]" />
-                    <span>{ui.placeholders.verifiedIndustryCredential}</span>
-                  </div>
-
-                  <p className="font-mono text-xs text-neutral-500 uppercase tracking-widest mb-1">
-                    {ui.placeholders.presentedTo}
-                  </p>
-
-                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight mb-2">
-                    {profile.fullName}
-                  </h3>
-
-                  <div className="w-24 h-0.5 bg-neutral-300 mx-auto mb-4" />
-
-                  <p className="font-mono text-xs text-neutral-500 max-w-md mx-auto mb-3">
-                    {ui.placeholders.proficiencyIntro}
-                  </p>
-
-                  <h4 className="font-display text-lg sm:text-xl font-bold text-[#111111] mb-6 px-4">
-                    {previewCert.title}
-                  </h4>
-
-                  {previewCert.skills && previewCert.skills.length > 0 && (
-                    <div className="mb-6">
-                      <span className="font-mono text-[10px] font-semibold text-neutral-500 uppercase tracking-wider block mb-2">
-                        {ui.placeholders.assessedCompetencies}
-                      </span>
-                      <div className="flex flex-wrap items-center justify-center gap-1.5">
-                        {previewCert.skills.map((skill) => (
-                          <span
-                            key={skill}
-                            className="px-2.5 py-1 rounded-md bg-white border border-[#111111]/10 font-mono text-xs font-medium text-[#111111]"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 border-t border-[#111111]/10 text-left">
-                    <div>
-                      <span className="font-mono text-[10px] text-neutral-500 uppercase block">
-                        {ui.placeholders.issuingAuthority}
-                      </span>
-                      <span className="font-mono text-xs font-bold text-[#111111]">
-                        {previewCert.issuer}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="font-mono text-[10px] text-neutral-500 uppercase block">
-                        {ui.placeholders.issueDate}
-                      </span>
-                      <span className="font-mono text-xs font-bold text-[#111111]">
-                        {previewCert.date}
-                      </span>
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                      <span className="font-mono text-[10px] text-neutral-500 uppercase block">
-                        {ui.placeholders.credentialId}
-                      </span>
-                      <span className="font-mono text-xs font-bold text-[#111111] break-all">
-                        {previewCert.credentialId || ui.placeholders.verifiedAuthority}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="px-6 py-4 bg-[#F3F1EC] border-t border-[#111111]/10 flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={() => setPreviewCert(null)}
-                  className="px-4 py-2 rounded-xl text-xs font-mono font-semibold text-neutral-600 hover:text-black transition-colors cursor-pointer"
-                >
-                  {ui.buttons.close}
-                </button>
-
-                {previewCert.url ? (
+            <div id="cl">
+              {(credPage === 1 ? CREDENTIALS_PAGE1 : CREDENTIALS_PAGE2).map(
+                (c, idx) => (
                   <a
-                    href={previewCert.url}
+                    key={c.title + idx}
+                    className="cr"
+                    href={c.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111111] hover:bg-neutral-800 text-white font-mono text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
+                    data-r
+                    style={{ "--i": idx } as React.CSSProperties}
                   >
-                    <span>{ui.buttons.verifyAt} {previewCert.issuer}</span>
-                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span className="mo">{c.date}</span>
+                    <span className="mo">{c.category}</span>
+                    <b>{c.title}</b>
+                    <span className="mo">{c.issuer}</span>
+                    <span className="mo" style={{ textAlign: "right" }}>
+                      <b style={{ fontSize: "13px" }}>Verify ↗</b>
+                    </span>
                   </a>
-                ) : (
-                  <span className="font-mono text-xs text-neutral-500">
-                    {ui.placeholders.officialNationalArchive}
-                  </span>
-                )}
-              </div>
-            </motion.div>
+                )
+              )}
+            </div>
+
+            <div className="fl mo">
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => setCredPage(credPage === 1 ? 2 : 1)}
+              >
+                {credPage === 1 ? "+ 5 more" : "← 8 core"}
+              </span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => setCredPage(credPage === 1 ? 2 : 1)}
+              >
+                Page 0{credPage} / 02 · {credPage === 1 ? "Next →" : "← Prev"}
+              </span>
+            </div>
           </div>
-        )}
-      </AnimatePresence>
+        </section>
+
+        {/* ============================================================
+            SECTION 08: EXPERIENCE (--t-k)
+           ============================================================ */}
+        <section id="experience" className="t-k">
+          <div className="c">
+            <div className="lb mo">
+              <span>(08) — Experience</span>
+              <span>2+ years building resilient systems</span>
+            </div>
+
+            <h2
+              className="h2 sm"
+              style={{
+                maxWidth: "11em",
+                marginBottom: "clamp(28px, 5vh, 56px)",
+              }}
+            >
+              <span className="ln">
+                <i>Industry track record</i>
+              </span>
+              <span className="ln">
+                <i>
+                  in engineering <em className="sf">&amp; QA.</em>
+                </i>
+              </span>
+            </h2>
+
+            <div id="ex">
+              {EXPERIENCES.map((x, idx) => (
+                <div
+                  key={idx}
+                  className="xr"
+                  data-r
+                  style={{ "--i": idx } as React.CSSProperties}
+                >
+                  <div
+                    className="yr"
+                    style={{ "--i": idx } as React.CSSProperties}
+                  >
+                    {x.year}
+                  </div>
+                  <div>
+                    <h3>{x.company}</h3>
+                    <div
+                      className="mo"
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: 700,
+                        marginTop: "6px",
+                      }}
+                    >
+                      {x.role}
+                    </div>
+                    <p>{x.summary}</p>
+                  </div>
+                  <div>
+                    <div
+                      className="mo"
+                      style={{
+                        fontSize: "12px",
+                        color: "var(--mu)",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      {x.location}
+                    </div>
+                    <div className="tags mo" style={{ padding: 0 }}>
+                      {x.tech.map((t) => (
+                        <span key={t} className="tg">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================
+            SECTION 09: CONTACT (--t-o)
+           ============================================================ */}
+        <section id="contact" className="t-o">
+          <div className="c">
+            <div className="lb mo">
+              <span>(09) — Contact</span>
+              <span id="ck">{clockString}</span>
+            </div>
+
+            <h2 className="h2 xl">
+              <span className="ln">
+                <i>Have a project</i>
+              </span>
+              <span className="ln">
+                <i>
+                  in <em className="sf">mind?</em>
+                </i>
+              </span>
+            </h2>
+
+            <p className="pp mo" data-r>
+              Let&apos;s engineer something clear, resilient, and impactful together.
+            </p>
+
+            <div
+              className="bs"
+              data-r
+              style={{ "--i": 1 } as React.CSSProperties}
+            >
+              <a
+                className="bt k"
+                data-mg
+                href={`mailto:${profile.email}`}
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+              >
+                {profile.email} ↗
+              </a>
+              <a
+                className="bt"
+                data-mg
+                href={profile.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+              >
+                WhatsApp
+              </a>
+              <a
+                className="bt"
+                data-mg
+                href={profile.cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+              >
+                Resume (PDF)
+              </a>
+            </div>
+
+            <div className="fl mo">
+              <span>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#stack">Stack</a>
+                <a href="#work">Work</a>
+                <a href="#experience">Experience</a>
+              </span>
+              <span>
+                © 2026 Mohammad Kevin Arif Rudianto. Built with Next.js 16 &amp;
+                React 19.
+              </span>
+              <a href="#hero">Back to top ↑</a>
+            </div>
+          </div>
+
+          {/* Giant Outlined Typography */}
+          <div className="big" aria-hidden="true">
+            Corecraft
+          </div>
+        </section>
+      </main>
     </>
   );
 }

@@ -1,9 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useSpring } from "framer-motion";
 
 export default function CustomCursor() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
+
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
