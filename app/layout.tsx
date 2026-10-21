@@ -113,7 +113,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700;800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
         />
       </head>
       <body className="antialiased">
@@ -129,7 +129,7 @@ export default function RootLayout({
           <Atmosphere />
           <CustomCursor />
           <Navbar />
-          <main id="main">{children}</main>
+          {children}
           <Footer />
         </SmoothScroll>
       </body>
