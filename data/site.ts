@@ -32,6 +32,7 @@ export type SiteConfig = {
     work: SectionInfo;
     credentials: SectionInfo;
     experience: SectionInfo;
+    education: SectionInfo;
     contact: SectionInfo;
   };
   experienceLabel: string;
@@ -56,6 +57,7 @@ export const site = {
     { id: "work", label: "Work" },
     { id: "credentials", label: "Credentials" },
     { id: "experience", label: "Experience" },
+    { id: "education", label: "Education" },
   ],
   navIds: [
     "hero",
@@ -65,6 +67,7 @@ export const site = {
     "work",
     "credentials",
     "experience",
+    "education",
     "contact",
   ],
   darkSectionIds: ["about", "stack", "work", "experience"],
@@ -108,13 +111,19 @@ export const site = {
       carouselAriaLabel: "Industry certifications grid track",
     },
     experience: {
-      number: "/07",
+      number: "/08",
       label: "EXPERIENCE",
       heading: "Industry track record in engineering & quality assurance.",
       meta: "2+ YEARS BUILDING RESILIENT SYSTEMS",
     },
+    education: {
+      number: "/09",
+      label: "EDUCATION",
+      heading: "Formal & non-formal learning path.",
+      meta: "ACADEMIC & SELF-DIRECTED TRACKS",
+    },
     contact: {
-      number: "/08",
+      number: "/10",
       label: "CONTACT & FOOTER",
       heading: "HAVE A PROJECT IN MIND?",
       subheading:

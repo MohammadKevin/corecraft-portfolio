@@ -1,22 +1,10 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
+import React from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  CheckCircle2,
-  ExternalLink,
-  Lock,
-  Server,
-} from "lucide-react";
-import MagneticButton from "@/components/MagneticButton";
-import Reveal from "@/components/Reveal";
+import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2, Server } from "lucide-react";
 import { GithubIcon } from "@/components/icons/SocialIcons";
-import { ui } from "@/data";
+import { ProjectMockup } from "@/components/ProjectMockup";
 import type { Project } from "@/lib/types";
 
 export default function ProjectDetail({
@@ -27,362 +15,424 @@ export default function ProjectDetail({
   previous?: Project;
   next: Project;
 }) {
-  const showcaseRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion();
-  const parallaxEnabled = prefersReducedMotion !== true;
-
-  const { scrollYProgress } = useScroll({
-    target: showcaseRef,
-    offset: ["start end", "end start"],
-  });
-
-  const imageY = useTransform(scrollYProgress, [0, 1], [-30, 30]);
-
-  const [leadImage, ...restImages] = project.gallery;
   const clientOrStudio = project.client ?? project.studio;
-
   const titleParts = project.title.split(" ");
   const firstWord = titleParts[0];
   const restWords = titleParts.slice(1).join(" ");
 
   return (
-    <article className="pb-24 pt-24 md:pt-32 bg-bg min-h-screen">
-      <div className="page-container">
-        <div className="sticky top-20 z-40 mb-10 flex items-center justify-between gap-4 py-2">
-          <Link
-            href="/#work"
-            className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/90 px-4 py-2 font-mono text-xs font-medium text-ink shadow-sm backdrop-blur-md transition-all duration-200 hover:border-black hover:bg-black hover:text-white cursor-pointer"
-          >
+    <article className="subpage-wrap">
+      <div
+        className="edu-bar"
+        style={{
+          marginBottom: "28px",
+          paddingBottom: "16px",
+          borderBottom: "1px solid var(--ln)",
+        }}
+      >
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <Link href="/#work" className="g nf chip mo" style={{ fontWeight: 600 }}>
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>{ui.buttons.backToOverview}</span>
+            <span>Home</span>
           </Link>
-
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/90 px-3.5 py-1.5 font-mono text-xs font-semibold text-ink shadow-sm backdrop-blur-md uppercase tracking-wider">
-            <span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
-            {project.badge || project.category}
-          </span>
+          <Link href="/work" className="g nf chip mo" style={{ fontWeight: 600 }}>
+            <span>All 07 Systems</span>
+          </Link>
         </div>
 
-        <header className="max-w-5xl">
-          <Reveal>
-            <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
-              /CASE STUDY · {project.year}
-            </span>
-          </Reveal>
+        <span
+          className="g nf chip mo"
+          style={{
+            color: "var(--cb)",
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+          }}
+        >
+          ● {project.badge || project.category} · {project.year}
+        </span>
+      </div>
 
-          <Reveal delay={0.05}>
-            <h1 className="mt-4 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight uppercase leading-[1.05]">
-              <span className="inline-block mr-3 transition-colors duration-500 [-webkit-text-stroke:2px_#0B0F19] text-transparent hover:text-[#0B0F19]">
-                {firstWord}
-              </span>
-              <span className="inline-block text-[#0B0F19]">
-                {restWords}
-              </span>
-            </h1>
-          </Reveal>
+      <header>
+        <div className="mo" style={{ fontSize: "12px", color: "var(--mu)", marginBottom: "12px" }}>
+          /CASE STUDY · {String(project.order).padStart(2, "0")} · {project.category.toUpperCase()}
+        </div>
 
-          <Reveal delay={0.1}>
-            <p className="mt-6 text-lg sm:text-xl leading-relaxed text-muted max-w-3xl font-normal">
-              {project.summary}
-            </p>
-          </Reveal>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "clamp(34px, 6.2vw, 88px)",
+            lineHeight: 0.92,
+            letterSpacing: "-0.055em",
+            fontWeight: 800,
+            textTransform: "uppercase",
+          }}
+        >
+          <span style={{ color: "var(--ink)" }}>{firstWord} </span>
+          <span className="sf" style={{ fontWeight: 400 }}>
+            {restWords}
+          </span>
+        </h1>
 
-          <Reveal delay={0.15}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              {project.liveUrl ? (
-                <MagneticButton
-                  href={project.liveUrl}
-                  variant="solid"
-                  newTab
-                  className="px-5 py-3 text-sm font-medium"
-                  ariaLabel={`Open live demo of ${project.title}`}
-                >
-                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                  <span>Live Demo</span>
-                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                </MagneticButton>
-              ) : null}
+        <p
+          style={{
+            margin: "20px 0 0",
+            maxWidth: "780px",
+            fontSize: "clamp(16px, 1.5vw, 21px)",
+            lineHeight: 1.55,
+            color: "var(--mu)",
+          }}
+        >
+          {project.summary}
+        </p>
 
-              {project.sourceUrl ? (
-                <MagneticButton
-                  href={project.sourceUrl}
-                  variant="outline"
-                  newTab
-                  className="px-5 py-3 text-sm font-medium"
-                  ariaLabel={`Open source code of ${project.title}`}
-                >
-                  <GithubIcon className="h-4 w-4" />
-                  <span>Source Code</span>
-                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                </MagneticButton>
-              ) : null}
-
-              <MagneticButton
-                href="/#contact"
-                variant={project.liveUrl || project.sourceUrl ? "outline" : "solid"}
-                className="px-5 py-3 text-sm font-medium"
-                ariaLabel={`Contact about ${project.title}`}
-              >
-                <span>Discuss System Architecture</span>
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-              </MagneticButton>
-            </div>
-          </Reveal>
-        </header>
-
-        <Reveal delay={0.15}>
-          <div className="mt-14 overflow-hidden rounded-3xl border border-black/[0.08] bg-surface shadow-xs">
-            <div className="grid grid-cols-2 divide-y divide-black/[0.08] sm:divide-y-0 lg:grid-cols-4 lg:divide-x lg:divide-black/[0.08]">
-              <div className="p-5 sm:p-8 border-r border-black/[0.08] lg:border-r-0">
-                <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
-                  Role
-                </h2>
-                <ul className="mt-3 space-y-1.5 text-sm font-medium text-ink">
-                  {project.role.map((r) => (
-                    <li key={r}>{r}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="p-5 sm:p-8">
-                <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
-                  Timeline
-                </h2>
-                <p className="mt-3 text-sm font-medium text-ink">{project.year}</p>
-                {clientOrStudio ? (
-                  <div className="mt-4">
-                    <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
-                      {project.client ? "Client" : "Studio"}
-                    </h3>
-                    <p className="mt-1 text-sm font-medium text-ink">{clientOrStudio}</p>
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="p-5 sm:p-8 border-r border-black/[0.08] lg:border-r-0">
-                <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
-                  Deliverables
-                </h2>
-                <ul className="mt-3 space-y-1.5 text-sm font-medium text-ink">
-                  {project.deliverables.map((item) => (
-                    <li key={item} className="flex items-center gap-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-neutral-900 shrink-0" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="p-5 sm:p-8">
-                <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
-                  Stack
-                </h2>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-black/[0.08] bg-bg px-2.5 py-1 font-mono text-[11px] text-ink font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-
-        {leadImage ? (
-          <Reveal delay={0.1}>
-            <div
-              ref={showcaseRef}
-              className="mt-16 overflow-hidden rounded-3xl border border-black/[0.08] bg-surface shadow-xl"
+        <div className="bs" style={{ marginTop: "24px" }}>
+          {project.liveUrl ? (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bt p"
             >
+              <span>Live Demo</span>
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </a>
+          ) : null}
 
-              <div className="flex h-10 w-full items-center justify-between border-b border-black/[0.06] bg-neutral-100/90 px-4 backdrop-blur-xs">
-                <div className="flex items-center gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-red-400" />
-                  <span className="h-3 w-3 rounded-full bg-amber-400" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
-                </div>
-                <div className="flex items-center gap-2 rounded-md bg-white px-3 py-1 text-xs font-mono text-muted shadow-2xs">
-                  <Lock className="h-3 w-3 text-muted/80" />
-                  <span>corecraft.my.id/work/{project.slug}</span>
-                </div>
-                <span className="font-mono text-[11px] text-muted uppercase">
-                  {project.category}
-                </span>
-              </div>
+          {project.sourceUrl ? (
+            <a
+              href={project.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bt g"
+            >
+              <GithubIcon className="h-4 w-4" />
+              <span>Source Code</span>
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </a>
+          ) : null}
 
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-bg-alt">
-                <motion.div
-                  style={parallaxEnabled ? { y: imageY } : undefined}
-                  className="relative h-[110%] w-full -top-[5%]"
-                >
-                  <Image
-                    src={project.image || leadImage.src || project.thumbnail}
-                    alt={leadImage.alt || `${project.title} framed showcase`}
-                    fill
-                    priority
-                    sizes="(max-width: 1440px) 100vw, 1440px"
-                    className="object-cover"
-                  />
-                </motion.div>
-              </div>
+          <Link href="/#contact" className="bt g">
+            <span>Discuss Architecture</span>
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </header>
 
-              {leadImage.caption ? (
-                <div className="border-t border-black/[0.06] bg-white p-4 text-xs font-mono text-muted">
-                  {leadImage.caption}
-                </div>
-              ) : null}
+      <div className="case-meta-grid">
+        <div className="g nf" style={{ padding: "18px" }}>
+          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
+            ROLE
+          </div>
+          <ul
+            style={{
+              margin: "10px 0 0",
+              padding: 0,
+              listStyle: "none",
+              display: "grid",
+              gap: "6px",
+              fontSize: "14px",
+              fontWeight: 600,
+            }}
+          >
+            {project.role.map((r) => (
+              <li key={r}>{r}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="g nf" style={{ padding: "18px" }}>
+          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
+            TIMELINE &amp; {project.client ? "CLIENT" : "STUDIO"}
+          </div>
+          <div style={{ marginTop: "10px", fontSize: "20px", fontWeight: 800 }}>
+            {project.year}
+          </div>
+          {clientOrStudio ? (
+            <div className="mo" style={{ marginTop: "6px", fontSize: "12px", color: "var(--cb)" }}>
+              {clientOrStudio}
             </div>
-          </Reveal>
-        ) : null}
+          ) : null}
+        </div>
 
-        <section className="mt-20 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
-            <Reveal>
-              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
-                /01 THE PROBLEM
+        <div className="g nf" style={{ padding: "18px" }}>
+          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
+            DELIVERABLES
+          </div>
+          <ul
+            style={{
+              margin: "10px 0 0",
+              padding: 0,
+              listStyle: "none",
+              display: "grid",
+              gap: "6px",
+              fontSize: "13px",
+              fontWeight: 500,
+            }}
+          >
+            {project.deliverables.map((d) => (
+              <li key={d} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: "var(--o)" }} />
+                <span>{d}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="g nf" style={{ padding: "18px" }}>
+          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
+            STACK
+          </div>
+          <div className="tags mo" style={{ marginTop: "10px" }}>
+            {project.tags.map((t) => (
+              <span key={t} className="tg">
+                {t}
               </span>
-              <h2 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
-                Problem & Friction
-              </h2>
-              <p className="mt-4 text-base md:text-lg leading-relaxed text-muted">
-                {project.problem}
-              </p>
-            </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
 
-            {project.metrics?.length ? (
-              <Reveal delay={0.1}>
-                <div className="mt-8 grid grid-cols-2 gap-4 border-t border-black/[0.08] pt-6">
-                  {project.metrics.map((metric) => (
-                    <div
-                      key={metric.label}
-                      className="rounded-2xl border border-black/[0.06] bg-surface p-4 shadow-2xs"
-                    >
-                      <span className="font-display text-2xl font-bold text-ink block">
-                        {metric.value}
-                      </span>
-                      <span className="font-mono text-xs text-muted block mt-1">
-                        {metric.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-            ) : null}
+      <div style={{ marginTop: "28px" }}>
+        <ProjectMockup
+          slug={project.slug}
+          title={project.title}
+          domain={`corecraft.my.id/work/${project.slug}`}
+          preferRealImage
+          imageSrc={project.image || project.thumbnail}
+        />
+      </div>
+
+      <div className="case-grid-2">
+        <div
+          style={{
+            background: "var(--pe)",
+            borderRadius: "16px",
+            padding: "24px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            gap: "20px",
+            border: "1px solid var(--ln)",
+          }}
+        >
+          <div>
+            <span className="mo" style={{ fontSize: "11px", color: "var(--od)", fontWeight: 700 }}>
+              /01 THE PROBLEM
+            </span>
+            <h2
+              style={{
+                margin: "10px 0 12px",
+                fontSize: "clamp(24px, 2.5vw, 34px)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+              }}
+            >
+              Problem &amp; Friction
+            </h2>
+            <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.65, color: "var(--ink)" }}>
+              {project.problem}
+            </p>
           </div>
 
-          <div className="lg:col-span-7 flex flex-col gap-10">
-            <Reveal delay={0.08}>
-              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
-                /02 SYSTEM DESIGN & ARCHITECTURE
+          {project.metrics?.length ? (
+            <div style={{ display: "grid", gap: "10px" }}>
+              {project.metrics.map((m) => (
+                <div key={m.label} className="g nf" style={{ padding: "14px 16px" }}>
+                  <div style={{ fontSize: "22px", fontWeight: 800, color: "var(--cb)" }}>
+                    {m.value}
+                  </div>
+                  <div className="mo" style={{ fontSize: "11px", color: "var(--mu)", marginTop: "2px" }}>
+                    {m.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <div
+            style={{
+              background: "var(--cb)",
+              color: "#fff",
+              borderRadius: "16px",
+              padding: "24px",
+            }}
+          >
+            <span className="mo" style={{ fontSize: "11px", opacity: 0.8 }}>
+              /02 SYSTEM DESIGN &amp; ARCHITECTURE
+            </span>
+            <h2
+              style={{
+                margin: "10px 0 14px",
+                fontSize: "clamp(24px, 2.5vw, 34px)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+              }}
+            >
+              Architectural Breakdown
+            </h2>
+            <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "grid", gap: "10px" }}>
+              {project.architecture.map((item) => (
+                <li
+                  key={item}
+                  className="g k nf"
+                  style={{
+                    padding: "13px 16px",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "10px",
+                    fontSize: "14px",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  <Server className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {project.solution?.length ? (
+            <div
+              className="g nf"
+              style={{
+                padding: "24px",
+                borderLeft: "5px solid var(--o)",
+              }}
+            >
+              <span className="mo" style={{ fontSize: "11px", color: "var(--od)", fontWeight: 700 }}>
+                /03 IMPLEMENTED SOLUTIONS
               </span>
-              <h2 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
-                Architectural Breakdown
+              <h2
+                style={{
+                  margin: "10px 0 14px",
+                  fontSize: "clamp(22px, 2.2vw, 30px)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.04em",
+                }}
+              >
+                Resilience &amp; Outcomes
               </h2>
-              <ul className="mt-4 space-y-3">
-                {project.architecture.map((item) => (
+              <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "grid", gap: "10px" }}>
+                {project.solution.map((item) => (
                   <li
                     key={item}
-                    className="flex items-start gap-3 rounded-xl border border-black/[0.06] bg-surface p-4 text-sm md:text-base text-ink shadow-2xs"
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: "10px",
+                      fontSize: "14px",
+                      lineHeight: 1.55,
+                      padding: "10px 12px",
+                      borderRadius: "10px",
+                      background: "var(--g)",
+                    }}
                   >
-                    <Server className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
-                    <span className="leading-relaxed">{item}</span>
+                    <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" style={{ color: "var(--cb)" }} />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
-            </Reveal>
+            </div>
+          ) : null}
+        </div>
+      </div>
 
-            {project.solution?.length ? (
-              <Reveal delay={0.12}>
-                <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
-                  /03 IMPLEMENTED SOLUTIONS
-                </span>
-                <h2 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
-                  Resilience & Outcomes
-                </h2>
-                <ul className="mt-4 space-y-3">
-                  {project.solution.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-3 rounded-xl border border-black/[0.06] bg-surface p-4 text-sm md:text-base text-ink shadow-2xs"
+      {project.timeline?.length ? (
+        <section style={{ marginTop: "36px" }}>
+          <span className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
+            /04 BUILD TIMELINE
+          </span>
+          <div className="case-timeline-grid">
+            {project.timeline.map((step, idx) => {
+              const colors = [
+                { bg: "#f5f1ea", fg: "#0a0a0f" },
+                { bg: "#2440ff", fg: "#ffffff" },
+                { bg: "#ff4d12", fg: "#0a0a0f" },
+              ][idx % 3];
+              return (
+                <div
+                  key={step.phase}
+                  style={{
+                    background: colors.bg,
+                    color: colors.fg,
+                    borderRadius: "14px",
+                    padding: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: "14px",
+                  }}
+                >
+                  <div className="mo" style={{ fontSize: "11px", opacity: 0.8 }}>
+                    0{idx + 1} · {step.period}
+                  </div>
+                  <div>
+                    <h3
+                      style={{
+                        margin: "0 0 8px",
+                        fontSize: "24px",
+                        fontWeight: 800,
+                        letterSpacing: "-0.03em",
+                      }}
                     >
-                      <CheckCircle2 className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-                      <span className="leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            ) : null}
+                      {step.phase}
+                    </h3>
+                    <p style={{ margin: 0, fontSize: "13.5px", lineHeight: 1.5 }}>
+                      {step.detail}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
+      ) : null}
 
-        {restImages.length ? (
-          <section className="mt-24 border-t border-black/[0.08] pt-16">
-            <Reveal>
-              <span className="font-mono text-xs font-semibold tracking-[0.2em] text-muted uppercase">
-                /DEEP DIVE SCREENS
-              </span>
-              <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-ink">
-                Technical Interface & Terminal Views
-              </h2>
-            </Reveal>
-
-            <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-              {restImages.map((image, index) => (
-                <Reveal key={image.src} delay={index * 0.08}>
-                  <div className="overflow-hidden rounded-2xl border border-black/[0.08] bg-surface shadow-sm">
-                    <div className="relative aspect-[16/10] w-full bg-bg-alt">
-                      <Image
-                        src={image.src}
-                        alt={image.alt || `${project.title} screen detail`}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
-                      />
-                    </div>
-                    {image.caption ? (
-                      <div className="p-4 text-xs font-mono text-muted border-t border-black/[0.06]">
-                        {image.caption}
-                      </div>
-                    ) : null}
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </section>
-        ) : null}
-
-        <nav
-          aria-label="More projects"
-          className="mt-24 border-t border-black/[0.08] pt-12"
+      <nav aria-label="Next case study" style={{ marginTop: "40px" }}>
+        <Link
+          href={`/work/${next.slug}`}
+          className="g nf"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "20px",
+            padding: "28px",
+            flexWrap: "wrap",
+          }}
         >
-          <Link
-            href={`/work/${next.slug}`}
-            className="group block rounded-3xl border border-black/[0.08] bg-surface p-8 sm:p-12 transition-all duration-300 hover:border-black hover:bg-neutral-50/80 hover:shadow-lg cursor-pointer"
-          >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <span className="font-mono text-xs font-semibold text-muted uppercase tracking-widest block mb-2">
-                  {ui.buttons.nextProjectCaseStudy}
-                </span>
-                <span className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink transition-colors group-hover:text-black uppercase">
-                  {next.title}
-                </span>
-                <p className="mt-2 text-sm text-muted max-w-xl">
-                  {next.summary}
-                </p>
-              </div>
+          <div>
+            <span className="mo" style={{ fontSize: "11px", color: "var(--cb)", fontWeight: 700 }}>
+              NEXT CASE STUDY →
+            </span>
+            <h3
+              style={{
+                margin: "8px 0 6px",
+                fontSize: "clamp(24px, 3vw, 42px)",
+                fontWeight: 800,
+                letterSpacing: "-0.045em",
+                textTransform: "uppercase",
+              }}
+            >
+              {next.title}
+            </h3>
+            <p style={{ margin: 0, fontSize: "14px", color: "var(--mu)", maxWidth: "620px" }}>
+              {next.summary}
+            </p>
+          </div>
 
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-black/[0.08] bg-white text-ink transition-all duration-300 group-hover:border-black group-hover:bg-black group-hover:text-white group-hover:scale-110">
-                <ArrowRight className="h-6 w-6" />
-              </div>
-            </div>
-          </Link>
-        </nav>
-      </div>
+          <span
+            className="bt p"
+            style={{ borderRadius: "999px", width: "52px", height: "52px", padding: 0 }}
+            aria-hidden="true"
+          >
+            <ArrowRight className="h-5 w-5" />
+          </span>
+        </Link>
+      </nav>
     </article>
   );
 }

@@ -96,6 +96,24 @@ export interface Experience {
   thumbnail?: string;
 }
 
+export type EducationType = "formal" | "non-formal";
+
+export interface EducationEntry {
+  id: string;
+  order: number;
+  type: EducationType;
+  categoryLabel: string;
+  institution: string;
+  program: string;
+  period: string;
+  location: string;
+  status: string;
+  summary: string;
+  highlights: string[];
+  tags: string[];
+  verifyUrl?: string;
+}
+
 export interface ProfileStat {
   value: string;
   label: string;

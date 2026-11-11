@@ -1,27 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUp, Clock } from "lucide-react";
-import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/icons/SocialIcons";
-import { profile, site, ui } from "@/data";
-
-const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  GitHub: GithubIcon,
-  LinkedIn: LinkedinIcon,
-  WhatsApp: WhatsappIcon,
-};
+import { profile, site } from "@/data";
 
 export default function Footer() {
   const pathname = usePathname();
-  const [time, setTime] = useState<string>("");
+  const isHome = pathname === "/";
+  const [time, setTime] = useState<string>("--:--:-- WIB");
 
   useEffect(() => {
+    if (isHome) return;
+
     function updateClock() {
       const now = new Date();
       const formatted = new Intl.DateTimeFormat("en-GB", {
-        timeZone: ui.clock.timeZone,
+        timeZone: profile.timezone,
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -33,72 +28,57 @@ export default function Footer() {
     updateClock();
     const interval = setInterval(updateClock, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isHome]);
 
-  if (pathname === "/") {
-    return null;
-  }
+  if (isHome) return null;
+
+  const tickText =
+    "AVAILABLE FOR NEW PROJECTS ✱ CORECRAFT PORTFOLIO ✱ KVN4.200581@GMAIL.COM ✱ MALANG, EAST JAVA ✱ ";
 
   return (
-    <footer className="border-t border-black/[0.08] bg-bg py-10">
-      <div className="page-container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-3">
-          <Image
-            src={site.logo}
-            alt={site.footer.brandName}
-            width={32}
-            height={32}
-            className="h-8 w-8 object-contain"
-          />
-          <div className="flex flex-col">
-            <span className="font-display font-bold text-sm tracking-tight text-ink">
-              {site.footer.brandName}
-            </span>
-            <span className="text-xs font-mono text-muted">
-              © {site.footer.copyrightYear} {profile.fullName}. {site.footer.builtWith}
-            </span>
+    <footer className="subfoot print:hidden">
+      <div className="subfoot-inner">
+        <div className="g cg4 mo nf">
+          <div>
+            <b>NAVIGATE</b>
+            <Link href="/">Home</Link> · <Link href="/work">All Systems</Link> ·{" "}
+            <Link href="/#education">Education</Link> ·{" "}
+            <Link href="/#contact">Contact</Link>
+          </div>
+          <div>
+            <b>ELSEWHERE</b>
+            {profile.socials.map((s, idx) => (
+              <React.Fragment key={s.label}>
+                {idx > 0 ? " · " : null}
+                <a href={s.url} target="_blank" rel="noopener noreferrer">
+                  {s.label}
+                </a>
+              </React.Fragment>
+            ))}
+          </div>
+          <div>
+            <b>MALANG · WIB</b>
+            <span>{time}</span>
+          </div>
+          <div>
+            <b>© {site.footer.copyrightYear}</b>
+            {profile.fullName}
+            <br />
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="subfoot-top"
+            >
+              Back to top ↑
+            </button>
           </div>
         </div>
+      </div>
 
-        <div className="flex items-center gap-2 rounded-full border border-black/[0.08] bg-surface px-4 py-1.5 font-mono text-xs text-ink shadow-2xs">
-          <Clock className="h-3.5 w-3.5 text-neutral-500" />
-          <span className="text-muted">{ui.clock.label}</span>
-          <span className="font-semibold text-ink">{time || ui.clock.loading}</span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <ul className="flex items-center gap-2">
-            {profile.socials.map((social) => {
-              const Icon = socialIcons[social.label];
-              if (!Icon) return null;
-              return (
-                <li key={social.label}>
-                  <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${social.label} profile`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.08] bg-surface text-muted transition-all duration-200 hover:border-black hover:bg-black hover:text-white"
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-
-          <button
-            type="button"
-            onClick={() => {
-              if (typeof window !== "undefined") {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }
-            }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-surface px-3 py-1.5 font-mono text-xs font-medium text-ink transition-all duration-200 hover:border-black hover:bg-black hover:text-white cursor-pointer"
-          >
-            <span>{ui.buttons.backToTop}</span>
-            <ArrowUp className="h-3 w-3" />
-          </button>
+      <div className="tick mo" style={{ position: "relative" }}>
+        <div>
+          <span>{tickText.repeat(6)}</span>
+          <span>{tickText.repeat(6)}</span>
         </div>
       </div>
     </footer>

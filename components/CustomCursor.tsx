@@ -6,7 +6,7 @@ import { motion, useSpring } from "framer-motion";
 
 export default function CustomCursor() {
   const pathname = usePathname();
-  if (pathname === "/") return null;
+  const isHome = pathname === "/";
 
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -15,17 +15,18 @@ export default function CustomCursor() {
   const cursorY = useSpring(-100, { stiffness: 500, damping: 28 });
 
   useEffect(() => {
+    if (isHome) return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+      setIsVisible((prev) => (prev ? prev : true));
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest("button, a, input, [role='button']")) {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("button, a, input, [role='button']")) {
         setIsHovered(true);
       } else {
         setIsHovered(false);
@@ -39,12 +40,13 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", moveCursor);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, [cursorX, cursorY, isVisible]);
+  }, [isHome, cursorX, cursorY]);
 
-  if (!isVisible) return null;
+  if (isHome || !isVisible) return null;
 
   return (
     <motion.div
+      aria-hidden="true"
       className="pointer-events-none fixed top-0 left-0 z-[9999] rounded-full mix-blend-difference bg-white"
       style={{
         x: cursorX,

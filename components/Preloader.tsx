@@ -6,13 +6,16 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export default function Preloader() {
   const pathname = usePathname();
-  if (pathname === "/") return null;
+  const isHome = pathname === "/";
 
   const [complete, setComplete] = useState(false);
   const [phase, setPhase] = useState<"drawing" | "filled" | "exiting">("drawing");
 
   useEffect(() => {
-    const hasShown = typeof window !== "undefined" && sessionStorage.getItem("preloader_shown");
+    if (isHome) return;
+
+    const hasShown =
+      typeof window !== "undefined" && sessionStorage.getItem("preloader_shown");
     if (hasShown) {
       const skipTimer = setTimeout(() => setComplete(true), 0);
       return () => clearTimeout(skipTimer);
@@ -32,7 +35,9 @@ export default function Preloader() {
       clearTimeout(fillTimer);
       clearTimeout(exitTimer);
     };
-  }, []);
+  }, [isHome]);
+
+  if (isHome) return null;
 
   return (
     <AnimatePresence>
@@ -98,7 +103,7 @@ export default function Preloader() {
               transition={{ duration: 0.4, ease: "easeOut" }}
               className="mt-3 font-mono text-[11px] sm:text-xs text-white/60 tracking-[0.28em] uppercase text-center"
             >
-              SYSTEMS & SOFTWARE ARCHITECTURE
+              SYSTEMS &amp; SOFTWARE ARCHITECTURE
             </motion.span>
           </div>
         </motion.div>

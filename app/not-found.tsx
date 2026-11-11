@@ -1,25 +1,54 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <section className="section-pad flex min-h-[70vh] items-center pt-40">
-      <div className="page-container">
-        <p className="label-eyebrow text-muted">/404</p>
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-ink md:text-6xl">
-          This page doesn&apos;t exist
-        </h1>
-        <p className="mt-6 max-w-md text-base leading-relaxed text-muted">
-          The project you were looking for may have been renamed or removed.
-        </p>
-        <Link
-          href="/"
-          className="mt-10 inline-flex items-center gap-2 rounded-full border border-ink bg-ink px-6 py-3 text-sm font-medium text-bg transition-colors duration-200 hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-4"
+    <main className="subpage-wrap" style={{ display: "grid", placeItems: "center" }}>
+      <div
+        className="g nf"
+        style={{
+          width: "100%",
+          maxWidth: "720px",
+          padding: "clamp(24px, 4vw, 48px)",
+          borderLeft: "6px solid var(--cb)",
+        }}
+      >
+        <span className="mo" style={{ fontSize: "12px", color: "var(--od)", fontWeight: 700 }}>
+          /404 — ROUTE NOT FOUND
+        </span>
+
+        <h1
+          style={{
+            margin: "12px 0",
+            fontSize: "clamp(48px, 11vw, 130px)",
+            lineHeight: 0.85,
+            letterSpacing: "-0.06em",
+            fontWeight: 800,
+          }}
         >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back home
-        </Link>
+          <span style={{ color: "transparent", WebkitTextStroke: "2px var(--ink)" }}>
+            404{" "}
+          </span>
+          <span className="sf" style={{ fontSize: "0.52em" }}>
+            missing.
+          </span>
+        </h1>
+
+        <p style={{ margin: "12px 0 0", fontSize: "16px", lineHeight: 1.6, color: "var(--mu)" }}>
+          The page or project case study you requested may have moved or does not exist.
+        </p>
+
+        <div className="bs" style={{ marginTop: "24px" }}>
+          <Link href="/" className="bt p">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            <span>Back Home</span>
+          </Link>
+          <Link href="/work" className="bt g">
+            <span>Browse All Work</span>
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
-    </section>
+    </main>
   );
 }

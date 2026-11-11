@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetail from "@/components/ProjectDetail";
@@ -5,6 +7,12 @@ import { getAdjacentProjects, getProject, projects } from "@/data/projects";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
+}
+
+function resolveOgImage(candidate?: string): string {
+  if (!candidate) return "/opengraph-image";
+  const filePath = path.join(process.cwd(), "public", candidate.replace(/^\//, ""));
+  return fs.existsSync(filePath) ? candidate : "/opengraph-image";
 }
 
 export async function generateMetadata({
@@ -17,6 +25,8 @@ export async function generateMetadata({
 
   if (!project) return { title: "Project not found" };
 
+  const ogImage = resolveOgImage(project.image || project.thumbnail);
+
   return {
     title: project.title,
     description: project.summary,
@@ -26,7 +36,7 @@ export async function generateMetadata({
       title: project.title,
       description: project.summary,
       url: `/work/${project.slug}`,
-      images: [{ url: project.image || project.thumbnail, alt: project.title }],
+      images: [{ url: ogImage, alt: project.title }],
     },
   };
 }
