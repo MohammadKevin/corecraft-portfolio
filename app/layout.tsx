@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Instrument_Serif,
+  Sacramento,
+} from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "@/components/SmoothScroll";
-import Preloader from "@/components/Preloader";
-import Atmosphere from "@/components/Atmosphere";
-import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { LanguageProvider } from "@/lib/i18n";
 import { profile } from "@/data/profile";
 
 const geist = Geist({
@@ -28,6 +30,13 @@ const instrumentSerif = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   variable: "--font-instrument-serif",
+  display: "swap",
+});
+
+const sacramento = Sacramento({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-sacramento",
   display: "swap",
 });
 
@@ -85,7 +94,6 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: {
       index: true,
-      follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
@@ -105,25 +113,23 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="id"
-      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      lang="en"
+      suppressHydrationWarning
+      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable} ${sacramento.variable}`}
     >
       <body className="antialiased">
         <a
           href="#hero"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[250] focus:rounded-lg focus:bg-[#0b0b0c] focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[250] focus:rounded-lg focus:bg-[#0a0a0f] focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white"
         >
           Skip to content
         </a>
 
-        <SmoothScroll>
-          <Preloader />
-          <Atmosphere />
-          <CustomCursor />
+        <LanguageProvider>
           <Navbar />
           {children}
           <Footer />
-        </SmoothScroll>
+        </LanguageProvider>
       </body>
     </html>
   );

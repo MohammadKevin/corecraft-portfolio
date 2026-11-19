@@ -96,7 +96,15 @@ export interface Experience {
   thumbnail?: string;
 }
 
-export type EducationType = "formal" | "non-formal";
+export type EducationType = "formal" | "nonformal";
+
+export interface EducationItem {
+  date: string;
+  institution: string;
+  title: string;
+  note: string;
+  type: EducationType;
+}
 
 export interface EducationEntry {
   id: string;

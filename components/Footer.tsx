@@ -1,52 +1,32 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { profile, site } from "@/data";
+import { profile } from "@/data/profile";
+import { getSubpageCopy, useLanguage } from "@/lib/i18n";
 
 export default function Footer() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const [time, setTime] = useState<string>("--:--:-- WIB");
-
-  useEffect(() => {
-    if (isHome) return;
-
-    function updateClock() {
-      const now = new Date();
-      const formatted = new Intl.DateTimeFormat("en-GB", {
-        timeZone: profile.timezone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      }).format(now);
-      setTime(`${formatted} WIB`);
-    }
-
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
-  }, [isHome]);
+  const { lang } = useLanguage();
+  const copy = getSubpageCopy(lang).footer;
 
   if (isHome) return null;
-
-  const tickText =
-    "AVAILABLE FOR NEW PROJECTS ✱ CORECRAFT PORTFOLIO ✱ KVN4.200581@GMAIL.COM ✱ MALANG, EAST JAVA ✱ ";
 
   return (
     <footer className="subfoot print:hidden">
       <div className="subfoot-inner">
-        <div className="g cg4 mo nf">
+        <div className="cg4">
           <div>
-            <b>NAVIGATE</b>
-            <Link href="/">Home</Link> · <Link href="/work">All Systems</Link> ·{" "}
-            <Link href="/#education">Education</Link> ·{" "}
-            <Link href="/#contact">Contact</Link>
+            <b>{copy.navTitle}</b>
+            <Link href="/">{copy.home}</Link> ·{" "}
+            <Link href="/work">{copy.allSystems}</Link> ·{" "}
+            <Link href="/#education">{copy.education}</Link> ·{" "}
+            <Link href="/#contact">{copy.contact}</Link>
           </div>
           <div>
-            <b>ELSEWHERE</b>
+            <b>{copy.elsewhereTitle}</b>
             {profile.socials.map((s, idx) => (
               <React.Fragment key={s.label}>
                 {idx > 0 ? " · " : null}
@@ -57,11 +37,11 @@ export default function Footer() {
             ))}
           </div>
           <div>
-            <b>MALANG · WIB</b>
-            <span>{time}</span>
+            <b>{copy.locationTimezone}</b>
+            <span>{profile.location}</span>
           </div>
           <div>
-            <b>© {site.footer.copyrightYear}</b>
+            <b>© 2026</b>
             {profile.fullName}
             <br />
             <button
@@ -69,16 +49,9 @@ export default function Footer() {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="subfoot-top"
             >
-              Back to top ↑
+              {copy.backToTop}
             </button>
           </div>
-        </div>
-      </div>
-
-      <div className="tick mo" style={{ position: "relative" }}>
-        <div>
-          <span>{tickText.repeat(6)}</span>
-          <span>{tickText.repeat(6)}</span>
         </div>
       </div>
     </footer>

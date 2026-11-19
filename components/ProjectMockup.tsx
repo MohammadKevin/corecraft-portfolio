@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { getSubpageCopy, useLanguage } from "@/lib/i18n";
 
 const EXISTING_PROJECT_IMAGES = new Set([
   "outerco",
@@ -40,7 +41,7 @@ export function ProjectMockup({
         <div className="relative aspect-[16/10] w-full bg-[#f3f3f5] overflow-hidden">
           <Image
             src={imageSrc}
-            alt={`${title} production preview`}
+            alt={`${title} preview`}
             fill
             priority
             sizes="(max-width: 768px) 100vw, 1200px"
@@ -55,6 +56,9 @@ export function ProjectMockup({
 }
 
 function MockupBody({ slug }: { slug: string }) {
+  const { lang } = useLanguage();
+  const copy = getSubpageCopy(lang).mockup;
+
   switch (slug) {
     case "worknest":
       return (
@@ -67,21 +71,21 @@ function MockupBody({ slug }: { slug: string }) {
               />
             ))}
           </div>
-          <div className="mo bw-note">12 / 15 spaces free · QR check-in</div>
+          <div className="mo bw-note">{copy.worknestNote}</div>
         </div>
       );
 
     case "outerco":
       return (
         <div className="bc">
-          <b className="bw-heading">We sell happiness</b>
+          <b className="bw-heading">{copy.outercoTagline}</b>
           <div className="pg4">
             <i style={{ background: "#f6c1d1" }} />
             <i style={{ background: "#cfe6c0" }} />
             <i style={{ background: "#f8dfa0" }} />
             <i style={{ background: "#e8a8a0" }} />
           </div>
-          <div className="mo bw-note">Best seller · WhatsApp checkout</div>
+          <div className="mo bw-note">{copy.outercoNote}</div>
         </div>
       );
 
@@ -106,19 +110,19 @@ function MockupBody({ slug }: { slug: string }) {
       return (
         <div className="bc">
           <div className="fr">
-            <span>Item A ×2</span>
+            <span>{copy.coreposItemA}</span>
             <em>40.000</em>
           </div>
           <div className="fr">
-            <span>Item B ×1</span>
+            <span>{copy.coreposItemB}</span>
             <em>25.000</em>
           </div>
           <div className="fr">
-            <span>Scan barcode</span>
+            <span>{copy.coreposScan}</span>
             <em>✓</em>
           </div>
           <div className="fr" style={{ fontWeight: 700 }}>
-            <span>TOTAL</span>
+            <span>{copy.coreposTotal}</span>
             <em>65.000</em>
           </div>
         </div>
@@ -137,9 +141,9 @@ function MockupBody({ slug }: { slug: string }) {
           </div>
           <div className="fr">
             <span>ALERT low_stock_qty</span>
-            <em>&lt; 5 units</em>
+            <em>{copy.inventoryUnits}</em>
           </div>
-          <div className="mo bw-note">40% faster search · Multi-warehouse</div>
+          <div className="mo bw-note">{copy.inventoryNote}</div>
         </div>
       );
 
@@ -148,17 +152,17 @@ function MockupBody({ slug }: { slug: string }) {
         <div className="bc">
           <div className="fr">
             <span>Public_Schedule_2025.pdf</span>
-            <em>Public</em>
+            <em>{copy.clinicPublic}</em>
           </div>
           <div className="fr">
             <span>Clinic_Internal_SOP.pdf</span>
-            <em>JWT Guarded</em>
+            <em>{copy.clinicJwt}</em>
           </div>
           <div className="fr">
             <span>Pharmacy_Form_A1.pdf</span>
             <em>RBAC</em>
           </div>
-          <div className="mo bw-note">Separated public &amp; internal records</div>
+          <div className="mo bw-note">{copy.clinicNote}</div>
         </div>
       );
 
@@ -166,20 +170,19 @@ function MockupBody({ slug }: { slug: string }) {
       return (
         <div className="bc">
           <div className="fr">
-            <span>Performance</span>
+            <span>{copy.corecraftPerf}</span>
             <em>100 / 100</em>
           </div>
           <div className="fr">
             <span>Next.js 16 · React 19</span>
-            <em>Static</em>
+            <em>{copy.corecraftStatic}</em>
           </div>
           <div className="fr">
             <span>TypeScript Strict</span>
-            <em>0 errors</em>
+            <em>{copy.corecraftZeroErr}</em>
           </div>
-          <div className="mo bw-note">Corecraft Engineering Portfolio</div>
+          <div className="mo bw-note">{copy.corecraftNote}</div>
         </div>
       );
   }
 }
-

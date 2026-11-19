@@ -1,86 +1,79 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2, Server } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "@/components/icons/SocialIcons";
 import { ProjectMockup } from "@/components/ProjectMockup";
+import { getLocalizedProjects, getSubpageCopy, useLanguage } from "@/lib/i18n";
 import type { Project } from "@/lib/types";
 
 export default function ProjectDetail({
-  project,
-  next,
+  project: rawProject,
+  next: rawNext,
 }: {
   project: Project;
   previous?: Project;
   next: Project;
 }) {
+  const { lang } = useLanguage();
+  const copy = getSubpageCopy(lang).detail;
+
+  const { project, next } = useMemo(() => {
+    const localized = getLocalizedProjects(lang);
+    return {
+      project: localized.find((p) => p.slug === rawProject.slug) ?? rawProject,
+      next: localized.find((p) => p.slug === rawNext.slug) ?? rawNext,
+    };
+  }, [lang, rawProject, rawNext]);
+
   const clientOrStudio = project.client ?? project.studio;
-  const titleParts = project.title.split(" ");
-  const firstWord = titleParts[0];
-  const restWords = titleParts.slice(1).join(" ");
 
   return (
     <article className="subpage-wrap">
       <div
         className="edu-bar"
         style={{
-          marginBottom: "28px",
+          marginBottom: "32px",
           paddingBottom: "16px",
-          borderBottom: "1px solid var(--ln)",
+          borderBottom: "1px solid var(--line)",
         }}
       >
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          <Link href="/#work" className="g nf chip mo" style={{ fontWeight: 600 }}>
-            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>Home</span>
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <Link href="/#work" className="chip">
+            <ArrowLeft style={{ width: 13, height: 13 }} aria-hidden="true" />
+            <span>{copy.home}</span>
           </Link>
-          <Link href="/work" className="g nf chip mo" style={{ fontWeight: 600 }}>
-            <span>All 07 Systems</span>
+          <Link href="/work" className="chip">
+            <span>{copy.allSystems}</span>
           </Link>
         </div>
 
-        <span
-          className="g nf chip mo"
-          style={{
-            color: "var(--cb)",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-          }}
-        >
-          ● {project.badge || project.category} · {project.year}
+        <span className="label">
+          {project.badge || project.category} · {project.year}
         </span>
       </div>
 
       <header>
-        <div className="mo" style={{ fontSize: "12px", color: "var(--mu)", marginBottom: "12px" }}>
-          /CASE STUDY · {String(project.order).padStart(2, "0")} · {project.category.toUpperCase()}
-        </div>
+        <p className="label">
+          {copy.caseStudyPrefix} · {String(project.order).padStart(2, "0")} ·{" "}
+          {project.category.toUpperCase()}
+        </p>
 
         <h1
-          style={{
-            margin: 0,
-            fontSize: "clamp(34px, 6.2vw, 88px)",
-            lineHeight: 0.92,
-            letterSpacing: "-0.055em",
-            fontWeight: 800,
-            textTransform: "uppercase",
-          }}
+          className="ttl"
+          style={{ marginTop: "14px", fontSize: "clamp(34px, 5.6vw, 76px)" }}
         >
-          <span style={{ color: "var(--ink)" }}>{firstWord} </span>
-          <span className="sf" style={{ fontWeight: 400 }}>
-            {restWords}
-          </span>
+          {project.title}
         </h1>
 
         <p
           style={{
-            margin: "20px 0 0",
-            maxWidth: "780px",
-            fontSize: "clamp(16px, 1.5vw, 21px)",
-            lineHeight: 1.55,
-            color: "var(--mu)",
+            margin: "18px 0 0",
+            maxWidth: "70ch",
+            fontSize: "clamp(15px, 1.3vw, 18px)",
+            lineHeight: 1.65,
+            color: "var(--muted)",
           }}
         >
           {project.summary}
@@ -94,8 +87,8 @@ export default function ProjectDetail({
               rel="noopener noreferrer"
               className="bt p"
             >
-              <span>Live Demo</span>
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              <span>{copy.liveDemo}</span>
+              <ArrowUpRight style={{ width: 15, height: 15 }} aria-hidden="true" />
             </a>
           ) : null}
 
@@ -106,33 +99,30 @@ export default function ProjectDetail({
               rel="noopener noreferrer"
               className="bt g"
             >
-              <GithubIcon className="h-4 w-4" />
-              <span>Source Code</span>
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              <GithubIcon style={{ width: 15, height: 15 }} />
+              <span>{copy.sourceCode}</span>
             </a>
           ) : null}
 
           <Link href="/#contact" className="bt g">
-            <span>Discuss Architecture</span>
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <span>{copy.discuss}</span>
+            <ArrowUpRight style={{ width: 15, height: 15 }} aria-hidden="true" />
           </Link>
         </div>
       </header>
 
       <div className="case-meta-grid">
-        <div className="g nf" style={{ padding: "18px" }}>
-          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
-            ROLE
-          </div>
+        <div className="g">
+          <div className="label">{copy.roleTitle}</div>
           <ul
             style={{
-              margin: "10px 0 0",
+              margin: "12px 0 0",
               padding: 0,
               listStyle: "none",
               display: "grid",
-              gap: "6px",
-              fontSize: "14px",
-              fontWeight: 600,
+              gap: "7px",
+              fontSize: "13.5px",
+              lineHeight: 1.45,
             }}
           >
             {project.role.map((r) => (
@@ -141,49 +131,48 @@ export default function ProjectDetail({
           </ul>
         </div>
 
-        <div className="g nf" style={{ padding: "18px" }}>
-          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
-            TIMELINE &amp; {project.client ? "CLIENT" : "STUDIO"}
+        <div className="g">
+          <div className="label">
+            {project.client ? copy.timelineClient : copy.timelineStudio}
           </div>
-          <div style={{ marginTop: "10px", fontSize: "20px", fontWeight: 800 }}>
+          <div style={{ marginTop: "12px", fontSize: "19px", fontWeight: 600 }}>
             {project.year}
           </div>
           {clientOrStudio ? (
-            <div className="mo" style={{ marginTop: "6px", fontSize: "12px", color: "var(--cb)" }}>
+            <div
+              className="mo"
+              style={{ marginTop: "4px", fontSize: "12px", color: "var(--muted)" }}
+            >
               {clientOrStudio}
             </div>
           ) : null}
         </div>
 
-        <div className="g nf" style={{ padding: "18px" }}>
-          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
-            DELIVERABLES
-          </div>
+        <div className="g">
+          <div className="label">{copy.deliverablesTitle}</div>
           <ul
             style={{
-              margin: "10px 0 0",
+              margin: "12px 0 0",
               padding: 0,
               listStyle: "none",
               display: "grid",
-              gap: "6px",
+              gap: "7px",
               fontSize: "13px",
-              fontWeight: 500,
+              lineHeight: 1.45,
             }}
           >
             {project.deliverables.map((d) => (
-              <li key={d} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: "var(--o)" }} />
+              <li key={d} style={{ display: "flex", gap: "8px" }}>
+                <span className="case-marker" aria-hidden="true" />
                 <span>{d}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="g nf" style={{ padding: "18px" }}>
-          <div className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
-            STACK
-          </div>
-          <div className="tags mo" style={{ marginTop: "10px" }}>
+        <div className="g">
+          <div className="label">{copy.stackTitle}</div>
+          <div className="tags" style={{ marginTop: "12px" }}>
             {project.tags.map((t) => (
               <span key={t} className="tg">
                 {t}
@@ -204,47 +193,72 @@ export default function ProjectDetail({
       </div>
 
       <div className="case-grid-2">
-        <div
-          style={{
-            background: "var(--pe)",
-            borderRadius: "16px",
-            padding: "24px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: "20px",
-            border: "1px solid var(--ln)",
-          }}
-        >
-          <div>
-            <span className="mo" style={{ fontSize: "11px", color: "var(--od)", fontWeight: 700 }}>
-              /01 THE PROBLEM
-            </span>
-            <h2
-              style={{
-                margin: "10px 0 12px",
-                fontSize: "clamp(24px, 2.5vw, 34px)",
-                fontWeight: 800,
-                letterSpacing: "-0.04em",
-              }}
-            >
-              Problem &amp; Friction
-            </h2>
-            <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.65, color: "var(--ink)" }}>
-              {project.problem}
-            </p>
-          </div>
+        <div className="g" style={{ padding: "clamp(20px, 3vw, 28px)" }}>
+          <span className="label" style={{ color: "var(--orange-text)" }}>
+            {copy.problemLabel}
+          </span>
+          <h2
+            style={{
+              margin: "12px 0 14px",
+              fontSize: "clamp(22px, 2.2vw, 30px)",
+              fontWeight: 600,
+              letterSpacing: "-0.03em",
+            }}
+          >
+            {copy.problemTitle}
+          </h2>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "15px",
+              lineHeight: 1.7,
+              color: "var(--muted)",
+            }}
+          >
+            {project.problem}
+          </p>
 
           {project.metrics?.length ? (
-            <div style={{ display: "grid", gap: "10px" }}>
+            <div
+              style={{
+                display: "grid",
+                gap: "0px",
+                marginTop: "24px",
+                paddingTop: "4px",
+                borderTop: "1px solid var(--line)",
+              }}
+            >
               {project.metrics.map((m) => (
-                <div key={m.label} className="g nf" style={{ padding: "14px 16px" }}>
-                  <div style={{ fontSize: "22px", fontWeight: 800, color: "var(--cb)" }}>
+                <div
+                  key={m.label}
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    gap: "16px",
+                    padding: "12px 0",
+                    borderBottom: "1px solid var(--line-soft)",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "19px",
+                      fontWeight: 600,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
                     {m.value}
-                  </div>
-                  <div className="mo" style={{ fontSize: "11px", color: "var(--mu)", marginTop: "2px" }}>
+                  </span>
+                  <span
+                    className="mo"
+                    style={{
+                      fontSize: "11px",
+                      color: "var(--muted)",
+                      textAlign: "right",
+                    }}
+                  >
                     {m.label}
-                  </div>
+                  </span>
                 </div>
               ))}
             </div>
@@ -254,40 +268,37 @@ export default function ProjectDetail({
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <div
             style={{
-              background: "var(--cb)",
-              color: "#fff",
-              borderRadius: "16px",
-              padding: "24px",
+              border: "1px solid var(--line)",
+              borderRadius: "12px",
+              padding: "clamp(20px, 3vw, 28px)",
             }}
           >
-            <span className="mo" style={{ fontSize: "11px", opacity: 0.8 }}>
-              /02 SYSTEM DESIGN &amp; ARCHITECTURE
-            </span>
+            <span className="label">{copy.archLabel}</span>
             <h2
               style={{
-                margin: "10px 0 14px",
-                fontSize: "clamp(24px, 2.5vw, 34px)",
-                fontWeight: 800,
-                letterSpacing: "-0.04em",
+                margin: "12px 0 16px",
+                fontSize: "clamp(22px, 2.2vw, 30px)",
+                fontWeight: 600,
+                letterSpacing: "-0.03em",
               }}
             >
-              Architectural Breakdown
+              {copy.archTitle}
             </h2>
-            <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "grid", gap: "10px" }}>
+            <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
               {project.architecture.map((item) => (
                 <li
                   key={item}
-                  className="g k nf"
                   style={{
-                    padding: "13px 16px",
                     display: "flex",
-                    alignItems: "flex-start",
                     gap: "10px",
+                    padding: "12px 0",
+                    borderTop: "1px solid var(--line-soft)",
                     fontSize: "14px",
-                    lineHeight: 1.5,
+                    lineHeight: 1.55,
+                    color: "var(--muted)",
                   }}
                 >
-                  <Server className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span className="case-marker" aria-hidden="true" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -296,41 +307,41 @@ export default function ProjectDetail({
 
           {project.solution?.length ? (
             <div
-              className="g nf"
               style={{
-                padding: "24px",
-                borderLeft: "5px solid var(--o)",
+                border: "1px solid var(--line)",
+                borderLeft: "2px solid var(--orange)",
+                borderRadius: "12px",
+                padding: "clamp(20px, 3vw, 28px)",
               }}
             >
-              <span className="mo" style={{ fontSize: "11px", color: "var(--od)", fontWeight: 700 }}>
-                /03 IMPLEMENTED SOLUTIONS
+              <span className="label" style={{ color: "var(--orange-text)" }}>
+                {copy.solutionLabel}
               </span>
               <h2
                 style={{
-                  margin: "10px 0 14px",
-                  fontSize: "clamp(22px, 2.2vw, 30px)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.04em",
+                  margin: "12px 0 16px",
+                  fontSize: "clamp(20px, 2vw, 26px)",
+                  fontWeight: 600,
+                  letterSpacing: "-0.03em",
                 }}
               >
-                Resilience &amp; Outcomes
+                {copy.solutionTitle}
               </h2>
-              <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "grid", gap: "10px" }}>
+              <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
                 {project.solution.map((item) => (
                   <li
                     key={item}
                     style={{
                       display: "flex",
-                      alignItems: "flex-start",
                       gap: "10px",
+                      padding: "12px 0",
+                      borderTop: "1px solid var(--line-soft)",
                       fontSize: "14px",
-                      lineHeight: 1.55,
-                      padding: "10px 12px",
-                      borderRadius: "10px",
-                      background: "var(--g)",
+                      lineHeight: 1.6,
+                      color: "var(--muted)",
                     }}
                   >
-                    <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" style={{ color: "var(--cb)" }} />
+                    <span className="case-marker" aria-hidden="true" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -342,95 +353,95 @@ export default function ProjectDetail({
 
       {project.timeline?.length ? (
         <section style={{ marginTop: "36px" }}>
-          <span className="mo" style={{ fontSize: "11px", color: "var(--mu)" }}>
-            /04 BUILD TIMELINE
-          </span>
+          <span className="label">{copy.buildTimelineLabel}</span>
           <div className="case-timeline-grid">
-            {project.timeline.map((step, idx) => {
-              const colors = [
-                { bg: "#f5f1ea", fg: "#0a0a0f" },
-                { bg: "#2440ff", fg: "#ffffff" },
-                { bg: "#ff4d12", fg: "#0a0a0f" },
-              ][idx % 3];
-              return (
-                <div
-                  key={step.phase}
-                  style={{
-                    background: colors.bg,
-                    color: colors.fg,
-                    borderRadius: "14px",
-                    padding: "20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    gap: "14px",
-                  }}
-                >
-                  <div className="mo" style={{ fontSize: "11px", opacity: 0.8 }}>
-                    0{idx + 1} · {step.period}
-                  </div>
-                  <div>
-                    <h3
-                      style={{
-                        margin: "0 0 8px",
-                        fontSize: "24px",
-                        fontWeight: 800,
-                        letterSpacing: "-0.03em",
-                      }}
-                    >
-                      {step.phase}
-                    </h3>
-                    <p style={{ margin: 0, fontSize: "13.5px", lineHeight: 1.5 }}>
-                      {step.detail}
-                    </p>
-                  </div>
+            {project.timeline.map((step) => (
+              <div
+                key={step.phase}
+                style={{
+                  border: "1px solid var(--line)",
+                  borderRadius: "12px",
+                  padding: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                <div className="label">
+                  {step.period}
                 </div>
-              );
-            })}
+                <div>
+                  <h3
+                    style={{
+                      margin: "0 0 8px",
+                      fontSize: "20px",
+                      fontWeight: 600,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    {step.phase}
+                  </h3>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: "13.5px",
+                      lineHeight: 1.6,
+                      color: "var(--muted)",
+                    }}
+                  >
+                    {step.detail}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       ) : null}
 
-      <nav aria-label="Next case study" style={{ marginTop: "40px" }}>
+      <nav aria-label="Next case study" style={{ marginTop: "44px" }}>
         <Link
           href={`/work/${next.slug}`}
-          className="g nf"
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             gap: "20px",
-            padding: "28px",
+            padding: "28px 0",
+            borderTop: "1px solid var(--line)",
+            borderBottom: "1px solid var(--line)",
             flexWrap: "wrap",
           }}
         >
           <div>
-            <span className="mo" style={{ fontSize: "11px", color: "var(--cb)", fontWeight: 700 }}>
-              NEXT CASE STUDY →
+            <span className="label" style={{ color: "var(--orange-text)" }}>
+              {copy.nextCaseStudy}
             </span>
             <h3
               style={{
-                margin: "8px 0 6px",
-                fontSize: "clamp(24px, 3vw, 42px)",
-                fontWeight: 800,
-                letterSpacing: "-0.045em",
-                textTransform: "uppercase",
+                margin: "10px 0 6px",
+                fontSize: "clamp(22px, 2.6vw, 34px)",
+                fontWeight: 600,
+                letterSpacing: "-0.03em",
               }}
             >
               {next.title}
             </h3>
-            <p style={{ margin: 0, fontSize: "14px", color: "var(--mu)", maxWidth: "620px" }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "14px",
+                color: "var(--muted)",
+                maxWidth: "62ch",
+              }}
+            >
               {next.summary}
             </p>
           </div>
 
-          <span
-            className="bt p"
-            style={{ borderRadius: "999px", width: "52px", height: "52px", padding: 0 }}
+          <ArrowRight
+            style={{ width: 22, height: 22, flexShrink: 0 }}
             aria-hidden="true"
-          >
-            <ArrowRight className="h-5 w-5" />
-          </span>
+          />
         </Link>
       </nav>
     </article>

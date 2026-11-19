@@ -2,53 +2,47 @@
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { projectCategories, projects, type ProjectFilter } from "@/data/projects";
+import { projectCategories, type ProjectFilter } from "@/data/projects";
 import { ProjectMockup } from "@/components/ProjectMockup";
-
-const CARD_THEMES = [
-  { bg: "#2440ff", fg: "#ffffff", dark: true },
-  { bg: "#ff4d12", fg: "#0a0a0f", dark: false },
-  { bg: "#0a0a0f", fg: "#ffffff", dark: true },
-  { bg: "#e8edff", fg: "#0a0a0f", dark: false },
-  { bg: "#f5f1ea", fg: "#0a0a0f", dark: false },
-];
+import { getLocalizedProjects, getSubpageCopy, useLanguage } from "@/lib/i18n";
 
 export default function WorkArchive() {
   const [filter, setFilter] = useState<ProjectFilter>("All");
+  const { lang } = useLanguage();
+  const copy = getSubpageCopy(lang).archive;
+  const localizedProjects = useMemo(() => getLocalizedProjects(lang), [lang]);
 
   const sortedProjects = useMemo(
     () =>
-      [...projects]
+      [...localizedProjects]
         .sort((a, b) => a.order - b.order)
         .filter((p) => filter === "All" || p.category === filter),
-    [filter]
+    [filter, localizedProjects]
   );
 
   return (
     <main className="subpage-wrap">
-      <div className="g nf chip mo" style={{ marginBottom: "18px" }}>
-        <span>06 / ARCHIVE</span>
-        <span>·</span>
-        <span style={{ color: "var(--cb)", fontWeight: 700 }}>
-          {String(projects.length).padStart(2, "0")} SYSTEMS DELIVERED
-        </span>
-      </div>
+      <p className="label">
+        {copy.badgeLeft} · {String(localizedProjects.length).padStart(2, "0")}{" "}
+        {copy.systemsDelivered}
+      </p>
 
-      <div className="hd" style={{ alignItems: "flex-end" }}>
-        <h1 className="ttl" style={{ fontSize: "clamp(38px, 7.5vw, 108px)" }}>
-          Selected <em className="sf">work.</em>
+      <div className="hd" style={{ marginTop: "18px" }}>
+        <h1 className="ttl" style={{ fontSize: "clamp(38px, 6.4vw, 88px)" }}>
+          {copy.headingLead} <em className="sf">{copy.headingEm}</em>
         </h1>
-        <p>
-          Full-lifecycle production systems across RESTful APIs, booking SaaS,
-          e-commerce, POS terminals, and encrypted document archives.
-        </p>
+        <p>{copy.subtitle}</p>
       </div>
 
       <div
         className="edu-bar"
-        style={{ marginTop: "26px", paddingBottom: "18px", borderBottom: "1px solid var(--ln)" }}
+        style={{
+          marginTop: "28px",
+          paddingBottom: "18px",
+          borderBottom: "1px solid var(--line)",
+        }}
       >
-        <div className="edu-tabs mo" role="tablist" aria-label="Filter projects">
+        <div className="edu-tabs" role="tablist" aria-label={copy.filterAriaLabel}>
           {projectCategories.map((cat) => (
             <button
               key={cat}
@@ -58,115 +52,99 @@ export default function WorkArchive() {
               className={`edu-tab${filter === cat ? " act" : ""}`}
               onClick={() => setFilter(cat)}
             >
-              {cat}
+              {cat === "All" ? copy.allFilterLabel : cat}
             </button>
           ))}
         </div>
 
-        <Link href="/#work" className="g chip mo" style={{ fontWeight: 600 }}>
-          ← Back to Home Stack
+        <Link href="/#work" className="chip">
+          {copy.backToHome}
         </Link>
       </div>
 
       <div className="work-grid">
-        {sortedProjects.map((project, i) => {
-          const theme = CARD_THEMES[i % CARD_THEMES.length];
-          return (
-            <article
-              key={project.slug}
-              className="work-card-archive"
-              style={
-                {
-                  "--card-bg": theme.bg,
-                  "--card-fg": theme.fg,
-                } as React.CSSProperties
-              }
-            >
-              <div className="wm mo">
-                <span>
-                  {String(project.order).padStart(2, "0")} / {project.category}
-                </span>
-                <span>{project.year}</span>
+        {sortedProjects.map((project) => (
+          <article key={project.slug} className="work-card-archive">
+            <div className="wm">
+              <span>
+                {String(project.order).padStart(2, "0")} / {project.category}
+              </span>
+              <span>{project.year}</span>
+            </div>
+
+            <div>
+              <h2
+                style={{
+                  margin: "0 0 10px",
+                  fontSize: "clamp(21px, 2vw, 28px)",
+                  fontWeight: 600,
+                  letterSpacing: "-0.03em",
+                  lineHeight: 1.15,
+                }}
+              >
+                <Link href={`/work/${project.slug}`}>{project.title}</Link>
+              </h2>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14px",
+                  lineHeight: 1.6,
+                  color: "var(--muted)",
+                }}
+              >
+                {project.summary}
+              </p>
+            </div>
+
+            <ProjectMockup
+              slug={project.slug}
+              title={project.title}
+              domain={`corecraft.my.id/work/${project.slug}`}
+              preferRealImage
+              imageSrc={project.image || project.thumbnail}
+            />
+
+            <div className="wi">
+              <div className="tags">
+                {project.tags.map((t) => (
+                  <span key={t} className="tg">
+                    {t}
+                  </span>
+                ))}
               </div>
 
-              <div>
-                <h2
-                  style={{
-                    margin: "0 0 8px",
-                    fontSize: "clamp(22px, 2.2vw, 32px)",
-                    fontWeight: 800,
-                    letterSpacing: "-0.04em",
-                    lineHeight: 1.08,
-                  }}
-                >
-                  {project.title}
-                </h2>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "14px",
-                    lineHeight: 1.55,
-                    opacity: theme.dark ? 0.85 : 0.78,
-                  }}
-                >
-                  {project.summary}
-                </p>
-              </div>
-
-              <ProjectMockup
-                slug={project.slug}
-                title={project.title}
-                domain={`corecraft.my.id/work/${project.slug}`}
-                preferRealImage
-                imageSrc={project.image || project.thumbnail}
-              />
-
-              <div className={`g nf wi${theme.dark ? " k" : ""}`}>
-                <div className="tags mo">
-                  {project.tags.map((t) => (
-                    <span key={t} className="tg">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div
-                  className="mo wi-links"
-                  style={{ justifyContent: "space-between", marginTop: "4px" }}
-                >
-                  <Link
-                    href={`/work/${project.slug}`}
-                    style={{ fontWeight: 700 }}
-                  >
-                    Case Study ↗
-                  </Link>
-                  <div style={{ display: "flex", gap: "12px" }}>
-                    {project.liveUrl ? (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Live ↗
-                      </a>
-                    ) : null}
-                    {project.sourceUrl ? (
-                      <a
-                        href={project.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Code ↗
-                      </a>
-                    ) : null}
-                  </div>
+              <div
+                className="wi-links"
+                style={{ justifyContent: "space-between", marginTop: "4px" }}
+              >
+                <Link href={`/work/${project.slug}`} style={{ fontWeight: 500 }}>
+                  {copy.caseStudy}
+                </Link>
+                <div style={{ display: "flex", gap: "14px" }}>
+                  {project.liveUrl ? (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {copy.live}
+                    </a>
+                  ) : null}
+                  {project.sourceUrl ? (
+                    <a
+                      href={project.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {copy.code}
+                    </a>
+                  ) : null}
                 </div>
               </div>
-            </article>
-          );
-        })}
+            </div>
+          </article>
+        ))}
       </div>
     </main>
   );
 }
-

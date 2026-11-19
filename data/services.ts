@@ -1,88 +1,96 @@
-import type { Service } from "@/lib/types";
+export interface ServiceItem {
+  number: string;
+  title: string;
+  description: string;
+  tags: string[];
+}
 
-export const services = [
+export const services: ServiceItem[] = [
   {
-    id: "backend-api",
+    number: "01",
     title: "Backend & RESTful API Architecture",
     description:
       "Modular APIs with NestJS & Express, DTO validation, JWT/OAuth2 authentication and OpenAPI/Swagger documentation. Every endpoint is designed to stay predictable as the product grows.",
-    deliverables: [
-      "Resource-oriented REST endpoints",
-      "DTO validation & typed contracts",
-      "JWT / OAuth2 authentication",
-      "OpenAPI documentation",
-    ],
-    stack: ["NestJS", "Express.js", "Node.js", "OpenAPI", "Postman"],
-    preview: "/images/services/backend-api.svg",
+    tags: ["NestJS", "Express.js", "Node.js", "OpenAPI", "Postman"],
   },
   {
-    id: "database-tuning",
+    number: "02",
     title: "Database Engineering & Query Tuning",
     description:
-      "Efficient relational PostgreSQL/MySQL schemas, structured query indexing, Prisma ORM migrations and Redis caching. On the inventory engine this cut search time by 40%.",
-    deliverables: [
-      "Normalised schema design",
-      "Index strategy for hot paths",
-      "Prisma migrations",
-      "Redis caching layer",
-    ],
-    stack: ["PostgreSQL", "MySQL", "Prisma ORM", "Redis"],
-    preview: "/images/services/database-tuning.svg",
+      "Relational schema design, indexing and query optimization built for surge traffic.",
+    tags: ["PostgreSQL", "MySQL", "Prisma ORM"],
   },
   {
-    id: "fullstack-apps",
+    number: "03",
     title: "Fullstack Web Applications",
     description:
-      "End-to-end web apps with Next.js App Router, React Server Components, type-safe TypeScript and Tailwind CSS. Built for SEO, speed and long-term maintainability.",
-    deliverables: [
-      "Server-rendered Next.js app",
-      "Type-safe client & server",
-      "Responsive Tailwind interface",
-      "SEO, sitemap & metadata",
-    ],
-    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Prisma ORM"],
-    preview: "/images/services/fullstack-apps.svg",
+      "Clean, intuitive interfaces on top of strict API contracts.",
+    tags: ["Next.js", "React", "TypeScript"],
   },
   {
-    id: "pos-inventory",
+    number: "04",
     title: "POS & Inventory Management Systems",
     description:
-      "Multi-branch cashier systems with barcode scanner, real-time stock mutation, digital invoices and precise transaction audit logs. Daily reconciliation replaces manual counting.",
-    deliverables: [
-      "Cashier & transaction flow",
-      "Barcode scanner integration",
-      "Thermal receipt printing",
-      "Daily reconciliation report",
-    ],
-    stack: ["React.js", "Express.js", "MySQL", "Prisma ORM"],
-    preview: "/images/services/pos-inventory.svg",
+      "Transaction-safe stock and sales flows with barcode scanning and invoicing.",
+    tags: ["Express.js", "MySQL"],
   },
   {
-    id: "digital-archive",
+    number: "05",
     title: "Digital Document & Archive Systems",
     description:
-      "Structured archiving with metadata tagging, role-based access control (RBAC) and encrypted file storage. Retrieval that used to take hours now takes seconds.",
-    deliverables: [
-      "Metadata-indexed archive",
-      "Document-level RBAC",
-      "Encrypted upload pipeline",
-      "Full access audit trail",
-    ],
-    stack: ["Next.js", "Express.js", "PostgreSQL", "RBAC"],
-    preview: "/images/services/digital-archive.svg",
+      "Structured archiving with file encryption and role-based access control.",
+    tags: ["PostgreSQL", "RBAC"],
   },
   {
-    id: "integrations",
+    number: "06",
     title: "Payment Gateway & Third-Party Integrations",
     description:
-      "Payment gateway integration (Midtrans/Xendit), idempotent webhooks and asynchronous data synchronization. Each integration is wrapped behind a typed, testable boundary.",
-    deliverables: [
-      "Payment gateway integration",
-      "Idempotent webhook handling",
-      "Async data synchronisation",
-      "Typed integration boundary",
-    ],
-    stack: ["Midtrans", "Xendit", "Cloudinary", "Webhooks"],
-    preview: "/images/services/integrations.svg",
+      "Webhook-safe payments and external integrations with retry handling.",
+    tags: ["Webhooks", "REST"],
   },
-] satisfies Service[];
+];
+
+export const servicesId: ServiceItem[] = [
+  {
+    number: "01",
+    title: "Arsitektur Backend & RESTful API",
+    description:
+      "API modular dengan NestJS & Express, validasi DTO, autentikasi JWT/OAuth2, serta dokumentasi OpenAPI/Swagger. Setiap endpoint dirancang agar tetap terprediksi seiring pertumbuhan produk.",
+    tags: ["NestJS", "Express.js", "Node.js", "OpenAPI", "Postman"],
+  },
+  {
+    number: "02",
+    title: "Rekayasa Basis Data & Optimasi Query",
+    description:
+      "Perancangan skema relasional, pengindeksan strategis, dan optimasi query SQL untuk menopang lonjakan trafik.",
+    tags: ["PostgreSQL", "MySQL", "Prisma ORM"],
+  },
+  {
+    number: "03",
+    title: "Aplikasi Web Fullstack",
+    description:
+      "Antarmuka bersih dan intuitif yang berdiri di atas kontrak API yang ketat dan bertipe aman.",
+    tags: ["Next.js", "React", "TypeScript"],
+  },
+  {
+    number: "04",
+    title: "Sistem Kasir POS & Manajemen Inventori",
+    description:
+      "Alur transaksi penjualan dan stok aman transaksi atomik lengkap dengan pemindaian barcode serta cetak faktur.",
+    tags: ["Express.js", "MySQL"],
+  },
+  {
+    number: "05",
+    title: "Sistem Dokumen Digital & Arsip",
+    description:
+      "Pengarsipan terstruktur dengan enkripsi file dan kendali akses berbasis peran (RBAC).",
+    tags: ["PostgreSQL", "RBAC"],
+  },
+  {
+    number: "06",
+    title: "Integrasi Payment Gateway & Pihak Ketiga",
+    description:
+      "Alur pembayaran aman webhook dan integrasi eksternal dengan manajemen retry otomatis.",
+    tags: ["Webhook", "REST"],
+  },
+];

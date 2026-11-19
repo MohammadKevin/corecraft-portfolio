@@ -1,37 +1,62 @@
-import type { Experience } from "@/lib/types";
+export interface ExperienceItem {
+  year: string;
+  company: string;
+  role: string;
+  location: string;
+  summary: string;
+  tags: string[];
+}
 
-export const experiences = [
+export const experience: ExperienceItem[] = [
   {
-    order: 1,
+    year: "2026—",
     company: "SIDIGS",
     role: "Quality Assurance",
-    period: "2026 – Present",
     location: "Malang, Indonesia",
     summary:
       "Executing rigorous test plans, automated API contract validations, and defect lifecycle tracking across client delivery pipelines.",
-    tech: ["Manual Testing", "Postman", "Bug Tracking", "API Testing"],
-    thumbnail: "/images/experience/sidigs.svg",
+    tags: ["Manual Testing", "Postman", "Bug Tracking", "API Testing"],
   },
   {
-    order: 2,
+    year: "2025—",
     company: "CoreCraft",
     role: "Freelance & Backend Developer",
-    period: "2025 – Present",
     location: "Remote",
     summary:
       "Building resilient web platforms, transactional backends, and custom management systems for businesses under the CoreCraft studio.",
-    tech: ["Next.js", "NestJS", "PostgreSQL", "Prisma ORM", "TypeScript"],
-    thumbnail: "/images/experience/independent.svg",
+    tags: ["Next.js", "NestJS", "PostgreSQL", "Prisma ORM", "TypeScript"],
   },
   {
-    order: 3,
+    year: "2024—",
     company: "SMK Telkom Malang",
     role: "Software Engineering Student",
-    period: "2024 – Present",
     location: "Malang, Indonesia",
     summary:
       "Studying core computer science principles, database modeling, object-oriented design, and enterprise application architectures.",
-    tech: ["PHP", "Node.js", "MySQL", "JavaScript", "HTML/CSS"],
-    thumbnail: "/images/experience/smk-telkom-malang.svg",
+    tags: ["PHP", "Node.js", "MySQL", "JavaScript"],
   },
-] satisfies Experience[];
+];
+
+export const experienceId: ExperienceItem[] = [
+  {
+    ...experience[0],
+    role: "Quality Assurance",
+    summary:
+      "Menjalankan rencana pengujian terstruktur, validasi kontrak API otomatis, dan pelacakan siklus cacat pada alur rilis klien.",
+    location: "Malang, Indonesia",
+  },
+  {
+    ...experience[1],
+    role: "Freelance & Backend Developer",
+    summary:
+      "Membangun platform web tangguh, backend transaksional, dan sistem manajemen kustom bagi bisnis di bawah studio CoreCraft.",
+    location: "Jarak jauh",
+  },
+  {
+    ...experience[2],
+    role: "Siswa Rekayasa Perangkat Lunak",
+    summary:
+      "Mendalami prinsip inti ilmu komputer, pemodelan basis data, desain berorientasi objek, dan arsitektur aplikasi enterprise.",
+    location: "Malang, Indonesia",
+  },
+];
