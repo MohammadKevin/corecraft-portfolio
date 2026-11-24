@@ -133,6 +133,10 @@ export interface Profile {
   lastName: string;
 
   fullName: string;
+  /** Giant word rendered behind the hero portrait. Easy to swap. */
+  heroWord: string;
+  /** Short display name used as the hero signature. */
+  displayName: string;
 
   role: string;
   subtitle: string;

@@ -11,6 +11,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "docs/qa/playwright-report/**",
+    "docs/qa/test-results/**",
+    "scripts/build-hero-assets.cjs",
   ]),
 ]);
 

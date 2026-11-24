@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export default function WorkArchive() {
   );
 
   return (
-    <main className="subpage-wrap">
+    <main id="main-content" className="subpage-wrap">
       <p className="label">
         {copy.badgeLeft} · {String(localizedProjects.length).padStart(2, "0")}{" "}
         {copy.systemsDelivered}
@@ -148,3 +148,4 @@ export default function WorkArchive() {
     </main>
   );
 }
+

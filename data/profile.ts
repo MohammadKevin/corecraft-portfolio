@@ -4,6 +4,8 @@ export const profile = {
   firstName: "Mohammad",
   lastName: "Kevin",
   fullName: "Mohammad Kevin Arif Rudianto",
+  heroWord: "ENGINEER",
+  displayName: "KEVIN",
   role: "Backend & Fullstack Software Engineer",
   subtitle:
     "Backend & Fullstack Developer building reliable APIs, POS systems and digital archives.",
@@ -12,7 +14,7 @@ export const profile = {
     "Every system I ship is measured by one thing: whether it still holds up a year after launch.",
   ],
   availableForProjects: true,
-  avatar: "/images/profile-removebg.png",
+  avatar: "/images/hero-kevin.webp",
   email: "kvn4.200581@gmail.com",
   whatsappUrl: "https://wa.me/6282131588846",
   cvUrl: "/CV Mohammad Kevin.pdf",

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, {
   createContext,
@@ -7,7 +7,8 @@ import React, {
   useEffect,
   useSyncExternalStore,
 } from "react";
-import { certificates, profile } from "@/data";
+import { usePathname } from "next/navigation";
+import { credentials as certificates, profile } from "@/data";
 import { projects } from "@/data/projects";
 import { services, servicesId } from "@/data/services";
 import { processSteps, processStepsId } from "@/data/process";
@@ -71,10 +72,13 @@ const LanguageContext = createContext<LanguageContextValue>({
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const lang = useSyncExternalStore(subscribeLang, readStoredLang, getServerLang);
+  const pathname = usePathname();
 
   useEffect(() => {
-    document.documentElement.lang = lang;
-  }, [lang]);
+    // The homepage is served in English but declared as Indonesian, per the
+    // site's language policy; subpages follow the language toggle.
+    document.documentElement.lang = pathname === "/" ? "id" : lang;
+  }, [lang, pathname]);
 
   const setLang = useCallback((next: Language) => {
     try {
@@ -954,3 +958,4 @@ export function getSubpageCopy(lang: Language) {
     },
   };
 }
+

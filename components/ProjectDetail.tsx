@@ -1,8 +1,7 @@
-"use client";
+﻿"use client";
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "@/components/icons/SocialIcons";
 import { ProjectMockup } from "@/components/ProjectMockup";
 import { getLocalizedProjects, getSubpageCopy, useLanguage } from "@/lib/i18n";
@@ -30,7 +29,7 @@ export default function ProjectDetail({
   const clientOrStudio = project.client ?? project.studio;
 
   return (
-    <article className="subpage-wrap">
+    <article id="main-content" className="subpage-wrap">
       <div
         className="edu-bar"
         style={{
@@ -41,7 +40,7 @@ export default function ProjectDetail({
       >
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
           <Link href="/#work" className="chip">
-            <ArrowLeft style={{ width: 13, height: 13 }} aria-hidden="true" />
+            <span aria-hidden="true">←</span>
             <span>{copy.home}</span>
           </Link>
           <Link href="/work" className="chip">
@@ -88,7 +87,7 @@ export default function ProjectDetail({
               className="bt p"
             >
               <span>{copy.liveDemo}</span>
-              <ArrowUpRight style={{ width: 15, height: 15 }} aria-hidden="true" />
+              <span aria-hidden="true">↗</span>
             </a>
           ) : null}
 
@@ -106,7 +105,7 @@ export default function ProjectDetail({
 
           <Link href="/#contact" className="bt g">
             <span>{copy.discuss}</span>
-            <ArrowUpRight style={{ width: 15, height: 15 }} aria-hidden="true" />
+            <span aria-hidden="true">↗</span>
           </Link>
         </div>
       </header>
@@ -438,12 +437,10 @@ export default function ProjectDetail({
             </p>
           </div>
 
-          <ArrowRight
-            style={{ width: 22, height: 22, flexShrink: 0 }}
-            aria-hidden="true"
-          />
+          <span aria-hidden="true" style={{ fontSize: 22 }}>→</span>
         </Link>
       </nav>
     </article>
   );
 }
+

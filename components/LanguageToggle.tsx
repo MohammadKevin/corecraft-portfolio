@@ -1,8 +1,6 @@
 "use client";
 
-import React from "react";
-import { Globe } from "lucide-react";
-import { NAV_SECTIONS, useLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/lib/i18n";
 
 export function LanguageToggle({
   variant = "island",
@@ -10,18 +8,33 @@ export function LanguageToggle({
   variant?: "island" | "mobile";
 }) {
   const { lang, setLang } = useLanguage();
-  const labels = NAV_SECTIONS[lang];
+  const labels = {
+    en: "Switch language",
+    id: "Ubah bahasa",
+  } as const;
 
   return (
     <div
-      className={variant === "mobile" ? "di-lang di-lang-mobile mo" : "di-lang mo"}
+      className={variant === "mobile" ? "lang-switch is-mobile" : "lang-switch"}
       role="group"
-      aria-label={labels.langSwitchAriaLabel}
+      aria-label={labels[lang]}
     >
-      <Globe className="di-lang-icon" aria-hidden="true" />
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 9h18M9 21V9" />
+      </svg>
       <button
         type="button"
-        className={`di-lang-btn${lang === "id" ? " act" : ""}`}
+        className={`lang-btn${lang === "id" ? " act" : ""}`}
         aria-pressed={lang === "id"}
         onClick={() => setLang("id")}
       >
@@ -29,7 +42,7 @@ export function LanguageToggle({
       </button>
       <button
         type="button"
-        className={`di-lang-btn${lang === "en" ? " act" : ""}`}
+        className={`lang-btn${lang === "en" ? " act" : ""}`}
         aria-pressed={lang === "en"}
         onClick={() => setLang("en")}
       >
@@ -38,4 +51,3 @@ export function LanguageToggle({
     </div>
   );
 }
-

@@ -1,9 +1,8 @@
-export * from "./profile";
+﻿export * from "./profile";
 export * from "./projects";
 export * from "./services";
 export * from "./skills";
 export * from "./experience";
 export * from "./education";
-export * from "./certificates";
-export * from "./site";
-export * from "./ui";
+export * from "./credentials";
+

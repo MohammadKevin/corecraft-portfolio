@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Image from "next/image";
@@ -38,7 +38,7 @@ export function ProjectMockup({
       </div>
 
       {showRealImage ? (
-        <div className="relative aspect-[16/10] w-full bg-[#f3f3f5] overflow-hidden">
+        <div className="relative aspect-[16/10] w-full bg-[var(--bg-2)] overflow-hidden">
           <Image
             src={imageSrc}
             alt={`${title} preview`}
@@ -186,3 +186,4 @@ function MockupBody({ slug }: { slug: string }) {
       );
   }
 }
+
